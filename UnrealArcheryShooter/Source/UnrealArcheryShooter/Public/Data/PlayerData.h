@@ -11,9 +11,14 @@ struct UNREALARCHERYSHOOTER_API FPlayerData
 	GENERATED_BODY()
 
 public:
-	FPlayerData();
-	~FPlayerData();
+	FPlayerData() { }
+	FPlayerData(float Score)
+	{
+		this->Score = Score;
+	}
+
+	~FPlayerData() { }
 
 	UPROPERTY(EditAnywhere)
-		float Score;
+		float Score = 1;
 };

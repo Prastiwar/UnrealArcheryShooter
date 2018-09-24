@@ -11,13 +11,18 @@ struct UNREALARCHERYSHOOTER_API FSpawnData
 	GENERATED_BODY()
 
 public:
-	FSpawnData();
-	FSpawnData(FLinearColor Color, float Score);
-	~FSpawnData();
+	FSpawnData() { }
+	FSpawnData(FLinearColor Color, float Score) 
+	{
+		this->Color = Color;
+		this->Score = Score;
+	}
+
+	~FSpawnData() { }
 
 	UPROPERTY(EditAnywhere)
 		FLinearColor Color;
 
 	UPROPERTY(EditAnywhere)
-		float Score;
+		float Score = 1;
 };

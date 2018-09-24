@@ -12,8 +12,9 @@ struct UNREALARCHERYSHOOTER_API FWeaponData
 	GENERATED_BODY()
 
 public:
-	FWeaponData();
-	~FWeaponData();
+	FWeaponData() { }
+
+	~FWeaponData() { }
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class AProjectile> Projectile;
