@@ -8,6 +8,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "Data/SpawnData.h"
+#include "DestructibleComponent.h"
 #include "SpawnableActor.generated.h"
 
 UCLASS()
@@ -22,10 +23,10 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
-	UPROPERTY(VisibleAnywhere, Category = "Spawnable")
-		UStaticMeshComponent* StaticMesh;
+	UPROPERTY(EditAnywhere, Category = "Spawnable")
+		UDestructibleComponent* DestructibleMesh;
 
-	UPROPERTY(VisibleAnywhere, Category = "Spawnable")
+	UPROPERTY(EditAnywhere, Category = "Spawnable")
 		UPointLightComponent* Light;
 
 	UPROPERTY(VisibleAnywhere, Category = "Spawnable")

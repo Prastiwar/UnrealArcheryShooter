@@ -15,9 +15,9 @@ public:
 	FSpawnData(FLinearColor Color, float Score);
 	~FSpawnData();
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 		FLinearColor Color;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 		float Score;
 };

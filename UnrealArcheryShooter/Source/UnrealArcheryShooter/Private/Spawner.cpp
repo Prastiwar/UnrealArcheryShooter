@@ -37,13 +37,17 @@ void ASpawner::SetSpawnTimer()
 
 void ASpawner::Spawn()
 {
-	if (ASpawner::SpawnableActor)
+	if (SpawnableActor)
 	{
 		ASpawnableActor* ActorRef = GetWorld()->SpawnActor<ASpawnableActor>(SpawnableActor, GetTransform());
 		int RandIndex = FMath::RandRange(0, SpawnDatas.Num() - 1);
 		ActorRef->Initialize(SpawnDatas[RandIndex]);
 
-		if (UStaticMeshComponent* SM = Cast<UStaticMeshComponent>(ActorRef->GetRootComponent()))
+		if (UDestructibleComponent* Mesh = Cast<UDestructibleComponent>(ActorRef->GetRootComponent()))
+		{
+			Mesh->SetPhysicsLinearVelocity(Force);
+		}
+		else if (UStaticMeshComponent* SM = Cast<UStaticMeshComponent>(ActorRef->GetRootComponent()))
 		{
 			SM->SetPhysicsLinearVelocity(Force);
 		}

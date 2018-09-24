@@ -6,9 +6,10 @@ ASpawnableActor::ASpawnableActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
-	StaticMesh->SetSimulatePhysics(true);
-	RootComponent = StaticMesh;
+	DestructibleMesh = CreateDefaultSubobject<UDestructibleComponent>("Mesh");
+	DestructibleMesh->SetSimulatePhysics(true);
+	DestructibleMesh->bApplyImpulseOnDamage = true;
+	RootComponent = DestructibleMesh;
 
 	Light = CreateDefaultSubobject<UPointLightComponent>("PointLight");
 	Light->SetIntensity(10000);
@@ -19,7 +20,6 @@ ASpawnableActor::ASpawnableActor()
 	Light->SetSoftSourceRadius(1500);
 	Light->SetupAttachment(RootComponent);
 
-	InitialLifeSpan = 5.1f;
 	SpawnData = FSpawnData();
 }
 

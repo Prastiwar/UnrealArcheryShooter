@@ -19,12 +19,11 @@ private:
 	FVector InitLocation;
 	FVector TargetLocation;
 	float EvaluateTime;
-	bool Invert;
 
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
-
+	
 	UPROPERTY(VisibleAnywhere, Category = "Floating")
 		UStaticMeshComponent* StaticMesh;
 

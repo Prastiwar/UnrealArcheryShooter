@@ -5,26 +5,34 @@
 #include "CoreMinimal.h"
 #include "Queue.h"
 
-template<typename InElementType>
+template<typename ObjectType>
 class UNREALARCHERYSHOOTER_API TObjectPool
 {
-private:
-	TQueue<InElementType> Pool;
+protected:
+	TQueue<ObjectType> Pool;
+	ObjectType* Ptr;
+	UWorld* World;
 
 public:
-	typedef InElementType ElementType;
 	int32 Length;
 
-	FORCEINLINE TObjectPool(const ElementType* Ptr, int32 Count)
+	TObjectPool(const UWorld* World, const ObjectType* Ptr, int32 Count)
 	{
 		check(Ptr != nullptr || Count == 0);
-		Pool = TQueue<InElementType>();
+		Pool = TQueue<ObjectType>();
 		Length = 0;
+		this->Ptr = Ptr;
+		this->World = World;
 	}
 
-	FORCEINLINE InElementType* Get()
+	virtual ~TObjectPool()
 	{
-		InElementType* Obj = nullptr;
+		Pool->~TQueue();
+	}
+
+	ObjectType* Get()
+	{
+		ObjectType* Obj = nullptr;
 		if (Pool.Dequeue(Obj))
 		{
 			return Obj;
@@ -32,7 +40,7 @@ public:
 		return CreateNewObject();
 	}
 	
-	void Push(InElementType* Obj)
+	void Push(ObjectType* Obj)
 	{
 		OnPush(Obj);
 		Pool.Enqueue(Obj);
@@ -54,6 +62,14 @@ public:
 	}
 
 protected:
-	virtual void OnPush(InElementType* Obj);
-	abstract InElementType* CreateNewObject();
+	virtual void OnPush(ObjectType* Obj)
+	{
+		unimplemented();
+	}
+
+	virtual ObjectType* CreateNewObject()
+	{
+		unimplemented();
+		return nullptr;
+	}
 };

@@ -9,12 +9,11 @@
 #include "SpawnableActor.h"
 #include "Data/PlayerData.h"
 
-
-// Sets default values
 AProjectile::AProjectile()
 {
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
+	CollisionComp->SetSimulatePhysics(true);
 	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
 	CollisionComp->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 
@@ -54,7 +53,6 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-		TryAddScoreFromActor(OtherActor);
 	}
 	OnHitImpl();
 }
@@ -72,7 +70,11 @@ bool AProjectile::TryAddScoreFromActor(AActor* OtherActor)
 		{
 			ActorItr->AddScore(ScoreActor->GetScore());
 		}
-		ScoreActor->Destroy();
+		if (UDestructibleComponent* DM = Cast<UDestructibleComponent>(ScoreActor->GetRootComponent()))
+		{
+			DM->AddRadialImpulse(GetActorLocation(), SphereRadius, RadialStrength, ERadialImpulseFalloff::RIF_Linear, true);
+			DM->ApplyRadiusDamage(1000, GetActorLocation(), SphereRadius, RadialStrength, true);
+		}
 		return true;
 	}
 	return false;
@@ -83,7 +85,7 @@ void AProjectile::OnHitImpl()
 	TArray<FHitResult> HitResults;
 	FVector StartLocation = GetActorLocation();
 	FVector EndLocation = GetActorLocation();
-	ECollisionChannel ECC = ECollisionChannel::ECC_WorldStatic /*| ECollisionChannel::ECC_PhysicsBody*/;
+	ECollisionChannel ECC = ECollisionChannel::ECC_Visibility;
 	FCollisionShape CollisionShape;
 	CollisionShape.ShapeType = ECollisionShape::Sphere;
 	CollisionShape.SetSphere(SphereRadius);
@@ -95,18 +97,28 @@ void AProjectile::OnHitImpl()
 		{
 			if (!TryAddScoreFromActor(It->GetActor()))
 			{
-				if (UStaticMeshComponent* SM = Cast<UStaticMeshComponent>(It->GetActor()->GetRootComponent()))
+				if (AActor* HitActor = It->GetActor())
 				{
-					SM->AddRadialImpulse(GetActorLocation(), SphereRadius, RadialStrength, ERadialImpulseFalloff::RIF_Linear, true);
+					if (USceneComponent* SceneComponent = It->GetActor()->GetRootComponent())
+					{
+						if (UStaticMeshComponent* SM = Cast<UStaticMeshComponent>(SceneComponent))
+						{
+							SM->AddRadialImpulse(GetActorLocation(), SphereRadius, RadialStrength, ERadialImpulseFalloff::RIF_Linear, true);
+						}
+						else if (UDestructibleComponent* DM = Cast<UDestructibleComponent>(It->GetActor()->GetRootComponent()))
+						{
+							DM->ApplyRadiusDamage(1000, GetActorLocation(), SphereRadius, RadialStrength, true);
+						}
+					}
 				}
 			}
 		}
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation());
-
-		if (HitSound != NULL)
-		{
-			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
-		}
-		Destroy();
 	}
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation());
+
+	if (HitSound != NULL)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
+	}
+	Destroy();
 }
