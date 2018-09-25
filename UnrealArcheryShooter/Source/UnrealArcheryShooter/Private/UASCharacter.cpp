@@ -24,28 +24,27 @@ AUASCharacter::AUASCharacter()
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
-	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
-	Mesh1P->SetOnlyOwnerSee(true);
-	Mesh1P->SetupAttachment(FirstPersonCameraComponent);
-	Mesh1P->bCastDynamicShadow = false;
-	Mesh1P->CastShadow = false;
-	Mesh1P->RelativeRotation = FRotator(1.9f, -19.19f, 5.2f);
-	Mesh1P->RelativeLocation = FVector(-0.5f, -4.4f, -155.7f);
+	FirstPersonMeshViewed = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
+	FirstPersonMeshViewed->SetOnlyOwnerSee(true);
+	FirstPersonMeshViewed->SetupAttachment(FirstPersonCameraComponent);
+	FirstPersonMeshViewed->bCastDynamicShadow = false;
+	FirstPersonMeshViewed->CastShadow = false;
+	FirstPersonMeshViewed->RelativeRotation = FRotator(1.9f, -19.19f, 5.2f);
+	FirstPersonMeshViewed->RelativeLocation = FVector(-0.5f, -4.4f, -155.7f);
 
 	// Create a gun mesh component
-	FP_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
-	FP_Gun->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
-	FP_Gun->bCastDynamicShadow = false;
-	FP_Gun->CastShadow = false;
-	FP_Gun->SetupAttachment(RootComponent);
+	GunMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
+	GunMesh->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
+	GunMesh->bCastDynamicShadow = false;
+	GunMesh->CastShadow = false;
+	GunMesh->SetupAttachment(RootComponent);
 
-	FP_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
-	FP_MuzzleLocation->SetupAttachment(FP_Gun);
-	FP_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
-
-	GunOffset = FVector(100.0f, 0.0f, 10.0f);
+	MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
+	MuzzleLocation->SetupAttachment(GunMesh);
+	MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
 
 	CurrentWeaponIndex = 0;
+	ScoreMultiplier = 1.0f;
 	PlayerData = FPlayerData();
 }
 
@@ -54,8 +53,8 @@ void AUASCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
-	FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
-	Mesh1P->SetHiddenInGame(false, true);
+	GunMesh->AttachToComponent(FirstPersonMeshViewed, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	FirstPersonMeshViewed->SetHiddenInGame(false, true);
 }
 
 void AUASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -95,27 +94,24 @@ void AUASCharacter::OnFire()
 		UWorld* const World = GetWorld();
 		if (World != NULL)
 		{
-			const FRotator SpawnRotation = GetControlRotation();
-			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-			const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
-
 			FActorSpawnParameters ActorSpawnParams;
 			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
-			AProjectile* projectile = World->SpawnActor<AProjectile>(Weapons[CurrentWeaponIndex].Projectile, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			AProjectile* projectile = World->SpawnActor<AProjectile>(
+				Weapons[CurrentWeaponIndex].Projectile, MuzzleLocation->GetComponentLocation(), GetControlRotation(), ActorSpawnParams);
 			if (projectile)
 			{
 				AddScore(-projectile->GetFireCost());
 			}
 		}
-	}
 
-	if (FireAnimation != NULL)
-	{
-		UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
-		if (AnimInstance != NULL)
+		if (Weapons[CurrentWeaponIndex].FireAnimation != NULL)
 		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
+			UAnimInstance* AnimInstance = FirstPersonMeshViewed->GetAnimInstance();
+			if (AnimInstance != NULL)
+			{
+				AnimInstance->Montage_Play(Weapons[CurrentWeaponIndex].FireAnimation, 1.f);
+			}
 		}
 	}
 }
@@ -142,9 +138,9 @@ void AUASCharacter::TurnAtRate(float Rate)
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
-void AUASCharacter::AddScore(float score)
+void AUASCharacter::AddScore(float Score)
 {
-	PlayerData.Score += score;
+	PlayerData.Score += Score * GetScoreMultiplier();
 	if (PlayerData.Score < 0.0f)
 	{
 		PlayerData.Score = 0.0f;
@@ -154,6 +150,16 @@ void AUASCharacter::AddScore(float score)
 float AUASCharacter::GetScore()
 {
 	return PlayerData.Score;
+}
+
+float AUASCharacter::GetScoreMultiplier()
+{
+	return ScoreMultiplier;
+}
+
+void AUASCharacter::SetScoreMultiplier(float ScoreMultiplier)
+{
+	this->ScoreMultiplier = ScoreMultiplier;
 }
 
 void AUASCharacter::SwitchPreviousWeapon()
@@ -177,5 +183,5 @@ void AUASCharacter::SetWeapon(int Index)
 	{
 		CurrentWeaponIndex = Weapons.Num() - 1;
 	}
-	FP_Gun->SetSkeletalMeshWithoutResettingAnimation(Weapons[CurrentWeaponIndex].WeaponMesh);
+	GunMesh->SetSkeletalMeshWithoutResettingAnimation(Weapons[CurrentWeaponIndex].WeaponMesh);
 }

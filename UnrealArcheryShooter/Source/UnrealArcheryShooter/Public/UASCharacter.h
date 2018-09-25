@@ -20,8 +20,8 @@ protected:
 	virtual void BeginPlay();
 
 	void OnFire();
-	void MoveForward(float Val);
-	void MoveSide(float Val);
+	void MoveForward(float Value);
+	void MoveSide(float Value);
 
 	/**
 	 * Called via input to turn at a given rate.
@@ -36,15 +36,20 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Player Score")
 		FPlayerData PlayerData;
 
-public:
-	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
-	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+	float ScoreMultiplier;
 
+public:
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		void AddScore(float Score);
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		float GetScore();
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		float GetScoreMultiplier();
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		void SetScoreMultiplier(float ScoreMultiplier);
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		void SwitchNextWeapon();
@@ -56,13 +61,10 @@ public:
 		void SetWeapon(int Index);
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-		class USkeletalMeshComponent* Mesh1P;
+		class USkeletalMeshComponent* FirstPersonMeshViewed;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-		class USkeletalMeshComponent* FP_Gun;
-
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-		class USceneComponent* FP_MuzzleLocation;
+		class USkeletalMeshComponent* GunMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FirstPersonCameraComponent;
@@ -76,10 +78,7 @@ public:
 		float BaseLookUpRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		FVector GunOffset;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		class UAnimMontage* FireAnimation;
+		USceneComponent* MuzzleLocation;
 
 	UPROPERTY(EditDefaultsOnly, Category = Weapon)
 		TArray<FWeaponData> Weapons;

@@ -21,5 +21,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		USkeletalMesh* WeaponMesh;
+	
+	UPROPERTY(EditAnywhere)
+		class UAnimMontage* FireAnimation;
 
 };
