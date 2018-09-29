@@ -33,7 +33,6 @@ AProjectile::AProjectile()
 	ProjectileMovement->bShouldBounce = true;
 
 	InitialLifeSpan = 3.0f;
-	HitForce = 100.0f;
 	SphereRadius = 10;
 	RadialStrength = 500;
 	FireScoreCost = 20.0f;

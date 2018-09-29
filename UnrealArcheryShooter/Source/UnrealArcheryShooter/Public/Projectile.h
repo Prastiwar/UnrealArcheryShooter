@@ -31,9 +31,6 @@ protected:
 		UParticleSystem* HitParticle;
 
 	UPROPERTY(EditAnywhere, Category = "FPPProjectile")
-		float HitForce;
-
-	UPROPERTY(EditAnywhere, Category = "FPPProjectile")
 		float FireScoreCost;
 
 	UPROPERTY(EditAnywhere, Category = "FPPProjectile")

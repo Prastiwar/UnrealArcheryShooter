@@ -44,6 +44,12 @@ private:
 
 	float ScoreMultiplier;
 
+	UPROPERTY(EditDefaultsOnly, Category = Weapon)
+		TArray<FWeaponData> Weapons;
+
+	UPROPERTY(EditDefaultsOnly, Category = Weapon)
+		int CurrentWeaponIndex;
+
 public:
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		void AddScore(float Score);
@@ -85,11 +91,5 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		USceneComponent* MuzzleLocation;
-
-	UPROPERTY(EditDefaultsOnly, Category = Weapon)
-		TArray<FWeaponData> Weapons;
-
-	UPROPERTY(EditDefaultsOnly, Category = Weapon)
-		int CurrentWeaponIndex;
 
 };

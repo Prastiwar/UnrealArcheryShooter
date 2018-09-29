@@ -24,7 +24,7 @@ void AToggleActor::BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Oth
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
 	{
 		this->SetActorHiddenInGame(!bActiveOnOverlap);
-		Activated(!bActiveOnOverlap, OtherActor);
+		Activated(bActiveOnOverlap, OtherActor);
 	}
 }
 
