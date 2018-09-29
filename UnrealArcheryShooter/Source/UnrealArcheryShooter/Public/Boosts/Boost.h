@@ -22,9 +22,6 @@ protected:
 
 	void SetTriggerComponent(UShapeComponent* Trigger);
 
-	/** If false, actor is hidden in game with disabled tick and collision*/
-	void SetActive(bool Active);
-
 	UPROPERTY(EditAnywhere, Category = "Boost")
 		FBoostData Boost;
 

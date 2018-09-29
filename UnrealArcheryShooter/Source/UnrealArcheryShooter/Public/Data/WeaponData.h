@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Projectile.h"
+#include "CooldownData.h"
 #include "WeaponData.generated.h"
 
 USTRUCT()
@@ -21,8 +22,11 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		USkeletalMesh* WeaponMesh;
-	
+
 	UPROPERTY(EditAnywhere)
 		class UAnimMontage* FireAnimation;
+
+	UPROPERTY(EditAnywhere)
+		FCooldownData FireCooldown;
 
 };

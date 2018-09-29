@@ -9,6 +9,6 @@ public class UnrealArcheryShooterEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 
-		ExtraModuleNames.AddRange( new string[] { "UnrealArcheryShooter" } );
+		ExtraModuleNames.AddRange( new string[] { "UnrealArcheryShooter", "ApexDestruction" } );
 	}
 }

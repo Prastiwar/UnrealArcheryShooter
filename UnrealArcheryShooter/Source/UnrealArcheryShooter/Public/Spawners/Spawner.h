@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "SpawnableActor.h"
-#include "Data/SpawnData.h"
+#include "ActorPool.h"
 #include "Spawner.generated.h"
 
 UCLASS()
@@ -16,37 +16,34 @@ class UNREALARCHERYSHOOTER_API ASpawner : public AActor
 public:	
 	ASpawner();
 
+	UFUNCTION(BlueprintCallable)
+		void Spawn();
+
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
-		void IncreaseLevel();
+		void IncreaseFrequency();
 
 	UFUNCTION(BlueprintCallable)
 		void SetSpawnTimer();
 
-private:
 	FTimerHandle SpawnTimerHandle;
-	FTimerHandle LevelTimerHandle;
-	float ActualTimeToSpawn;
+	FTimerHandle FrequencyTimerHandle;
+	
+	UPROPERTY(EditAnywhere, Category = "Spawner")
+		FVector2D SpawnTimeRange;
 
 	UPROPERTY(EditAnywhere, Category = "Spawner")
 		float TimeToSpawn;
 
 	UPROPERTY(EditAnywhere, Category = "Spawner")
-		float TimeToIncreaseLevel;
+		float TimeToDecreaseTime;
 
 	UPROPERTY(EditAnywhere, Category = "Spawner")
-		TSubclassOf<class ASpawnableActor> SpawnableActor;
+		TArray<TSubclassOf<class ASpawnableActor>> SpawnableActors;
 
 	UPROPERTY(EditAnywhere, Category = "Spawner")
 		FVector Force;
-
-	UPROPERTY(EditAnywhere, Category = "Spawner")
-		TArray<FSpawnData> SpawnDatas;
-
-	UFUNCTION(BlueprintCallable)
-		void Spawn();
 
 };

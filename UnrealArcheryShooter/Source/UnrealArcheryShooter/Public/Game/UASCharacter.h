@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Data/PlayerData.h"
 #include "Data/WeaponData.h"
+#include "CooldownComponent.h"
 #include "UASCharacter.generated.h"
 
 UCLASS(config = Game)
@@ -18,8 +19,10 @@ public:
 
 protected:
 	virtual void BeginPlay();
+	virtual void Tick(float DeltaSeconds) override;
 
 	void OnFire();
+	void PlayFireAnim();
 	void MoveForward(float Value);
 	void MoveSide(float Value);
 
@@ -33,6 +36,9 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override; // APawn interface
 
 private:
+	UPROPERTY(VisibleAnywhere)
+		UCooldownComponent* CooldownComponent;
+
 	UPROPERTY(EditAnywhere, Category = "Player Score")
 		FPlayerData PlayerData;
 

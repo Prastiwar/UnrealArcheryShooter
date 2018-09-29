@@ -3,24 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "Components/PointLightComponent.h"
-#include "Components/StaticMeshComponent.h"
-#include "Components/BoxComponent.h"
-#include "Data/SpawnData.h"
+#include "Spawners/SpawnableActor.h"
 #include "DestructibleComponent.h"
-#include "SpawnableActor.generated.h"
+#include "Components/PointLightComponent.h"
+#include "SpawnableRing.generated.h"
 
 UCLASS()
-class UNREALARCHERYSHOOTER_API ASpawnableActor : public AActor
+class UNREALARCHERYSHOOTER_API ASpawnableRing : public ASpawnableActor
 {
 	GENERATED_BODY()
-	
-public:	
-	ASpawnableActor();
 
-protected:
+public:
+	ASpawnableRing();
 	virtual void BeginPlay() override;
+	virtual bool CanSpawn() override;
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Spawnable")
@@ -29,12 +25,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Spawnable")
 		UPointLightComponent* Light;
 
-	UPROPERTY(VisibleAnywhere, Category = "Spawnable")
-		FSpawnData SpawnData;
-
 public:
-	virtual void Initialize(FSpawnData SpawnData);
-
 	UFUNCTION(BlueprintCallable)
 		float GetScore();
+
 };

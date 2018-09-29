@@ -6,7 +6,7 @@
 #include "Components/SphereComponent.h"
 #include "EngineUtils.h"
 #include "UASCharacter.h"
-#include "SpawnableActor.h"
+#include "Spawners/SpawnableRing.h"
 #include "Data/PlayerData.h"
 
 AProjectile::AProjectile()
@@ -64,7 +64,7 @@ float AProjectile::GetFireCost()
 
 bool AProjectile::TryAddScoreFromActor(AActor* OtherActor)
 {
-	if (ASpawnableActor* ScoreActor = Cast<ASpawnableActor>(OtherActor))
+	if (ASpawnableRing* ScoreActor = Cast<ASpawnableRing>(OtherActor))
 	{
 		for (TActorIterator<AUASCharacter> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 		{
@@ -93,6 +93,11 @@ void AProjectile::OnHitImpl()
 	bool bHitSomething = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::FQuat(), ECC, CollisionShape);
 	if (bHitSomething)
 	{
+		if (CameraShake)
+		{
+			GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(CameraShake);
+		}
+
 		for (auto It = HitResults.CreateIterator(); It; It++)
 		{
 			if (!TryAddScoreFromActor(It->GetActor()))

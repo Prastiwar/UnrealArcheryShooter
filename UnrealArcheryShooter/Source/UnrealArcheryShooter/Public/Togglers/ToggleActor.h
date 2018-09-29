@@ -2,31 +2,36 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "Engine.h"
 #include "GameFramework/Actor.h"
-#include "Components/PointLightComponent.h"
 #include "Components/BoxComponent.h"
-#include "PointLightSwitcher.generated.h"
+#include "ToggleActor.generated.h"
 
 UCLASS()
-class UNREALARCHERYSHOOTER_API APointLightSwitcher : public AActor
+class UNREALARCHERYSHOOTER_API AToggleActor : public AActor
 {
 	GENERATED_BODY()
+	
+public:	
+	AToggleActor();
 
-public:
-	// Sets default values for this actor's properties
-	APointLightSwitcher();
+	/** If false, actor is hidden in game with disabled tick and collision*/
+	static void SetActive(AActor* Actor, bool Active)
+	{
+		Actor->SetActorHiddenInGame(!Active);
+		Actor->SetActorEnableCollision(Active);
+		Actor->SetActorTickEnabled(Active);
+	}
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-private:
-	UPROPERTY(EditAnywhere)
-		UBoxComponent* Box;
+	virtual void Activated(bool bActive, AActor* OverlappedActor) {}
 
 	UPROPERTY(EditAnywhere)
-		UPointLightComponent* PointLight;
+		bool bActiveOnOverlap;
+
+	UPROPERTY(EditAnywhere)
+		UBoxComponent* TriggerBox;
 
 	UFUNCTION()
 		void BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -34,5 +39,4 @@ private:
 
 	UFUNCTION()
 		void EndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex);
-
 };

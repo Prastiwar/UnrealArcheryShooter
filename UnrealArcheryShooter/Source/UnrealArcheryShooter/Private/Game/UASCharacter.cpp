@@ -55,6 +55,12 @@ void AUASCharacter::BeginPlay()
 	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
 	GunMesh->AttachToComponent(FirstPersonMeshViewed, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 	FirstPersonMeshViewed->SetHiddenInGame(false, true);
+	CooldownComponent = NewObject<UCooldownComponent>();
+}
+
+void AUASCharacter::Tick(float DeltaSeconds)
+{
+	//CooldownComponent->Tick();
 }
 
 void AUASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -91,27 +97,41 @@ void AUASCharacter::OnFire()
 {
 	if (Weapons.IsValidIndex(CurrentWeaponIndex))
 	{
+		//GLog->Log(Weapons[CurrentWeaponIndex].FireCooldownPtr->IsCompleted ? TEXT("true") : TEXT("false"));
+		//GLog->Log(FString::SanitizeFloat(Weapons[CurrentWeaponIndex].FireCooldownPtr->CooldownTime));
+		//if (Weapons[CurrentWeaponIndex].FireCooldownPtr->IsCompleted)
+		//{
 		UWorld* const World = GetWorld();
 		if (World != NULL)
 		{
-			FActorSpawnParameters ActorSpawnParams;
-			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
-			AProjectile* projectile = World->SpawnActor<AProjectile>(
-				Weapons[CurrentWeaponIndex].Projectile, MuzzleLocation->GetComponentLocation(), GetControlRotation(), ActorSpawnParams);
-			if (projectile)
+			AProjectile* Projectile = World->SpawnActor<AProjectile>(
+				Weapons[CurrentWeaponIndex].Projectile, MuzzleLocation->GetComponentLocation(), GetControlRotation(), SpawnParams);
+			if (Projectile)
 			{
-				AddScore(-projectile->GetFireCost());
+				AddScore(-Projectile->GetFireCost());
+				//if (CooldownComponent)
+				//{
+					//Weapons[CurrentWeaponIndex].FireCooldown = CooldownComponent->SetCooldown(Weapons[CurrentWeaponIndex].FireCooldown);
+					//Weapons[CurrentWeaponIndex].FireCooldownPtr = &Weapons[CurrentWeaponIndex].FireCooldown;
+				//}
 			}
 		}
+		PlayFireAnim();
+		//}
+	}
+}
 
-		if (Weapons[CurrentWeaponIndex].FireAnimation != NULL)
+void AUASCharacter::PlayFireAnim()
+{
+	if (Weapons[CurrentWeaponIndex].FireAnimation != NULL)
+	{
+		UAnimInstance* AnimInstance = FirstPersonMeshViewed->GetAnimInstance();
+		if (AnimInstance != NULL)
 		{
-			UAnimInstance* AnimInstance = FirstPersonMeshViewed->GetAnimInstance();
-			if (AnimInstance != NULL)
-			{
-				AnimInstance->Montage_Play(Weapons[CurrentWeaponIndex].FireAnimation, 1.f);
-			}
+			AnimInstance->Montage_Play(Weapons[CurrentWeaponIndex].FireAnimation, 1.f);
 		}
 	}
 }

@@ -42,6 +42,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "FPPProjectile")
 		float RadialStrength;
 
+	UPROPERTY(EditAnywhere, Category = "FPPProjectile")
+		TSubclassOf<UCameraShake> CameraShake;
+
 public:
 	AProjectile();
 
