@@ -16,9 +16,29 @@ AUnrealArcheryShooterGameMode::AUnrealArcheryShooterGameMode() : Super()
 void AUnrealArcheryShooterGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	if (PlayerHUD)
+	ApplyPlayerHUD();
+}
+
+void AUnrealArcheryShooterGameMode::ApplyPlayerHUD()
+{
+	ApplyNewHUD(PlayerHUD, false, false);
+}
+
+bool AUnrealArcheryShooterGameMode::ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, bool bShowCursor, bool bEnableEvents)
+{
+	if (CurrentWidget)
 	{
-		CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUD);
-		CurrentWidget->AddToViewport();
+		CurrentWidget->RemoveFromParent();
 	}
+
+	CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), Hud);
+	if (CurrentWidget)
+	{
+		APlayerController* Controller = GetWorld()->GetFirstPlayerController();
+		Controller->bShowMouseCursor = bShowCursor;
+		Controller->bEnableClickEvents = bEnableEvents;
+		CurrentWidget->AddToViewport();
+		return true;
+	}
+	return false;
 }

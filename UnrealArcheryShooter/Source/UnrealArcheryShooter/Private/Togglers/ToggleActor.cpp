@@ -5,10 +5,8 @@
 AToggleActor::AToggleActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	TriggerBox = CreateDefaultSubobject<UBoxComponent>("TriggerBox");
+	TriggerBox = SetTrigger<UBoxComponent>("TriggerBox");
 	TriggerBox->InitBoxExtent(FVector(50, 50, 50));
-	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &AToggleActor::BeginOverlap);
-	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &AToggleActor::EndOverlap);
 	RootComponent = TriggerBox;
 }
 
@@ -18,21 +16,14 @@ void AToggleActor::BeginPlay()
 	this->SetActorHiddenInGame(bActiveOnOverlap);
 }
 
-void AToggleActor::BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AToggleActor::BeginTrigger(AActor* OtherActor)
 {
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
-	{
-		this->SetActorHiddenInGame(!bActiveOnOverlap);
-		Activated(bActiveOnOverlap, OtherActor);
-	}
+	this->SetActorHiddenInGame(!bActiveOnOverlap);
+	Activated(bActiveOnOverlap, OtherActor);
 }
 
-void AToggleActor::EndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex)
+void AToggleActor::EndTrigger(AActor* OtherActor)
 {
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
-	{
-		this->SetActorHiddenInGame(bActiveOnOverlap);
-		Activated(bActiveOnOverlap, OtherActor);
-	}
+	this->SetActorHiddenInGame(bActiveOnOverlap);
+	Activated(bActiveOnOverlap, OtherActor);
 }

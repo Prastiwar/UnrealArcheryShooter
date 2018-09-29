@@ -4,7 +4,7 @@
 
 ABeamAttacher::ABeamAttacher()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	BeamParticle = CreateDefaultSubobject<UParticleSystemComponent>("BeamParticle");
 	UpdateRate = 0.016f;	
 }

@@ -2,13 +2,11 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "Components/BoxComponent.h"
+#include "TriggerActor.h"
 #include "Lift.generated.h"
 
 UCLASS()
-class UNREALARCHERYSHOOTER_API ALift : public AActor
+class UNREALARCHERYSHOOTER_API ALift : public ATriggerActor
 {
 	GENERATED_BODY()
 
@@ -19,9 +17,7 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UFUNCTION()
-		void BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-			UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	virtual void BeginTrigger(AActor* OtherActor) override;
 
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* Box;

@@ -6,9 +6,7 @@ ALift::ALift()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	NextLocation = FVector(0, 0, 550);
-
-	Box = CreateDefaultSubobject<UBoxComponent>("BoxTrigger");
-	Box->OnComponentBeginOverlap.AddDynamic(this, &ALift::BeginOverlap);
+	Box = SetTrigger<UBoxComponent>("BoxTrigger");
 }
 
 void ALift::BeginPlay()
@@ -16,12 +14,8 @@ void ALift::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ALift::BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ALift::BeginTrigger(AActor* OtherActor)
 {
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
-	{
-		OtherActor->SetActorLocation(OtherActor->GetActorLocation() + NextLocation, bFromSweep);
-	}
+	OtherActor->SetActorLocation(OtherActor->GetActorLocation() + NextLocation);
 }
 

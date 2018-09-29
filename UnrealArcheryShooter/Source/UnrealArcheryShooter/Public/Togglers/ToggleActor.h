@@ -2,13 +2,11 @@
 
 #pragma once
 
-#include "Engine.h"
-#include "GameFramework/Actor.h"
-#include "Components/BoxComponent.h"
+#include "TriggerActor.h"
 #include "ToggleActor.generated.h"
 
 UCLASS()
-class UNREALARCHERYSHOOTER_API AToggleActor : public AActor
+class UNREALARCHERYSHOOTER_API AToggleActor : public ATriggerActor
 {
 	GENERATED_BODY()
 	
@@ -26,17 +24,12 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void Activated(bool bActive, AActor* OverlappedActor) {}
+	virtual void BeginTrigger(AActor* OtherActor);
+	virtual void EndTrigger(AActor* OtherActor);
 
 	UPROPERTY(EditAnywhere)
 		bool bActiveOnOverlap;
 
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* TriggerBox;
-
-	UFUNCTION()
-		void BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-			UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-		void EndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex);
 };

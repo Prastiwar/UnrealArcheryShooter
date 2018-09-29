@@ -14,6 +14,10 @@ class UNREALARCHERYSHOOTER_API AUnrealArcheryShooterGameMode : public AGameModeB
 public:
 	AUnrealArcheryShooterGameMode();
 
+	bool ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, bool bShowCursor, bool bEnableEvents);
+	void ApplyPlayerHUD();
+	UUserWidget* GetCurrentWidget() { return CurrentWidget; }
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -22,4 +26,5 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite)
 		UUserWidget* CurrentWidget;
+
 };
