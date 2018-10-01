@@ -7,7 +7,7 @@
 #include "UnrealArcheryShooterGameMode.h"
 #include "Shop.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class UNREALARCHERYSHOOTER_API AShop : public ATriggerActor
 {
 	GENERATED_BODY()
@@ -15,17 +15,36 @@ class UNREALARCHERYSHOOTER_API AShop : public ATriggerActor
 public:
 	AShop();
 
-protected:
-	AUnrealArcheryShooterGameMode* GameMode;
+	virtual bool BuyItem(int Index) { unimplemented(); return false; }
 
+protected:
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* BoxTrigger;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class UUserWidget> ShopHud;
 
+	UPROPERTY(EditAnywhere)
+		UDataTable* ItemsTable;
+
+	template<typename T>
+	TArray<T*> GetItemsArray()
+	{
+		TArray<T*> Items;
+		ItemsTable->GetAllRows<T>(TEXT(""), Items);
+		return Items;
+	}
+	AUASCharacter* GetPlayerCharacter() { return PlayerCharacter; }
+	AUnrealArcheryShooterGameMode* GetGameMode() { return GameMode; }
+
+	virtual void BuildShop() {}
+
 	virtual void BeginPlay() override;
-	virtual void BeginTrigger(AActor* OtherActor) override;
-	virtual void EndTrigger(AActor* OtherActor) override;
+	void BeginTrigger(AActor* OtherActor) override;
+	void EndTrigger(AActor* OtherActor) override;
+
+private:
+	AUASCharacter* PlayerCharacter;
+	AUnrealArcheryShooterGameMode* GameMode;
 
 };

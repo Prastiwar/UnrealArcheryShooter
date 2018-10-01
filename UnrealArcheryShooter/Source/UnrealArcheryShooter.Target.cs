@@ -9,6 +9,6 @@ public class UnrealArcheryShooterTarget : TargetRules
 	{
 		Type = TargetType.Game;
 
-		ExtraModuleNames.AddRange( new string[] { "UnrealArcheryShooter", "ApexDestruction" } );
+		ExtraModuleNames.AddRange( new string[] { "UnrealArcheryShooter" } );
 	}
 }

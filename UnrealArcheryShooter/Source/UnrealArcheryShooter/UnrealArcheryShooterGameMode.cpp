@@ -8,7 +8,7 @@
 
 AUnrealArcheryShooterGameMode::AUnrealArcheryShooterGameMode() : Super()
 {
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/UnrealArcheryContent/Blueprints/Player/BP_FirstPersonCharacter"));
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/UnrealArcheryContent/Blueprints/Player/BP_UASFPP"));
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 	HUDClass = AUASHUD::StaticClass();
 }
@@ -17,11 +17,6 @@ void AUnrealArcheryShooterGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	ApplyPlayerHUD();
-}
-
-void AUnrealArcheryShooterGameMode::ApplyPlayerHUD()
-{
-	ApplyNewHUD(PlayerHUD, false, false);
 }
 
 bool AUnrealArcheryShooterGameMode::ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, bool bShowCursor, bool bEnableEvents)

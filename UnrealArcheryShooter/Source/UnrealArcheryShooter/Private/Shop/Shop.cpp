@@ -5,13 +5,14 @@
 AShop::AShop()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	BoxTrigger = ATriggerActor::SetTrigger<UBoxComponent>("Box Trigger");
+	BoxTrigger = SetTrigger<UBoxComponent>("Box Trigger");
 	RootComponent = BoxTrigger;
 }
 
 void AShop::BeginPlay()
 {
 	Super::BeginPlay();
+	PlayerCharacter = Cast<AUASCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	GameMode = GetWorld()->GetAuthGameMode<AUnrealArcheryShooterGameMode>();
 }
 
@@ -19,6 +20,7 @@ void AShop::BeginTrigger(AActor* OtherActor)
 {
 	if (Cast<AUASCharacter>(OtherActor))
 	{
+		BuildShop();
 		GameMode->ApplyNewHUD(ShopHud, true, true);
 	}
 }

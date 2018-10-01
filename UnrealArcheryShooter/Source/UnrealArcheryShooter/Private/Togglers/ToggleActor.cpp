@@ -25,5 +25,5 @@ void AToggleActor::BeginTrigger(AActor* OtherActor)
 void AToggleActor::EndTrigger(AActor* OtherActor)
 {
 	this->SetActorHiddenInGame(bActiveOnOverlap);
-	Activated(bActiveOnOverlap, OtherActor);
+	Activated(!bActiveOnOverlap, OtherActor);
 }

@@ -51,6 +51,13 @@ private:
 		int CurrentWeaponIndex;
 
 public:
+	TArray<FWeaponData> GetWeapons() { return Weapons; }
+
+	void AddWeapon(FWeaponData& Weapon) { Weapons.Add(Weapon); }
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		int GetCurrentWeaponIndex() { return CurrentWeaponIndex; }
+
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		void AddScore(float Score);
 

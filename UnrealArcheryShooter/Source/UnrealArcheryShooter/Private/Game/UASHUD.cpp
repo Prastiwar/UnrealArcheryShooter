@@ -13,7 +13,6 @@ AUASHUD::AUASHUD()
 	CrosshairTex = CrosshairTexObj.Object;
 }
 
-
 void AUASHUD::DrawHUD()
 {
 	Super::DrawHUD();
