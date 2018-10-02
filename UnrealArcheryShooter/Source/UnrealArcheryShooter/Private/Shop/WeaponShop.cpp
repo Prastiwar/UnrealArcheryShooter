@@ -4,16 +4,22 @@
 
 void AWeaponShop::BuildShop()
 {
+	UItemGrid* ItemGrid = ShopHud->GetDefaultObject<UItemGrid>();
+	ItemGrid->bAutoFill = false;
+	GLog->Log(FString::FromInt(ItemGrid->RowCount));
+	GLog->Log(ItemGrid->ItemWidgetClass ? TEXT("true") : TEXT("false"));
+	GLog->Log(ItemGrid->Grid ? TEXT("true") : TEXT("false"));
+	TArray<UItemWidget*> ItemWidgets = ItemGrid->FillGrid<UItemWidget>();
 	TArray<FUIWeaponData*> Weapons = GetItemsArray<FUIWeaponData>();
-	uint8 Count = Weapons.Num();
-	for (uint8 i = 0; i < Count; i++)
+	uint8 WeaponsCount = Weapons.Num();
+	uint32 WidgetsCount = ItemWidgets.Num();
+	GLog->Log(FString::FromInt(ItemWidgets.Num()));
+	if (WidgetsCount >= WeaponsCount)
 	{
-		// create slot
-		//Weapons[i]->Cost;
-		//Weapons[i]->Icon;
-		//Weapons[i]->Weapon.Name;
-		//WeaponItem->GetDefaultObject<UUserWidget>().
-		//ShopHud->
+		for (uint8 Index = 0; Index < WeaponsCount; Index++)
+		{
+			ItemWidgets[Index]->SetItem(Weapons[Index]->Icon, FText::AsCurrency(Weapons[Index]->Cost), Weapons[Index]->Weapon.Name);
+		}
 	}
 }
 

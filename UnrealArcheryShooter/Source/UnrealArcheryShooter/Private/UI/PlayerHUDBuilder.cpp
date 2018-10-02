@@ -22,7 +22,7 @@ void UPlayerHUDBuilder::BuildWeaponSlotsWidget(uint8 Count)
 
 		if (PlayerWeapons.IsValidIndex(i))
 		{
-			FUIWeaponData* UIWeapon = WeaponsTable->FindRow<FUIWeaponData>(PlayerWeapons[i].Name, TEXT(""));
+			//FUIWeaponData* UIWeapon = WeaponsTable->FindRow<FUIWeaponData>(FString(PlayerWeapons[i].Name), TEXT(""));
 			//UIWeapon->Icon;
 		}
 	}

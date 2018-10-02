@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Shop/Shop.h"
+#include "UI/ItemGrid.h"
 #include "Data/UIWeaponData.h"
 #include "WeaponShop.generated.h"
 
@@ -17,7 +18,7 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<class UUserWidget*> WeaponItem;
+		TSubclassOf<class UUserWidget> WeaponItem;
 
 	virtual void BuildShop() override;
 

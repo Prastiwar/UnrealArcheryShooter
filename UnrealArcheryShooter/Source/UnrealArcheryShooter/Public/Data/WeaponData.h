@@ -18,7 +18,7 @@ public:
 	~FWeaponData() { }
 
 	UPROPERTY(EditAnywhere)
-		FName Name;
+		FText Name;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class AProjectile> Projectile;
