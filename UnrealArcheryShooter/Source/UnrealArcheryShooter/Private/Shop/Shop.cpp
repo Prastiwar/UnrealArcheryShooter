@@ -13,13 +13,13 @@ AShop::AShop()
 void AShop::BeginPlay()
 {
 	Super::BeginPlay();
-	PlayerCharacter = Cast<AUASCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	GameMode = GetWorld()->GetAuthGameMode<AUnrealArcheryShooterGameMode>();
 }
 
 void AShop::BeginTrigger(AActor* OtherActor)
 {
-	if (Cast<AUASCharacter>(OtherActor))
+	PlayerCharacter = Cast<AUASCharacter>(OtherActor);
+	if (PlayerCharacter)
 	{
 		GameMode->ApplyNewHUD(ShopHud, true, true);
 	}

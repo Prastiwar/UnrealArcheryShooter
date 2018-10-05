@@ -17,7 +17,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void FillGrid() override;
 
+	UFUNCTION(BlueprintCallable)
+		void RefreshScore(float Score);
+
 protected:
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UTextBlock* ScoreText;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UDataTable* WeaponsTable;
 

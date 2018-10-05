@@ -26,7 +26,10 @@ void AUnrealArcheryShooterGameMode::ApplyPlayerHUD() {
 		Player->SetInputMode(FInputModeGameOnly());
 		Player->SetIgnoreMoveInput(false);
 		Player->SetIgnoreLookInput(false);
-		AUASCharacter::GetUASCharacter(GetWorld())->OnWeaponChanged.AddDynamic(Cast<UPlayerHUD>(CurrentWidget), &UPlayerHUD::SetDirty);
+		AUASCharacter* UASCharacter = AUASCharacter::GetUASCharacter(GetWorld());
+		UASCharacter->OnWeaponChanged.AddDynamic(Cast<UPlayerHUD>(CurrentWidget), &UPlayerHUD::SetDirty);
+		UASCharacter->OnScoreChanged.AddDynamic(Cast<UPlayerHUD>(CurrentWidget), &UPlayerHUD::RefreshScore);
+		UASCharacter->AddScore(0); // refresh Score Text
 	}
 	else
 	{

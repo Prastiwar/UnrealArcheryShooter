@@ -32,4 +32,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void SetGrid(TArray<UWeaponShopItem*> WeaponItems);
 
+private:
+	UFUNCTION()
+		void TryExitShop(bool bBought);
+
 };

@@ -14,13 +14,17 @@ class UNREALARCHERYSHOOTER_API AUASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
+		DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
+		DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScoreChanged, float, Score);
 
 public:
 	AUASCharacter();
 
 	UPROPERTY(BlueprintAssignable)
 		FWeaponChanged OnWeaponChanged;
+
+	UPROPERTY(BlueprintAssignable)
+		FScoreChanged OnScoreChanged;
 
 	static AUASCharacter* GetUASCharacter(const UWorld* World)
 	{
@@ -93,10 +97,10 @@ public:
 	void AddWeapon(FWeaponData& Weapon) { Weapons.Add(Weapon); }
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		void AddScore(float Score);
+		float GetScore();
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		float GetScore();
+		void AddScore(float Score);
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		float GetScoreMultiplier();

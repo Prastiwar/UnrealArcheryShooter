@@ -165,16 +165,17 @@ void AUASCharacter::AddScore(float Score)
 	{
 		PlayerData.Score = 0.0f;
 	}
-}
-
-float AUASCharacter::GetScore()
-{
-	return PlayerData.Score;
+	OnScoreChanged.Broadcast(PlayerData.Score);
 }
 
 float AUASCharacter::GetScoreMultiplier()
 {
 	return ScoreMultiplier;
+}
+
+float AUASCharacter::GetScore()
+{
+	return PlayerData.Score;
 }
 
 void AUASCharacter::SetScoreMultiplier(float ScoreMultiplier)

@@ -8,6 +8,13 @@ void UPlayerHUD::FillGrid()
 	SetGrid(WeaponItems);
 }
 
+void UPlayerHUD::RefreshScore(float Score)
+{
+	FNumberFormattingOptions options = FNumberFormattingOptions();
+	options.SetMaximumFractionalDigits(0);
+	ScoreText->SetText(FText::AsNumber(Score, &options));
+}
+
 void UPlayerHUD::SetGrid(TArray<UWeaponItem*> WeaponItems)
 {
 	if (AUASCharacter* Player = AUASCharacter::GetUASCharacter(GetWorld()))

@@ -16,6 +16,14 @@ void UWeaponShopGrid::ExitShop()
 	GetWorld()->GetAuthGameMode<AUnrealArcheryShooterGameMode>()->ApplyPlayerHUD();
 }
 
+void UWeaponShopGrid::TryExitShop(bool bBought)
+{
+	if (bBought)
+	{
+		GetWorld()->GetAuthGameMode<AUnrealArcheryShooterGameMode>()->ApplyPlayerHUD();
+	}
+}
+
 void UWeaponShopGrid::FillGrid()
 {
 	TArray<UWeaponShopItem*> WeaponItems = FillItemGrid<UWeaponShopItem>();
@@ -34,6 +42,8 @@ void UWeaponShopGrid::SetGrid(TArray<UWeaponShopItem*> WeaponItems)
 			WeaponItems[Index]->SetShopItem(Weapons[Index]->Icon,
 				FText::FromName(Weapons[Index]->Weapon.Name),
 				FText::AsNumber(Weapons[Index]->Cost));
+			WeaponItems[Index]->SetButton(Index, WeaponShop);
+			WeaponItems[Index]->OnBuy.AddDynamic(this, &UWeaponShopGrid::TryExitShop);
 		}
 	}
 }
