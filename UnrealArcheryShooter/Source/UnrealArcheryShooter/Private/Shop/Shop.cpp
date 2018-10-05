@@ -1,6 +1,7 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "Shop.h"
+#include "UI/ItemGrid.h"
 
 AShop::AShop()
 {
@@ -20,8 +21,8 @@ void AShop::BeginTrigger(AActor* OtherActor)
 {
 	if (Cast<AUASCharacter>(OtherActor))
 	{
-		BuildShop();
 		GameMode->ApplyNewHUD(ShopHud, true, true);
+		BuildShop();
 	}
 }
 

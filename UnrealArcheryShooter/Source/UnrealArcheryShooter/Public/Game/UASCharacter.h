@@ -16,6 +16,17 @@ class UNREALARCHERYSHOOTER_API AUASCharacter : public ACharacter
 
 public:
 	AUASCharacter();
+	static AUASCharacter* GetUASCharacter(const UWorld* World)
+	{
+		if (World)
+		{
+			if (World->GetFirstPlayerController())
+			{
+				return Cast<AUASCharacter>(World->GetFirstPlayerController()->GetCharacter());
+			}
+		}
+		return nullptr;
+	}
 
 protected:
 	virtual void BeginPlay();
@@ -51,7 +62,8 @@ private:
 		int CurrentWeaponIndex;
 
 public:
-	TArray<FWeaponData> GetWeapons() { return Weapons; }
+	UFUNCTION(BlueprintCallable)
+		TArray<FWeaponData> GetWeapons() { return Weapons; }
 
 	void AddWeapon(FWeaponData& Weapon) { Weapons.Add(Weapon); }
 

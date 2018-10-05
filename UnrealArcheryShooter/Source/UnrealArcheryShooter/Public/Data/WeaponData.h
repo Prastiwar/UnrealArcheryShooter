@@ -7,7 +7,7 @@
 #include "CooldownData.h"
 #include "WeaponData.generated.h"
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct UNREALARCHERYSHOOTER_API FWeaponData
 {
 	GENERATED_BODY()
@@ -17,16 +17,16 @@ public:
 
 	~FWeaponData() { }
 
-	UPROPERTY(EditAnywhere)
-		FText Name;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FName Name;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TSubclassOf<class AProjectile> Projectile;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USkeletalMesh* WeaponMesh;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class UAnimMontage* FireAnimation;
 
 	UPROPERTY(EditAnywhere)

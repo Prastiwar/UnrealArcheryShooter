@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Shop/Shop.h"
-#include "UI/ItemGrid.h"
+#include "UI/WeaponShopItem.h"
 #include "Data/UIWeaponData.h"
 #include "WeaponShop.generated.h"
 
@@ -21,5 +21,7 @@ protected:
 		TSubclassOf<class UUserWidget> WeaponItem;
 
 	virtual void BuildShop() override;
+
+	void SetUIInput();
 
 };

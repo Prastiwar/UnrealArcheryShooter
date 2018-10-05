@@ -5,8 +5,5 @@
 void UItemGrid::SynchronizeProperties()
 {
 	Super::SynchronizeProperties();
-	if (bAutoFill)
-	{
-		FillGrid<UItemWidget>();
-	}
+	OnSynchronizeProperties();
 }

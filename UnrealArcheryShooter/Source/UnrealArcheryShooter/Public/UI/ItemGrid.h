@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UI/ItemWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "UMG/Public/Components/UniformGridPanel.h"
 #include "UMG/Public/Components/UniformGridSlot.h"
+#include "UMG/Public/Components/Button.h"
 #include "ItemGrid.generated.h"
 
 UCLASS()
@@ -15,25 +15,34 @@ class UNREALARCHERYSHOOTER_API UItemGrid : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere)
-		bool bAutoFill;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		uint8 RowCount;
 
-	UPROPERTY(EditAnywhere)
-		uint32 RowCount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		uint8 ColumnCount;
 
-	UPROPERTY(EditAnywhere)
-		uint32 ColumnCount;
-
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<class UItemWidget> ItemWidgetClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TSubclassOf<class UUserWidget> ItemWidgetClass;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UUniformGridPanel* Grid;
 
+	virtual void FillGrid() { FillUserGrid(); }
 	virtual void SynchronizeProperties() override;
 
+	UFUNCTION(BlueprintNativeEvent)
+		void OnSynchronizeProperties();
+
+	void OnSynchronizeProperties_Implementation() {}
+
+	UFUNCTION(BlueprintCallable)
+		TArray<UUserWidget*> FillUserGrid() { return FillItemGrid<UUserWidget>(); }
+
 	template<typename T>
-	TArray<T*> FillGridImpl(uint32 RowCount, uint32 ColumnCount)
+	TArray<T*> FillItemGrid() { return FillItemGridImpl<T>(RowCount, ColumnCount); }
+
+	template<typename T>
+	TArray<T*> FillItemGridImpl(uint32 RowCount, uint32 ColumnCount)
 	{
 		TArray<T*> Items = TArray<T*>();
 		if (Grid && ItemWidgetClass)
@@ -54,15 +63,9 @@ public:
 		}
 		else
 		{
-			GLog->Log(TEXT("There is no Grid or ItemWidgetClass"));
+			UE_LOG(LogTemp, Error, TEXT("There is no Grid or ItemWidgetClass"));
 		}
 		return Items;
-	}
-
-	template<typename T>
-	TArray<T*> FillGrid()
-	{
-		return FillGridImpl<T>(RowCount, ColumnCount);
 	}
 
 };

@@ -6,7 +6,7 @@
 #include "Engine/DataTable.h"
 #include "UIWeaponData.generated.h"
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct UNREALARCHERYSHOOTER_API FUIWeaponData : public FTableRowBase
 {
 	GENERATED_BODY()
@@ -16,12 +16,12 @@ public:
 	~FUIWeaponData() {}
 
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FWeaponData Weapon;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float Cost;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UTexture2D* Icon;
 };

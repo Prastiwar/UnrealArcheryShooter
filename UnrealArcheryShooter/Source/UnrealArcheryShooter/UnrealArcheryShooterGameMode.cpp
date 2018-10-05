@@ -16,22 +16,42 @@ AUnrealArcheryShooterGameMode::AUnrealArcheryShooterGameMode() : Super()
 void AUnrealArcheryShooterGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+	FTimerHandle Handler;
+	GetWorld()->GetTimerManager().SetTimer(Handler, this, &AUnrealArcheryShooterGameMode::ApplyPlayerHUD, 1.0f, false, 1.0f);
 	ApplyPlayerHUD();
 }
 
-bool AUnrealArcheryShooterGameMode::ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, bool bShowCursor, bool bEnableEvents)
+void AUnrealArcheryShooterGameMode::ApplyPlayerHUD() {
+	if (ApplyNewHUD(PlayerHUD, false, false))
+	{
+		//Cast<UPlayerHUD>(PlayerHUD.GetDefaultObject())->FillItemsInGrid(GetWorld());
+		APlayerController* Player = GetWorld()->GetFirstPlayerController();
+		Player->SetInputMode(FInputModeGameOnly());
+		Player->SetIgnoreMoveInput(false);
+		Player->SetIgnoreLookInput(false);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Applying Player HUD failed!"))
+	}
+}
+
+bool AUnrealArcheryShooterGameMode::ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, bool bShowCursor, bool bEnableClickEvents)
 {
 	if (CurrentWidget)
 	{
 		CurrentWidget->RemoveFromParent();
 	}
-
+	if (GetWorld() == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Applying Player HUD NO WORLD"))
+	}
 	CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), Hud);
 	if (CurrentWidget)
 	{
 		APlayerController* Controller = GetWorld()->GetFirstPlayerController();
 		Controller->bShowMouseCursor = bShowCursor;
-		Controller->bEnableClickEvents = bEnableEvents;
+		Controller->bEnableClickEvents = bEnableClickEvents;
 		CurrentWidget->AddToViewport();
 		return true;
 	}
