@@ -16,12 +16,4 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual bool BuyItem(int Index) override;
 
-protected:
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<class UUserWidget> WeaponItem;
-
-	virtual void BuildShop() override;
-
-	void SetUIInput();
-
 };

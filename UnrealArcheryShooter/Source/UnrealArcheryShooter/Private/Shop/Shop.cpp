@@ -22,7 +22,6 @@ void AShop::BeginTrigger(AActor* OtherActor)
 	if (Cast<AUASCharacter>(OtherActor))
 	{
 		GameMode->ApplyNewHUD(ShopHud, true, true);
-		BuildShop();
 	}
 }
 

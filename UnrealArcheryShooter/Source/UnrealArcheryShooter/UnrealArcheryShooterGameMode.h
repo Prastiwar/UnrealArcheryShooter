@@ -14,6 +14,21 @@ class UNREALARCHERYSHOOTER_API AUnrealArcheryShooterGameMode : public AGameModeB
 
 public:
 	AUnrealArcheryShooterGameMode();
+	
+	static bool SetUIInput(const UWorld* World)
+	{
+		if (World)
+		{
+			if (APlayerController* Player = World->GetFirstPlayerController())
+			{
+				Player->SetInputMode(FInputModeUIOnly());
+				Player->SetIgnoreMoveInput(true);
+				Player->SetIgnoreLookInput(true);
+				return true;
+			}
+		}
+		return false;
+	}
 
 	void ApplyPlayerHUD();
 	bool ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, bool bShowCursor, bool bEnableClickEvents);

@@ -5,5 +5,6 @@
 void UItemGrid::SynchronizeProperties()
 {
 	Super::SynchronizeProperties();
+	FillGrid();
 	OnSynchronizeProperties();
 }

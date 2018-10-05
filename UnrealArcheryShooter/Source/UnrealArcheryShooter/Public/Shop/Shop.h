@@ -17,6 +17,14 @@ public:
 
 	virtual bool BuyItem(int Index) { unimplemented(); return false; }
 
+	template<typename T>
+	TArray<T*> GetItemsArray()
+	{
+		TArray<T*> Items;
+		ItemsTable->GetAllRows<T>(TEXT(""), Items);
+		return Items;
+	}
+
 protected:
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* BoxTrigger;
@@ -27,21 +35,12 @@ protected:
 	UPROPERTY(EditAnywhere)
 		UDataTable* ItemsTable;
 
-	template<typename T>
-	TArray<T*> GetItemsArray()
-	{
-		TArray<T*> Items;
-		ItemsTable->GetAllRows<T>(TEXT(""), Items);
-		return Items;
-	}
-	AUASCharacter* GetPlayerCharacter() { return PlayerCharacter; }
-	AUnrealArcheryShooterGameMode* GetGameMode() { return GameMode; }
-
-	virtual void BuildShop() {}
-
 	virtual void BeginPlay() override;
 	void BeginTrigger(AActor* OtherActor) override;
 	void EndTrigger(AActor* OtherActor) override;
+
+	AUASCharacter* GetPlayerCharacter() { return PlayerCharacter; }
+	AUnrealArcheryShooterGameMode* GetGameMode() { return GameMode; }
 
 private:
 	AUASCharacter* PlayerCharacter;

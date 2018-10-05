@@ -14,8 +14,14 @@ class UNREALARCHERYSHOOTER_API AUASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
+
 public:
 	AUASCharacter();
+
+	UPROPERTY(BlueprintAssignable)
+		FWeaponChanged OnWeaponChanged;
+
 	static AUASCharacter* GetUASCharacter(const UWorld* World)
 	{
 		if (World)
@@ -43,7 +49,6 @@ protected:
 	 */
 	void TurnAtRate(float Rate);
 
-protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override; // APawn interface
 
 private:
@@ -62,35 +67,6 @@ private:
 		int CurrentWeaponIndex;
 
 public:
-	UFUNCTION(BlueprintCallable)
-		TArray<FWeaponData> GetWeapons() { return Weapons; }
-
-	void AddWeapon(FWeaponData& Weapon) { Weapons.Add(Weapon); }
-
-	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		int GetCurrentWeaponIndex() { return CurrentWeaponIndex; }
-
-	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		void AddScore(float Score);
-
-	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		float GetScore();
-
-	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		float GetScoreMultiplier();
-
-	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		void SetScoreMultiplier(float ScoreMultiplier);
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-		void SwitchNextWeapon();
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-		void SwitchPreviousWeapon();
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-		void SetWeapon(int Index);
-
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 		class USkeletalMeshComponent* FirstPersonMeshViewed;
 
@@ -110,5 +86,34 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		USceneComponent* MuzzleLocation;
+
+	UFUNCTION(BlueprintCallable)
+		TArray<FWeaponData> GetWeapons() { return Weapons; }
+
+	void AddWeapon(FWeaponData& Weapon) { Weapons.Add(Weapon); }
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		void AddScore(float Score);
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		float GetScore();
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		float GetScoreMultiplier();
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		void SetScoreMultiplier(float ScoreMultiplier);
+
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+		int GetCurrentWeaponIndex() { return CurrentWeaponIndex; }
+
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+		void SwitchNextWeapon();
+
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+		void SwitchPreviousWeapon();
+
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+		void SetWeapon(int Index);
 
 };

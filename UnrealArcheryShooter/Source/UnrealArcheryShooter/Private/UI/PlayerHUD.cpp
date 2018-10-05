@@ -12,27 +12,17 @@ void UPlayerHUD::SetGrid(TArray<UWeaponItem*> WeaponItems)
 {
 	if (AUASCharacter* Player = AUASCharacter::GetUASCharacter(GetWorld()))
 	{
-
-	}
-	if (const UWorld* World = GetWorld())
-	{
-		if (World->GetFirstPlayerController())
+		TArray<FWeaponData> PlayerWeapons = Player->GetWeapons();
+		for (uint8 Index = 0; Index < WeaponItems.Num(); Index++)
 		{
-			if (AUASCharacter* Player = Cast<AUASCharacter>(World->GetFirstPlayerController()->GetCharacter()))
+			if (PlayerWeapons.IsValidIndex(Index))
 			{
-				TArray<FWeaponData> PlayerWeapons = Player->GetWeapons();
-				for (uint8 Index = 0; Index < WeaponItems.Num(); Index++)
+				FUIWeaponData* UIWeapon = WeaponsTable->FindRow<FUIWeaponData>(PlayerWeapons[Index].Name, TEXT(""));
+				if (UIWeapon)
 				{
-					if (PlayerWeapons.IsValidIndex(Index))
-					{
-						FUIWeaponData* UIWeapon = WeaponsTable->FindRow<FUIWeaponData>(PlayerWeapons[Index].Name, TEXT(""));
-						if (UIWeapon)
-						{
-							int SelectedWeaponIndex = Player->GetCurrentWeaponIndex();
-							bool bSelect = Index == SelectedWeaponIndex;
-							WeaponItems[Index]->SetItem(UIWeapon->Icon, bSelect);
-						}
-					}
+					int SelectedWeaponIndex = Player->GetCurrentWeaponIndex();
+					bool bSelect = Index == SelectedWeaponIndex;
+					WeaponItems[Index]->SetItem(UIWeapon->Icon, bSelect);
 				}
 			}
 		}

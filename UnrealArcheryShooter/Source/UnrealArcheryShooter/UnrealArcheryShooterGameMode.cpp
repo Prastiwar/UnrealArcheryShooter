@@ -16,19 +16,17 @@ AUnrealArcheryShooterGameMode::AUnrealArcheryShooterGameMode() : Super()
 void AUnrealArcheryShooterGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	FTimerHandle Handler;
-	GetWorld()->GetTimerManager().SetTimer(Handler, this, &AUnrealArcheryShooterGameMode::ApplyPlayerHUD, 1.0f, false, 1.0f);
 	ApplyPlayerHUD();
 }
 
 void AUnrealArcheryShooterGameMode::ApplyPlayerHUD() {
 	if (ApplyNewHUD(PlayerHUD, false, false))
 	{
-		//Cast<UPlayerHUD>(PlayerHUD.GetDefaultObject())->FillItemsInGrid(GetWorld());
 		APlayerController* Player = GetWorld()->GetFirstPlayerController();
 		Player->SetInputMode(FInputModeGameOnly());
 		Player->SetIgnoreMoveInput(false);
 		Player->SetIgnoreLookInput(false);
+		AUASCharacter::GetUASCharacter(GetWorld())->OnWeaponChanged.AddDynamic(Cast<UPlayerHUD>(CurrentWidget), &UPlayerHUD::SetDirty);
 	}
 	else
 	{

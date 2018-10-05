@@ -204,4 +204,5 @@ void AUASCharacter::SetWeapon(int Index)
 		CurrentWeaponIndex = Weapons.Num() - 1;
 	}
 	GunMesh->SetSkeletalMeshWithoutResettingAnimation(Weapons[CurrentWeaponIndex].WeaponMesh);
+	OnWeaponChanged.Broadcast();
 }

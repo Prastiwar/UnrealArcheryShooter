@@ -28,12 +28,17 @@ public:
 		UUniformGridPanel* Grid;
 
 	virtual void FillGrid() { FillUserGrid(); }
-	virtual void SynchronizeProperties() override;
 
+	virtual void SynchronizeProperties() override;
 	UFUNCTION(BlueprintNativeEvent)
 		void OnSynchronizeProperties();
-
 	void OnSynchronizeProperties_Implementation() {}
+
+	UFUNCTION(BlueprintCallable)
+		void SetDirty() { OnDirty(); }
+	UFUNCTION(BlueprintNativeEvent)
+		void OnDirty();
+	void OnDirty_Implementation() { FillGrid(); }
 
 	UFUNCTION(BlueprintCallable)
 		TArray<UUserWidget*> FillUserGrid() { return FillItemGrid<UUserWidget>(); }
