@@ -32,10 +32,10 @@ public:
 		void SetShopItem(UTexture2D* Icon, FText Name, FText Cost);
 
 	UFUNCTION(BlueprintCallable)
-		void SetButton(int Index, TSubclassOf<class AWeaponShop> WeaponShop);
+		void SetButton(int WeaponIndex, TSubclassOf<class AWeaponShop> WeaponShop);
 
 private:
-	int ButtonIndex;
+	int WeaponIndex;
 	TSubclassOf<class AWeaponShop> WeaponShop;
 
 	UFUNCTION()

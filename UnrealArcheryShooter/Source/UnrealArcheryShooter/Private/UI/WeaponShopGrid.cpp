@@ -30,20 +30,36 @@ void UWeaponShopGrid::FillGrid()
 	SetGrid(WeaponItems);
 }
 
-void UWeaponShopGrid::SetGrid(TArray<UWeaponShopItem*> WeaponItems)
+void UWeaponShopGrid::SetGrid(TArray<UWeaponShopItem*> WeaponWidgetItems)
 {
 	if (AUnrealArcheryShooterGameMode::SetUIInput(GetWorld()))
 	{
+		AUASCharacter* Player = AUASCharacter::GetUASCharacter(GetWorld());
+		// Weapons From Data Table
 		TArray<FUIWeaponData*> Weapons = WeaponShop->GetDefaultObject<AWeaponShop>()->GetItemsArray<FUIWeaponData>();
+
 		uint8 WeaponsCount = Weapons.Num();
-		uint32 WidgetsCount = WeaponItems.Num();
-		for (uint8 Index = 0; Index < WeaponsCount; Index++)
+		uint8 WidgetsCount = WeaponWidgetItems.Num();
+
+		if (WeaponsCount <= WidgetsCount)
 		{
-			WeaponItems[Index]->SetShopItem(Weapons[Index]->Icon,
-				FText::FromName(Weapons[Index]->Weapon.Name),
-				FText::AsNumber(Weapons[Index]->Cost));
-			WeaponItems[Index]->SetButton(Index, WeaponShop);
-			WeaponItems[Index]->OnBuy.AddDynamic(this, &UWeaponShopGrid::TryExitShop);
+			uint8 WidgetIndex = 0;
+			for (uint8 WeaponIndex = 0; WeaponIndex < WeaponsCount; WeaponIndex++)
+			{
+				if (!Player->HasWeapon(Weapons[WeaponIndex]->Weapon))
+				{
+					WeaponWidgetItems[WidgetIndex]->SetShopItem(Weapons[WeaponIndex]->Icon,
+						FText::FromName(Weapons[WeaponIndex]->Weapon.Name),
+						FText::AsNumber(Weapons[WeaponIndex]->Cost));
+					WeaponWidgetItems[WidgetIndex]->SetButton(WeaponIndex, WeaponShop);
+					WeaponWidgetItems[WidgetIndex]->OnBuy.AddDynamic(this, &UWeaponShopGrid::TryExitShop);
+					WidgetIndex++;
+				}
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("WeaponShopGrid: There is more weapons than item widgets!"));
 		}
 	}
 }

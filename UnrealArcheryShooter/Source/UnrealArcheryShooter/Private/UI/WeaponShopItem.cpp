@@ -9,14 +9,14 @@ void UWeaponShopItem::SetShopItem(UTexture2D* Icon, FText Name, FText Cost)
 	ItemCost->SetText(Cost);
 }
 
-void UWeaponShopItem::SetButton(int Index, TSubclassOf<class AWeaponShop> WeaponShop)
+void UWeaponShopItem::SetButton(int WeaponIndex, TSubclassOf<class AWeaponShop> WeaponShop)
 {
-	ButtonIndex = Index;
+	this->WeaponIndex = WeaponIndex;
 	this->WeaponShop = WeaponShop;
 	Button->OnClicked.AddDynamic(this, &UWeaponShopItem::ButtonClick);
 }
 
 void UWeaponShopItem::ButtonClick()
 {
-	OnBuy.Broadcast(WeaponShop->GetDefaultObject<AWeaponShop>()->BuyItem(this, ButtonIndex));
+	OnBuy.Broadcast(WeaponShop->GetDefaultObject<AWeaponShop>()->BuyItem(this, WeaponIndex));
 }

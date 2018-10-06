@@ -29,5 +29,14 @@ public:
 		bool IsCompleted = true;
 
 	FORCEINLINE bool operator==(const FCooldownData &Other) const { return ID == Other.ID; }
-	FORCEINLINE bool operator!=(const FCooldownData &Other) const { return ID == Other.ID; }
+	FORCEINLINE bool operator!=(const FCooldownData &Other) const { return !(ID == Other.ID); }
+	
+	friend uint32 GetTypeHash(const FCooldownData& Other)
+	{
+		return GetTypeHash(Other.ID)
+			+ GetTypeHash(Other.TickRateMultiplier)
+			+ GetTypeHash(Other.InitialTime)
+			+ GetTypeHash(Other.CooldownTime)
+			+ GetTypeHash(Other.IsCompleted);
+	}
 };

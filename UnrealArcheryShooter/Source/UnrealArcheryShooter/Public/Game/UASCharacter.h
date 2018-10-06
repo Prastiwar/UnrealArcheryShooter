@@ -91,22 +91,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		USceneComponent* MuzzleLocation;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Weapon)
 		TArray<FWeaponData> GetWeapons() { return Weapons; }
 
-	void AddWeapon(FWeaponData& Weapon) { Weapons.Add(Weapon); }
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+		bool AddWeapon(FWeaponData& Weapon);
 
-	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		float GetScore();
-
-	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		void AddScore(float Score);
-
-	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		float GetScoreMultiplier();
-
-	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		void SetScoreMultiplier(float ScoreMultiplier);
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+		bool HasWeapon(FWeaponData& Weapon);
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		int GetCurrentWeaponIndex() { return CurrentWeaponIndex; }
@@ -119,5 +111,17 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		void SetWeapon(int Index);
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		float GetScore();
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		void AddScore(float Score);
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		float GetScoreMultiplier();
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		void SetScoreMultiplier(float ScoreMultiplier);
 
 };

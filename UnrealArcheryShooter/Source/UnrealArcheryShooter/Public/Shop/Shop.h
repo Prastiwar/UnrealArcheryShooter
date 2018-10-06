@@ -15,7 +15,8 @@ class UNREALARCHERYSHOOTER_API AShop : public ATriggerActor
 public:
 	AShop();
 
-	virtual bool BuyItem(int Index) { unimplemented(); return false; }
+	virtual bool BuyItem(int ItemIndex) { unimplemented(); return false; }
+	virtual bool BuyItem(const UObject* WorldContextObject, int ItemIndex) { unimplemented(); return false; }
 
 	template<typename T>
 	TArray<T*> GetItemsArray()

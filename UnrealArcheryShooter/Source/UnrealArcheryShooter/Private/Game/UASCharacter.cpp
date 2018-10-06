@@ -183,6 +183,21 @@ void AUASCharacter::SetScoreMultiplier(float ScoreMultiplier)
 	this->ScoreMultiplier = ScoreMultiplier;
 }
 
+bool AUASCharacter::AddWeapon(FWeaponData& Weapon)
+{
+	if (!HasWeapon(Weapon))
+	{
+		Weapons.Add(Weapon);
+		return true;
+	}
+	return false;
+}
+
+bool AUASCharacter::HasWeapon(FWeaponData& Weapon)
+{
+	return Weapons.Contains(Weapon);
+}
+
 void AUASCharacter::SwitchPreviousWeapon()
 {
 	SetWeapon(CurrentWeaponIndex - 1);

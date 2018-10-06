@@ -30,6 +30,18 @@ public:
 		class UAnimMontage* FireAnimation;
 
 	UPROPERTY(EditAnywhere)
-		FCooldownData FireCooldown;
+		FCooldownData FireCooldown; 
+
+	FORCEINLINE bool operator==(const FWeaponData &Other) const { return Name == Other.Name; }
+	FORCEINLINE bool operator!=(const FWeaponData &Other) const { return !(Name == Other.Name); }
+
+	friend uint32 GetTypeHash(const FWeaponData& Other)
+	{
+		return GetTypeHash(Other.Name)
+			+ GetTypeHash(Other.Projectile)
+			+ GetTypeHash(Other.WeaponMesh)
+			+ GetTypeHash(Other.FireAnimation)
+			+ GetTypeHash(Other.FireCooldown);
+	}
 
 };

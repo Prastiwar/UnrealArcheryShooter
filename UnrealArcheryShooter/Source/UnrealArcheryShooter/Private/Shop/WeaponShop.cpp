@@ -2,16 +2,16 @@
 
 #include "WeaponShop.h"
 
-bool AWeaponShop::BuyItem(const UObject* WorldContextObject, int Index)
+bool AWeaponShop::BuyItem(const UObject* WorldContextObject, int WeaponIndex)
 {
 	TArray<FUIWeaponData*> Weapons = GetItemsArray<FUIWeaponData>();
-	if (Weapons.IsValidIndex(Index))
+	if (Weapons.IsValidIndex(WeaponIndex))
 	{
 		AUASCharacter* Player = AUASCharacter::GetUASCharacter(WorldContextObject->GetWorld());
-		if (Player->GetScore() >= Weapons[Index]->Cost)
+		if (Player->GetScore() >= Weapons[WeaponIndex]->Cost)
 		{
-			Player->AddScore(-Weapons[Index]->Cost);
-			Player->AddWeapon(Weapons[Index]->Weapon);
+			Player->AddScore(-Weapons[WeaponIndex]->Cost);
+			Player->AddWeapon(Weapons[WeaponIndex]->Weapon);
 			if (SuccessSound != NULL)
 			{
 				UGameplayStatics::PlaySoundAtLocation(WorldContextObject, SuccessSound, GetActorLocation());
