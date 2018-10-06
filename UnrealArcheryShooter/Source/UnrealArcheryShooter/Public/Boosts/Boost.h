@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include "Engine.h"
 #include "GameFramework/Actor.h"
 #include "BoostData.h"
+#include "Game/UASCharacter.h"
 #include "Boost.generated.h"
 
 UCLASS()

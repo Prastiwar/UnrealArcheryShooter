@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
 #include "Spawners/SpawnableActor.h"
 #include "Boosts/Boost.h"
 #include "SpawnableBoost.generated.h"

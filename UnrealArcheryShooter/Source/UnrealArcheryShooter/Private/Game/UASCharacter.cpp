@@ -7,7 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/InputSettings.h"
-#include "Kismet/GameplayStatics.h"
+#include "Game/SaveState.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -63,6 +63,29 @@ void AUASCharacter::Tick(float DeltaSeconds)
 	//CooldownComponent->Tick();
 }
 
+void AUASCharacter::SavePlayer()
+{
+	USaveState* SaveInstance = USaveState::Get();
+	SaveInstance->SavePlayer(this);
+	if (!SaveInstance->Save(SaveInstance))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Save failed!"))
+	}
+}
+
+void AUASCharacter::Load()
+{
+	USaveState* SaveInstance = USaveState::Load();
+	if (SaveInstance)
+	{
+		SaveInstance->LoadPlayer(this);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Load failed!"))
+	}
+}
+
 void AUASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// set up gameplay key bindings
@@ -80,6 +103,10 @@ void AUASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AUASCharacter::OnFire);
+
+	// Bind Persistance
+	PlayerInputComponent->BindAction("SaveGame", IE_Pressed, this, &AUASCharacter::SavePlayer);
+	PlayerInputComponent->BindAction("LoadGame", IE_Pressed, this, &AUASCharacter::Load);
 
 	// Bind movement events
 	PlayerInputComponent->BindAxis("MoveForward", this, &AUASCharacter::MoveForward);
@@ -178,6 +205,11 @@ float AUASCharacter::GetScore()
 	return PlayerData.Score;
 }
 
+void AUASCharacter:: SetScore(float Score)
+{
+	PlayerData.Score = Score;
+}
+
 void AUASCharacter::SetScoreMultiplier(float ScoreMultiplier)
 {
 	this->ScoreMultiplier = ScoreMultiplier;
@@ -196,6 +228,11 @@ bool AUASCharacter::AddWeapon(FWeaponData& Weapon)
 bool AUASCharacter::HasWeapon(FWeaponData& Weapon)
 {
 	return Weapons.Contains(Weapon);
+}
+
+void AUASCharacter::SetWeapons(TArray<FWeaponData> OtherWeapons)
+{
+	Weapons = OtherWeapons;
 }
 
 void AUASCharacter::SwitchPreviousWeapon()

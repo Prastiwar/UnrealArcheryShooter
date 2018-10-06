@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Togglers/ToggleActor.h"
-#include "UASCharacter.h"
+#include "Game/UASCharacter.h"
 #include "BeamAttacher.generated.h"
 
 UCLASS()

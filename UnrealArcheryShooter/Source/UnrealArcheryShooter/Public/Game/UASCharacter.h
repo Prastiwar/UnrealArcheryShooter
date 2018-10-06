@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Data/PlayerData.h"
 #include "Data/WeaponData.h"
@@ -14,11 +13,17 @@ class UNREALARCHERYSHOOTER_API AUASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-		DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
-		DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScoreChanged, float, Score);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScoreChanged, float, Score);
 
 public:
 	AUASCharacter();
+
+	UFUNCTION(BlueprintCallable)
+		void SavePlayer();
+
+	UFUNCTION(BlueprintCallable)
+		void Load();
 
 	UPROPERTY(BlueprintAssignable)
 		FWeaponChanged OnWeaponChanged;
@@ -30,9 +35,9 @@ public:
 	{
 		if (World)
 		{
-			if (World->GetFirstPlayerController())
+			if (AController* Controller = World->GetFirstPlayerController())
 			{
-				return Cast<AUASCharacter>(World->GetFirstPlayerController()->GetCharacter());
+				return Cast<AUASCharacter>(Controller->GetCharacter());
 			}
 		}
 		return nullptr;
@@ -101,6 +106,12 @@ public:
 		bool HasWeapon(FWeaponData& Weapon);
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
+		void SetWeapons(TArray<FWeaponData> OtherWeapons);
+
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+		void SetWeapon(int Index);
+
+	UFUNCTION(BlueprintCallable, Category = Weapon)
 		int GetCurrentWeaponIndex() { return CurrentWeaponIndex; }
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
@@ -109,14 +120,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		void SwitchPreviousWeapon();
 
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-		void SetWeapon(int Index);
-
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		float GetScore();
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		void AddScore(float Score);
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		void SetScore(float Score);
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		float GetScoreMultiplier();

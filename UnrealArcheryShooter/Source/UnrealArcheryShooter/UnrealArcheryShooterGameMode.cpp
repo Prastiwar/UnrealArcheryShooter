@@ -15,7 +15,8 @@ void AUnrealArcheryShooterGameMode::BeginPlay()
 	ApplyPlayerHUD();
 }
 
-void AUnrealArcheryShooterGameMode::ApplyPlayerHUD() {
+void AUnrealArcheryShooterGameMode::ApplyPlayerHUD()
+{
 	if (ApplyNewHUD(PlayerHUD, false, false))
 	{
 		APlayerController* Player = GetWorld()->GetFirstPlayerController();
@@ -39,18 +40,21 @@ bool AUnrealArcheryShooterGameMode::ApplyNewHUD(TSubclassOf<class UUserWidget> H
 	{
 		CurrentWidget->RemoveFromParent();
 	}
-	if (GetWorld() == nullptr)
+	if (GetWorld())
 	{
-		UE_LOG(LogTemp, Error, TEXT("Applying Player HUD NO WORLD"))
+		CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), Hud);
+		if (CurrentWidget)
+		{
+			APlayerController* Controller = GetWorld()->GetFirstPlayerController();
+			Controller->bShowMouseCursor = bShowCursor;
+			Controller->bEnableClickEvents = bEnableClickEvents;
+			CurrentWidget->AddToViewport();
+			return true;
+		}
 	}
-	CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), Hud);
-	if (CurrentWidget)
+	else
 	{
-		APlayerController* Controller = GetWorld()->GetFirstPlayerController();
-		Controller->bShowMouseCursor = bShowCursor;
-		Controller->bEnableClickEvents = bEnableClickEvents;
-		CurrentWidget->AddToViewport();
-		return true;
+		UE_LOG(LogTemp, Error, TEXT("Applying Player HUD error - No World detected"))
 	}
 	return false;
 }

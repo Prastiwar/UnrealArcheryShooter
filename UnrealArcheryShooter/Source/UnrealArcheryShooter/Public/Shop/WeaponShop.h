@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Shop/Shop.h"
-#include "UI/WeaponShopItem.h"
 #include "Data/UIWeaponData.h"
 #include "WeaponShop.generated.h"
 

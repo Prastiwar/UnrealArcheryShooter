@@ -2,10 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "SpawnableActor.h"
-#include "ActorPool.h"
 #include "Spawner.generated.h"
 
 UCLASS()

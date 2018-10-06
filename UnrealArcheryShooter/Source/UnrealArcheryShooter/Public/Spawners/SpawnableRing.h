@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Spawners/SpawnableActor.h"
 #include "DestructibleComponent.h"
 #include "Components/PointLightComponent.h"

@@ -2,12 +2,10 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "Game/UASCharacter.h"
 #include "UI/PlayerHUD.h"
 #include "UASHUD.h"
-#include "Kismet/GameplayStatics.h"
 #include "Blueprint/UserWidget.h"
 #include "UObject/ConstructorHelpers.h"
 #include "UnrealArcheryShooterGameMode.generated.h"
@@ -19,6 +17,11 @@ class UNREALARCHERYSHOOTER_API AUnrealArcheryShooterGameMode : public AGameModeB
 
 public:
 	AUnrealArcheryShooterGameMode();
+
+	static AUnrealArcheryShooterGameMode* GetUASGameMode(const UWorld* World)
+	{
+		return World ? World->GetAuthGameMode<AUnrealArcheryShooterGameMode>() : nullptr;
+	}
 	
 	static bool SetUIInput(const UWorld* World)
 	{

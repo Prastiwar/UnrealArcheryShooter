@@ -4,7 +4,6 @@
 
 #include "UI/WeaponItem.h"
 #include "Shop/WeaponShop.h"
-#include "WeaponShop.h"
 #include "UMG/Public/Components/Button.h"
 #include "WeaponShopItem.generated.h"
 

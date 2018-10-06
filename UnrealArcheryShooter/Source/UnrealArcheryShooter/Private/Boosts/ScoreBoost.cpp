@@ -1,7 +1,6 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "ScoreBoost.h"
-#include "UASCharacter.h"
 
 AScoreBoost::AScoreBoost()
 {
