@@ -60,7 +60,7 @@ void AUASCharacter::BeginPlay()
 
 void AUASCharacter::Tick(float DeltaSeconds)
 {
-	//CooldownComponent->Tick();
+	CooldownComponent->Tick(DeltaSeconds);
 }
 
 void AUASCharacter::SavePlayer()
@@ -124,30 +124,24 @@ void AUASCharacter::OnFire()
 {
 	if (Weapons.IsValidIndex(CurrentWeaponIndex))
 	{
-		//GLog->Log(Weapons[CurrentWeaponIndex].FireCooldownPtr->IsCompleted ? TEXT("true") : TEXT("false"));
-		//GLog->Log(FString::SanitizeFloat(Weapons[CurrentWeaponIndex].FireCooldownPtr->CooldownTime));
-		//if (Weapons[CurrentWeaponIndex].FireCooldownPtr->IsCompleted)
-		//{
-		UWorld* const World = GetWorld();
-		if (World != NULL)
+		if (Weapons[CurrentWeaponIndex].FireCooldown.bIsCompleted)
 		{
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-			AProjectile* Projectile = World->SpawnActor<AProjectile>(
-				Weapons[CurrentWeaponIndex].Projectile, MuzzleLocation->GetComponentLocation(), GetControlRotation(), SpawnParams);
-			if (Projectile)
+			UWorld* const World = GetWorld();
+			if (World != NULL)
 			{
-				AddScore(-Projectile->GetFireCost());
-				//if (CooldownComponent)
-				//{
-					//Weapons[CurrentWeaponIndex].FireCooldown = CooldownComponent->SetCooldown(Weapons[CurrentWeaponIndex].FireCooldown);
-					//Weapons[CurrentWeaponIndex].FireCooldownPtr = &Weapons[CurrentWeaponIndex].FireCooldown;
-				//}
+				FActorSpawnParameters SpawnParams;
+				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+
+				AProjectile* Projectile = World->SpawnActor<AProjectile>(
+					Weapons[CurrentWeaponIndex].Projectile, MuzzleLocation->GetComponentLocation(), GetControlRotation(), SpawnParams);
+				if (Projectile)
+				{
+					AddScore(-Projectile->GetFireCost());
+					CooldownComponent->SetCooldown(&Weapons[CurrentWeaponIndex].FireCooldown);
+				}
 			}
+			PlayFireAnim();
 		}
-		PlayFireAnim();
-		//}
 	}
 }
 
@@ -205,7 +199,7 @@ float AUASCharacter::GetScore()
 	return PlayerData.Score;
 }
 
-void AUASCharacter:: SetScore(float Score)
+void AUASCharacter::SetScore(float Score)
 {
 	PlayerData.Score = Score;
 }

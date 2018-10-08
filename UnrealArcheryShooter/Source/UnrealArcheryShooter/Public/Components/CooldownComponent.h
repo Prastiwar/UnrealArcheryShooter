@@ -14,12 +14,13 @@ class UNREALARCHERYSHOOTER_API UCooldownComponent : public UObject
 public:
 	UCooldownComponent();
 
-	UPROPERTY(VisibleAnywhere)
-		TArray<FCooldownData> CooldownDatas;
+	TArray<FCooldownData*> CooldownDatas;
 
-	void SetCooldown(FCooldownData &CooldownData);
-	void Complete(FCooldownData &CooldownData);
-	void ResetTime(FCooldownData &CooldownData);
-	void Tick();
+	void SetCooldown(FCooldownData* CooldownData);
+	void Complete(FCooldownData* CooldownData);
+	void ResetTime(FCooldownData* CooldownData);
+
+	UFUNCTION(BlueprintCallable)
+		void Tick(float DeltaSeconds);
 
 };

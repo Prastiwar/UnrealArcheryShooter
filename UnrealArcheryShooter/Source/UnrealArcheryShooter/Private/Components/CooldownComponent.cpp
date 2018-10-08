@@ -6,37 +6,34 @@ UCooldownComponent::UCooldownComponent()
 {
 }
 
-void UCooldownComponent::SetCooldown(FCooldownData &CooldownData)
+void UCooldownComponent::SetCooldown(FCooldownData* CooldownData)
 {
-	CooldownData.IsCompleted = false;
+	CooldownData->bIsCompleted = false;
 	ResetTime(CooldownData);
 	CooldownDatas.Add(CooldownData);
 }
 
-void UCooldownComponent::Tick()
+void UCooldownComponent::Tick(float DeltaSeconds)
 {
-	float Delta = FApp::GetDeltaTime();
-	uint8 Length = CooldownDatas.Num();
-
-	for (uint8 Index = 0; Index < Length; Index++)
+	for (uint8 Index = 0; Index < CooldownDatas.Num(); Index++)
 	{
-		CooldownDatas[Index].CooldownTime -= Delta * CooldownDatas[Index].TickRateMultiplier;
-		//GLog->Log(FString::SanitizeFloat(CooldownDatas[Index].CooldownTime));
-		if (CooldownDatas[Index].CooldownTime <= 0.0f)
+		CooldownDatas[Index]->CooldownTime -= DeltaSeconds * CooldownDatas[Index]->TickRateMultiplier;
+		if (CooldownDatas[Index]->CooldownTime <= 0.0f)
 		{
 			Complete(CooldownDatas[Index]);
+			Index--;
 		}
 	}
 }
 
-void UCooldownComponent::Complete(FCooldownData &CooldownData)
+void UCooldownComponent::Complete(FCooldownData* CooldownData)
 {
-	CooldownData.IsCompleted = true;
+	CooldownData->bIsCompleted = true;
 	ResetTime(CooldownData);
-	CooldownDatas.RemoveSingle(CooldownData);
+	CooldownDatas.RemoveSingleSwap(CooldownData, false);
 }
 
-void UCooldownComponent::ResetTime(FCooldownData &CooldownData)
+void UCooldownComponent::ResetTime(FCooldownData* CooldownData)
 {
-	CooldownData.CooldownTime = CooldownData.InitialTime;
+	CooldownData->CooldownTime = CooldownData->InitialTime;
 }

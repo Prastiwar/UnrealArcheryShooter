@@ -29,7 +29,7 @@ public:
 		class UAnimMontage* FireAnimation;
 
 	UPROPERTY(EditAnywhere)
-		FCooldownData FireCooldown; 
+		FCooldownData FireCooldown;
 
 	FORCEINLINE bool operator==(const FWeaponData &Other) const { return Name == Other.Name; }
 	FORCEINLINE bool operator!=(const FWeaponData &Other) const { return !(Name == Other.Name); }

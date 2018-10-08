@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "Data/PlayerData.h"
 #include "Data/WeaponData.h"
+#include "Attribute/TPAttribute.h"
 #include "CooldownComponent.h"
 #include "UASCharacter.generated.h"
 
@@ -18,12 +19,6 @@ class UNREALARCHERYSHOOTER_API AUASCharacter : public ACharacter
 
 public:
 	AUASCharacter();
-
-	UFUNCTION(BlueprintCallable)
-		void SavePlayer();
-
-	UFUNCTION(BlueprintCallable)
-		void Load();
 
 	UPROPERTY(BlueprintAssignable)
 		FWeaponChanged OnWeaponChanged;
@@ -61,7 +56,7 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override; // APawn interface
 
 private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY()
 		UCooldownComponent* CooldownComponent;
 
 	UPROPERTY(EditAnywhere, Category = "Player Score")
@@ -96,6 +91,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		USceneComponent* MuzzleLocation;
 
+	UFUNCTION(BlueprintCallable)
+		void SavePlayer();
+
+	UFUNCTION(BlueprintCallable)
+		void Load();
+
+
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		TArray<FWeaponData> GetWeapons() { return Weapons; }
 
@@ -119,6 +121,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		void SwitchPreviousWeapon();
+
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		float GetScore();

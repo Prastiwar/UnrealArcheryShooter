@@ -16,7 +16,7 @@ public:
 
 protected:
 	template<class TReturnType>
-	TReturnType* SetTrigger(FName TriggerName, bool bTransient = false)
+	FORCEINLINE TReturnType* SetTrigger(FName TriggerName, bool bTransient = false)
 	{
 		TReturnType* Trigger = CreateDefaultSubobject<TReturnType>("TriggerName", bTransient);
 		Trigger->OnComponentBeginOverlap.AddDynamic(this, &ATriggerActor::BeginOverlap);

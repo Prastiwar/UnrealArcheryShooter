@@ -26,7 +26,7 @@ public:
 		float CooldownTime = 1.0f;
 
 	UPROPERTY(VisibleAnywhere)
-		bool IsCompleted = true;
+		bool bIsCompleted = true;
 
 	FORCEINLINE bool operator==(const FCooldownData &Other) const { return ID == Other.ID; }
 	FORCEINLINE bool operator!=(const FCooldownData &Other) const { return !(ID == Other.ID); }
@@ -37,6 +37,6 @@ public:
 			+ GetTypeHash(Other.TickRateMultiplier)
 			+ GetTypeHash(Other.InitialTime)
 			+ GetTypeHash(Other.CooldownTime)
-			+ GetTypeHash(Other.IsCompleted);
+			+ GetTypeHash(Other.bIsCompleted);
 	}
 };
