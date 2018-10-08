@@ -8,6 +8,7 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/InputSettings.h"
 #include "CoreGame/SaveState.h"
+#include "Attribute/TPAttribute.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -42,6 +43,8 @@ AUASCharacter::AUASCharacter()
 	MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
 	MuzzleLocation->SetupAttachment(GunMesh);
 	MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
+
+	AttributeComponent = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
 
 	CurrentWeaponIndex = 0;
 	ScoreMultiplier = 1.0f;

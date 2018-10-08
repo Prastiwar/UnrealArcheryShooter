@@ -4,14 +4,45 @@
 
 UAttributeComponent::UAttributeComponent()
 {
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 void UAttributeComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
 	for (TSubclassOf<class UTPAttribute> Attribute : AttributeClasses)
 	{
 		Attributes.Add(Attribute->GetDefaultObject<UTPAttribute>());
+	}
+
+	for (TSubclassOf<class UAutoSkillWorker> WorkerClass : AutoSkillWorkerClasses)
+	{
+		UAutoSkillWorker* Worker = WorkerClass->GetDefaultObject<UAutoSkillWorker>();
+		Worker->Initialize(GetWorld());
+		AutoSkillWorkers.Add(Worker);
+	}
+
+	if (bFillWorkersWithArray)
+	{
+		if (AutoSkillWorkers.Num() > AutoSkillWorkers.Num())
+		{
+			UE_LOG(LogTemp, Error, TEXT("You can't fill AutoSkillWorkers from Attributes array if there are less attributes than workers"));
+		}
+		else
+		{
+			for (int32 Index = 0; Index < AutoSkillWorkers.Num(); Index++)
+			{
+				AutoSkillWorkers[Index]->SkillAttribute = Attributes[Index];
+			}
+		}
+	}
+}
+
+void UAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	for (UAutoSkillWorker* Worker : AutoSkillWorkers)
+	{
+		Worker->Tick(DeltaTime);
 	}
 }

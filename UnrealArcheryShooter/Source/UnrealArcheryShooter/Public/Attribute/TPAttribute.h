@@ -15,9 +15,6 @@ class UNREALARCHERYSHOOTER_API UTPAttribute : public UObject
 public:
 	UTPAttribute();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<FTPModifier> Modifiers;
-
 	UPROPERTY(BlueprintAssignable)
 		FValueChanged OnChanged;
 
@@ -33,7 +30,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void Recalculate();
 
+	UFUNCTION(BlueprintCallable)
+		virtual int32 Add(const FTPModifier& Modifier);
+
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<FTPModifier> Modifiers;
+
 	UPROPERTY(EditAnywhere)
 		float BaseValue;
 

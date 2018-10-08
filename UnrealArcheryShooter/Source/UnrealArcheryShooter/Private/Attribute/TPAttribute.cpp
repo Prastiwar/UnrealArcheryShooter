@@ -36,3 +36,10 @@ void UTPAttribute::SetBaseValue(float NewValue)
 	BaseValue = NewValue;
 	Recalculate();
 }
+
+int32 UTPAttribute::Add(const FTPModifier& Modifier)
+{
+	int32 Index = Modifiers.Add(Modifier); 
+	Recalculate();
+	return Index;
+}

@@ -7,6 +7,7 @@
 #include "Data/WeaponData.h"
 #include "Attribute/TPAttribute.h"
 #include "CooldownComponent.h"
+#include "Attribute/AttributeComponent.h"
 #include "UASCharacter.generated.h"
 
 UCLASS(config = Game)
@@ -129,8 +130,8 @@ protected:
 	UPROPERTY()
 		UCooldownComponent* CooldownComponent;
 
-	//UPROPERTY()
-		//UAttributeComponent* AttributeComponent;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UAttributeComponent* AttributeComponent;
 
 	UPROPERTY(EditAnywhere, Category = Weapon)
 		TArray<FWeaponData> Weapons;
