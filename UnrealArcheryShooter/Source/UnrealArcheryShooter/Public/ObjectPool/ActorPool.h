@@ -9,7 +9,7 @@ template<typename ObjectType>
 class UNREALARCHERYSHOOTER_API TActorPool : TObjectPool<ObjectType>
 {
 public:
-	TActorPool(const UWorld* World, const ObjectType* Ptr, int32 Count) : TObjectPool(World, Ptr, Count) {	}
+	TActorPool(const UWorld* World, const ObjectType* Ptr, const int32 Count) : TObjectPool(World, Ptr, Count) {	}
 
 	virtual ~TActorPool() override
 	{

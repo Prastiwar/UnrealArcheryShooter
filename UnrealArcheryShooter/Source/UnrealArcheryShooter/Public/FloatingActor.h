@@ -14,25 +14,25 @@ class UNREALARCHERYSHOOTER_API AFloatingActor : public AActor
 public:
 	AFloatingActor();
 
-private:
-	FVector InitLocation;
-	FVector TargetLocation;
-	float EvaluateTime;
-
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 	
-	UPROPERTY(VisibleAnywhere, Category = "Floating")
+	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* StaticMesh;
 
-	UPROPERTY(EditAnywhere, Category = "Floating")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float TimeScale;
 
-	UPROPERTY(EditAnywhere, Category = "Floating")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FVector FloatDirection;
 
-	UPROPERTY(EditAnywhere, Category = "Floating")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UCurveFloat* CurveFloat;
+
+private:
+	FVector InitLocation;
+	FVector TargetLocation;
+	float EvaluateTime;
 
 };

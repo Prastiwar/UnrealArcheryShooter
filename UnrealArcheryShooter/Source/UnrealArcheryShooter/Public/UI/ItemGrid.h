@@ -32,7 +32,7 @@ public:
 	virtual void SynchronizeProperties() override;
 	UFUNCTION(BlueprintNativeEvent)
 		void OnSynchronizeProperties();
-	void OnSynchronizeProperties_Implementation() {}
+	void OnSynchronizeProperties_Implementation() { FillGrid(); }
 
 	UFUNCTION(BlueprintCallable)
 		void SetDirty() { OnDirty(); }
@@ -41,13 +41,13 @@ public:
 	void OnDirty_Implementation() { FillGrid(); }
 
 	UFUNCTION(BlueprintCallable)
-		TArray<UUserWidget*> FillUserGrid() { return FillItemGrid<UUserWidget>(); }
+		FORCEINLINE TArray<UUserWidget*> FillUserGrid() { return FillItemGrid<UUserWidget>(); }
 
 	template<typename T>
-	TArray<T*> FillItemGrid() { return FillItemGridImpl<T>(RowCount, ColumnCount); }
+	FORCEINLINE TArray<T*> FillItemGrid() { return FillItemGridImpl<T>(RowCount, ColumnCount); }
 
 	template<typename T>
-	TArray<T*> FillItemGridImpl(uint32 RowCount, uint32 ColumnCount)
+	FORCEINLINE TArray<T*> FillItemGridImpl(uint32 RowCount, uint32 ColumnCount)
 	{
 		TArray<T*> Items = TArray<T*>();
 		if (Grid && ItemWidgetClass)

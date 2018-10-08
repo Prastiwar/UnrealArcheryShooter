@@ -12,9 +12,8 @@ struct UNREALARCHERYSHOOTER_API FWeaponData
 	GENERATED_BODY()
 
 public:
-	FWeaponData() { }
-
-	~FWeaponData() { }
+	FWeaponData() {}
+	~FWeaponData() {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FName Name;
@@ -22,13 +21,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TSubclassOf<class AProjectile> Projectile;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		class UAnimMontage* FireAnimation;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USkeletalMesh* WeaponMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		class UAnimMontage* FireAnimation;
-
-	UPROPERTY(EditAnywhere)
 		FCooldownData FireCooldown;
 
 	FORCEINLINE bool operator==(const FWeaponData &Other) const { return Name == Other.Name; }

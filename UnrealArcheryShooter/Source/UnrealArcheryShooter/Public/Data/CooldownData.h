@@ -5,28 +5,28 @@
 #include "CoreMinimal.h"
 #include "CooldownData.generated.h"
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct UNREALARCHERYSHOOTER_API FCooldownData
 {
 	GENERATED_BODY()
 
 public:
-	FCooldownData() { }
-	~FCooldownData() { }
+	FCooldownData() {}
+	~FCooldownData() {}
 
-	int ID = 0;
-
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float TickRateMultiplier = 1.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		float InitialTime = 1.0f;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float CooldownTime = 1.0f;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsCompleted = true;
+
+	int ID;
 
 	FORCEINLINE bool operator==(const FCooldownData &Other) const { return ID == Other.ID; }
 	FORCEINLINE bool operator!=(const FCooldownData &Other) const { return !(ID == Other.ID); }

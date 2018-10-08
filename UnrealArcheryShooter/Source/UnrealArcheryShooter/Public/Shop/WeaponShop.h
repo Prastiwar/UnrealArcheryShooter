@@ -13,14 +13,13 @@ class UNREALARCHERYSHOOTER_API AWeaponShop : public AShop
 
 public:
 	UFUNCTION(BlueprintCallable)
-		//virtual bool BuyItem(int ItemIndex) override;
-		virtual bool BuyItem(const UObject* WorldContextObject, int ItemIndex) override; // hack to prevent null GetWorld() bug
+		virtual bool BuyItem(const UObject* WorldContextObject, const int32 ItemIndex) override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, BlueprintReadOnly)
 		USoundBase* SuccessSound;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, BlueprintReadOnly)
 		USoundBase* FailSound;
 
 };

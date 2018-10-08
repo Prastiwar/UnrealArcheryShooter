@@ -15,30 +15,20 @@ void UTPAttribute::Recalculate()
 	{
 		switch (Modifier.Type)
 		{
-			case ModifierType::FlatIncrease:
+			case EModifierType::FlatIncrease:
 				Value += Modifier.Value;
 				break;
 
-			case ModifierType::FlatMultiply:
+			case EModifierType::FlatMultiply:
 				Value *= Modifier.Value;
 				break;
 
-			case ModifierType::Percentage:
+			case EModifierType::Percentage:
 				Value *= 1 + Modifier.Value;
 				break;
 		}
 	}
 	OnChanged.Broadcast(Value);
-}
-
-float UTPAttribute::GetValue()
-{
-	return Value;
-}
-
-float UTPAttribute::GetBaseValue()
-{
-	return BaseValue;
 }
 
 void UTPAttribute::SetBaseValue(float NewValue)

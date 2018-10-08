@@ -14,18 +14,18 @@ class UNREALARCHERYSHOOTER_API ASpawnableRing : public ASpawnableActor
 
 public:
 	ASpawnableRing();
+
 	virtual void BeginPlay() override;
 	virtual bool CanSpawn() override;
 
-protected:
-	UPROPERTY(EditAnywhere, Category = "Spawnable")
-		UDestructibleComponent* DestructibleMesh;
-
-	UPROPERTY(EditAnywhere, Category = "Spawnable")
-		UPointLightComponent* Light;
-
-public:
 	UFUNCTION(BlueprintCallable)
 		float GetScore();
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UDestructibleComponent* DestructibleMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UPointLightComponent* Light;
 
 };

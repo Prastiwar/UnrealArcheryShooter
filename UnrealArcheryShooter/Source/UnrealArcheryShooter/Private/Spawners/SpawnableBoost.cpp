@@ -7,11 +7,6 @@ ASpawnableBoost::ASpawnableBoost()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ASpawnableBoost::BeginPlay()
-{
-	Super::BeginPlay();	
-}
-
 bool ASpawnableBoost::CanSpawn()
 {
 	ABoost* Boost = nullptr;

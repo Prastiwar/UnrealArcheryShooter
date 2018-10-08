@@ -6,7 +6,7 @@
 #include "TPModifier.generated.h"
 
 UENUM(BlueprintType)
-enum class ModifierType : uint8
+enum class EModifierType : uint8
 {
 	FlatIncrease,
 	FlatMultiply,
@@ -20,10 +20,10 @@ struct UNREALARCHERYSHOOTER_API FTPModifier
 
 public:
 	FTPModifier() {}
-	FTPModifier(ModifierType Type, float Value, UObject* Source) : FTPModifier(Type, Value, (uint8)Type, Source) { }
-	FTPModifier(ModifierType Type, float Value, int Priority) : FTPModifier(Type, Value, Priority, nullptr) { }
-	FTPModifier(ModifierType Type, float Value) : FTPModifier(Type, Value, (uint8)Type, nullptr) { }
-	FTPModifier(ModifierType Type, float Value, int Priority, UObject* Source)
+	FTPModifier(EModifierType Type, const float Value, UObject* Source) : FTPModifier(Type, Value, (uint8)Type, Source) {}
+	FTPModifier(EModifierType Type, const float Value, const int32 Priority) : FTPModifier(Type, Value, Priority, nullptr) {}
+	FTPModifier(EModifierType Type, const float Value) : FTPModifier(Type, Value, (uint8)Type, nullptr) {}
+	FTPModifier(EModifierType Type, const float Value, const int32 Priority, UObject* Source)
 	{
 		this->Priority = Priority;
 		this->Value = Value;
@@ -32,17 +32,17 @@ public:
 	}
 	~FTPModifier() {}
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UObject* Source;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float Value;
 
-	UPROPERTY(EditAnywhere)
-		ModifierType Type;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		EModifierType Type;
 
-	UPROPERTY(EditAnywhere)
-		int Priority;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 Priority;
 
 	FORCEINLINE bool operator==(const FTPModifier &Other) const {
 		return Value == Other.Value && Type == Other.Type && Priority == Other.Priority && Source == Other.Source;

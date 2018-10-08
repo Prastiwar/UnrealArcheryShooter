@@ -26,51 +26,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FScoreChanged OnScoreChanged;
 
-	static AUASCharacter* GetUASCharacter(const UWorld* World)
-	{
-		if (World)
-		{
-			if (AController* Controller = World->GetFirstPlayerController())
-			{
-				return Cast<AUASCharacter>(Controller->GetCharacter());
-			}
-		}
-		return nullptr;
-	}
-
-protected:
-	virtual void BeginPlay();
-	virtual void Tick(float DeltaSeconds) override;
-
-	void OnFire();
-	void PlayFireAnim();
-	void MoveForward(float Value);
-	void MoveSide(float Value);
-
-	/**
-	 * Called via input to turn at a given rate.
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
-	void TurnAtRate(float Rate);
-
-	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override; // APawn interface
-
-private:
-	UPROPERTY()
-		UCooldownComponent* CooldownComponent;
-
-	UPROPERTY(EditAnywhere, Category = "Player Score")
-		FPlayerData PlayerData;
-
-	float ScoreMultiplier;
-
-	UPROPERTY(EditDefaultsOnly, Category = Weapon)
-		TArray<FWeaponData> Weapons;
-
-	UPROPERTY(EditDefaultsOnly, Category = Weapon)
-		int CurrentWeaponIndex;
-
-public:
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 		class USkeletalMeshComponent* FirstPersonMeshViewed;
 
@@ -91,12 +46,27 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		USceneComponent* MuzzleLocation;
 
+	static FORCEINLINE AUASCharacter* GetUASCharacter(const UWorld* World)
+	{
+		if (World)
+		{
+			if (AController* Controller = World->GetFirstPlayerController())
+			{
+				return Cast<AUASCharacter>(Controller->GetCharacter());
+			}
+		}
+		return nullptr;
+	}
+
+	// Persistence Functionality
+
 	UFUNCTION(BlueprintCallable)
 		void SavePlayer();
 
 	UFUNCTION(BlueprintCallable)
 		void Load();
 
+	// Weapon Functionality
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		TArray<FWeaponData> GetWeapons() { return Weapons; }
@@ -122,6 +92,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		void SwitchPreviousWeapon();
 
+	// Score Functionality
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		float GetScore();
@@ -137,5 +108,40 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		void SetScoreMultiplier(float ScoreMultiplier);
+
+protected:
+	virtual void BeginPlay();
+	virtual void Tick(float DeltaSeconds) override;
+
+	void OnFire();
+	void PlayFireAnim();
+	void MoveForward(float Value);
+	void MoveSide(float Value);
+
+	/**
+	 * Called via input to turn at a given rate.
+	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
+	 */
+	void TurnAtRate(float Rate);
+
+	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override; // APawn interface
+
+	UPROPERTY()
+		UCooldownComponent* CooldownComponent;
+
+	//UPROPERTY()
+		//UAttributeComponent* AttributeComponent;
+
+	UPROPERTY(EditAnywhere, Category = Weapon)
+		TArray<FWeaponData> Weapons;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Score")
+		FPlayerData PlayerData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon)
+		int CurrentWeaponIndex;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
+		float ScoreMultiplier;
 
 };

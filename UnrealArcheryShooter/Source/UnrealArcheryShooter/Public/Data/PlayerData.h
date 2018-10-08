@@ -5,20 +5,16 @@
 #include "CoreMinimal.h"
 #include "PlayerData.generated.h"
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct UNREALARCHERYSHOOTER_API FPlayerData
 {
 	GENERATED_BODY()
 
 public:
-	FPlayerData() { }
-	FPlayerData(float Score)
-	{
-		this->Score = Score;
-	}
+	FPlayerData() {}
+	FPlayerData(float Score) { this->Score = Score; }
+	~FPlayerData() {}
 
-	~FPlayerData() { }
-
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float Score = 1;
 };

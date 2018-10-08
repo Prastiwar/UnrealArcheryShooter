@@ -16,7 +16,7 @@ protected:
 public:
 	int32 Length;
 
-	TObjectPool(const UWorld* World, const ObjectType* Ptr, int32 Count)
+	TObjectPool(const UWorld* World, const ObjectType* Ptr, const int32 Count)
 	{
 		check(Ptr != nullptr || Count == 0);
 		Pool = TQueue<ObjectType>();
@@ -30,7 +30,7 @@ public:
 		Pool->~TQueue();
 	}
 
-	ObjectType* Get()
+	FORCEINLINE ObjectType* Get()
 	{
 		ObjectType* Obj = nullptr;
 		if (Pool.Dequeue(Obj))
@@ -40,14 +40,14 @@ public:
 		return CreateNewObject();
 	}
 	
-	void Push(ObjectType* Obj)
+	FORCEINLINE void Push(ObjectType* Obj)
 	{
 		OnPush(Obj);
 		Pool.Enqueue(Obj);
 		Length++;
 	}
 	
-	void Grow(const int Size)
+	FORCEINLINE void Grow(const int Size)
 	{
 		for (int i = 0; i < Size; i++)
 		{
@@ -55,7 +55,7 @@ public:
 		}
 	}
 
-	void Empty()
+	FORCEINLINE void Empty()
 	{
 		Pool.Empty();
 		Length = 0;

@@ -13,23 +13,15 @@ class UNREALARCHERYSHOOTER_API AToggleActor : public ATriggerActor
 public:	
 	AToggleActor();
 
-	/** If false, actor is hidden in game with disabled tick and collision*/
-	static void SetActive(AActor* Actor, bool Active)
-	{
-		Actor->SetActorHiddenInGame(!Active);
-		Actor->SetActorEnableCollision(Active);
-		Actor->SetActorTickEnabled(Active);
-	}
-
 protected:
 	virtual void BeginPlay() override;
-	virtual void Activated(bool bActive, AActor* OverlappedActor) {}
 	virtual void BeginTrigger(AActor* OtherActor);
 	virtual void EndTrigger(AActor* OtherActor);
+	virtual void Activated(bool bActive, AActor* OverlappedActor) {}
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bActiveOnOverlap;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UBoxComponent* TriggerBox;
 };

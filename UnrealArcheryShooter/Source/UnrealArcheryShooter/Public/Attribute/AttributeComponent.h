@@ -20,7 +20,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-private:
 	TArray<UTPAttribute*> Attributes;
 
 	UPROPERTY(EditAnywhere)

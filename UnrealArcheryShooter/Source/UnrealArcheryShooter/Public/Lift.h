@@ -14,15 +14,12 @@ public:
 	ALift();
 
 protected:
-	virtual void BeginPlay() override;
-
-private:
 	virtual void BeginTrigger(AActor* OtherActor) override;
 
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* Box;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FVector NextLocation;
 
 };

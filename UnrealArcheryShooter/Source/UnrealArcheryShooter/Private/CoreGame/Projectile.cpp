@@ -56,11 +56,6 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	OnHitImpl();
 }
 
-float AProjectile::GetFireCost()
-{
-	return FireScoreCost;
-}
-
 bool AProjectile::TryAddScoreFromActor(AActor* OtherActor)
 {
 	if (ASpawnableRing* ScoreActor = Cast<ASpawnableRing>(OtherActor))

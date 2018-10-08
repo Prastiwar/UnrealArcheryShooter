@@ -3,7 +3,7 @@
 #pragma once
 
 #include "GameFramework/GameModeBase.h"
-#include "Game/UASCharacter.h"
+#include "CoreGame/UASCharacter.h"
 #include "UI/PlayerHUD.h"
 #include "UASHUD.h"
 #include "Blueprint/UserWidget.h"
@@ -18,12 +18,12 @@ class UNREALARCHERYSHOOTER_API AUnrealArcheryShooterGameMode : public AGameModeB
 public:
 	AUnrealArcheryShooterGameMode();
 
-	static AUnrealArcheryShooterGameMode* GetUASGameMode(const UWorld* World)
+	static FORCEINLINE AUnrealArcheryShooterGameMode* GetUASGameMode(const UWorld* World)
 	{
 		return World ? World->GetAuthGameMode<AUnrealArcheryShooterGameMode>() : nullptr;
 	}
 	
-	static bool SetUIInput(const UWorld* World)
+	static FORCEINLINE bool SetUIInput(const UWorld* World)
 	{
 		if (World)
 		{
@@ -38,17 +38,17 @@ public:
 		return false;
 	}
 
+	UUserWidget* GetCurrentWidget() { return CurrentWidget; }
 	void ApplyPlayerHUD();
 	bool ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, bool bShowCursor, bool bEnableClickEvents);
-	UUserWidget* GetCurrentWidget() { return CurrentWidget; }
 
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TSubclassOf<class UUserWidget> PlayerHUD;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadOnly)
 		UUserWidget* CurrentWidget;
 
 };

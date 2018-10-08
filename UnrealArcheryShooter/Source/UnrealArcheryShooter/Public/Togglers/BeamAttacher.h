@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Togglers/ToggleActor.h"
-#include "Game/UASCharacter.h"
+#include "CoreGame/UASCharacter.h"
 #include "BeamAttacher.generated.h"
 
 UCLASS()
@@ -15,18 +15,18 @@ public:
 	ABeamAttacher();
 
 protected:
+	virtual void BeginPlay() override;
 	virtual void Activated(bool bActive, AActor* OverlappedActor) override;
 	virtual void AttachBeam();
-	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UParticleSystemComponent* BeamParticle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FVector AttachOffset;
 
 	AUASCharacter* Player;
 	FTimerHandle TimerHandle;
 	float UpdateRate;
-
-	UPROPERTY(EditAnywhere)
-		UParticleSystemComponent* BeamParticle;
-
-	UPROPERTY(EditAnywhere)
-		FVector AttachOffset;
 
 };

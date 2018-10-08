@@ -2,7 +2,7 @@
 
 #include "WeaponShop.h"
 
-bool AWeaponShop::BuyItem(const UObject* WorldContextObject, int WeaponIndex)
+bool AWeaponShop::BuyItem(const UObject* WorldContextObject, const int32 WeaponIndex)
 {
 	TArray<FUIWeaponData*> Weapons = GetItemsArray<FUIWeaponData>();
 	if (Weapons.IsValidIndex(WeaponIndex))

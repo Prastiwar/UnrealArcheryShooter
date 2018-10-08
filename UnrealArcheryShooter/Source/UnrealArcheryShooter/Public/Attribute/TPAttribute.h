@@ -22,10 +22,10 @@ public:
 		FValueChanged OnChanged;
 
 	UFUNCTION(BlueprintCallable)
-		float GetValue();
+		FORCEINLINE float GetValue() { return Value; }
 
 	UFUNCTION(BlueprintCallable)
-		float GetBaseValue();
+		FORCEINLINE float GetBaseValue() { return BaseValue; }
 
 	UFUNCTION(BlueprintCallable)
 		void SetBaseValue(float NewValue);

@@ -15,10 +15,9 @@ public:
 	ASpawnableBoost();
 
 protected:
-	virtual void BeginPlay() override;
-	virtual bool CanSpawn() override;
-
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TSubclassOf<ABoost> BoostToSpawn;
+
+	virtual bool CanSpawn() override;
 
 };

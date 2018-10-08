@@ -13,12 +13,12 @@ class UNREALARCHERYSHOOTER_API AShop : public ATriggerActor
 
 public:
 	AShop();
-
-	virtual bool BuyItem(int ItemIndex) { unimplemented(); return false; }
-	virtual bool BuyItem(const UObject* WorldContextObject, int ItemIndex) { unimplemented(); return false; }
+	//virtual bool BuyItem(int ItemIndex) { unimplemented(); return false; }
+	// hack to prevent null GetWorld() bug
+	virtual bool BuyItem(const UObject* WorldContextObject, const int32 ItemIndex) { unimplemented(); return false; }
 
 	template<typename T>
-	TArray<T*> GetItemsArray()
+	FORCEINLINE TArray<T*> GetItemsArray()
 	{
 		TArray<T*> Items;
 		ItemsTable->GetAllRows<T>(TEXT(""), Items);
@@ -39,8 +39,8 @@ protected:
 	void BeginTrigger(AActor* OtherActor) override;
 	void EndTrigger(AActor* OtherActor) override;
 
-	AUASCharacter* GetPlayerCharacter() { return PlayerCharacter; }
-	AUnrealArcheryShooterGameMode* GetGameMode() { return GameMode; }
+	FORCEINLINE AUASCharacter* GetPlayerCharacter() { return PlayerCharacter; }
+	FORCEINLINE AUnrealArcheryShooterGameMode* GetGameMode() { return GameMode; }
 
 private:
 	AUASCharacter* PlayerCharacter;

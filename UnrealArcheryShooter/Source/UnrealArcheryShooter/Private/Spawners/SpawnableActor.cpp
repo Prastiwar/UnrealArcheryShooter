@@ -6,8 +6,3 @@ ASpawnableActor::ASpawnableActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
 }
-
-void ASpawnableActor::BeginPlay()
-{
-	Super::BeginPlay();
-}

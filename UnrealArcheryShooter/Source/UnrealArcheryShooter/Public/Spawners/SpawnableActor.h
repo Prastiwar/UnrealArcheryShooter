@@ -13,7 +13,6 @@ class UNREALARCHERYSHOOTER_API ASpawnableActor : public AActor
 public:	
 	ASpawnableActor();
 
-	virtual void BeginPlay() override;
 	virtual bool CanSpawn() { return true; }
 
 };

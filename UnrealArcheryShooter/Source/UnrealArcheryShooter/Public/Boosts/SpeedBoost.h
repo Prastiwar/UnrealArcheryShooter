@@ -20,4 +20,5 @@ protected:
 private:
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* BoxTrigger;
+
 };

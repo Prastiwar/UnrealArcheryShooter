@@ -4,7 +4,7 @@
 
 #include "UI/ItemGrid.h"
 #include "UI/WeaponItem.h"
-#include "Game/UASCharacter.h"
+#include "CoreGame/UASCharacter.h"
 #include "Data/UIWeaponData.h"
 #include "PlayerHUD.generated.h"
 

@@ -3,8 +3,9 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "BoostData.h"
-#include "Game/UASCharacter.h"
+#include "Data/BoostData.h"
+#include "Statics/ActorHelper.h"
+#include "CoreGame/UASCharacter.h"
 #include "Boost.generated.h"
 
 UCLASS()
@@ -16,9 +17,8 @@ public:
 	ABoost();
 
 protected:
-	virtual void BeginPlay() override;
-	virtual void PickBoostImpl(AActor* AppliedActor) { }
-	virtual void RevertBoostImpl(AActor* AppliedActor) { }
+	virtual void PickBoostImpl(AActor* AppliedActor) {}
+	virtual void RevertBoostImpl(AActor* AppliedActor) {}
 
 	void SetTriggerComponent(UShapeComponent* Trigger);
 
@@ -29,9 +29,10 @@ protected:
 		UStaticMeshComponent* StaticMesh;
 
 private:
-	void StopBoost();
-
 	UFUNCTION(BlueprintCallable)
+		void StopBoost();
+
+	UFUNCTION()
 		void BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 			UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 

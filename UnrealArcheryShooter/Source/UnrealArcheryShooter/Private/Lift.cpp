@@ -9,11 +9,6 @@ ALift::ALift()
 	Box = SetTrigger<UBoxComponent>("BoxTrigger");
 }
 
-void ALift::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 void ALift::BeginTrigger(AActor* OtherActor)
 {
 	OtherActor->SetActorLocation(OtherActor->GetActorLocation() + NextLocation);

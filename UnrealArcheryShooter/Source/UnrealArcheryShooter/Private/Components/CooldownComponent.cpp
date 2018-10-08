@@ -10,7 +10,8 @@ void UCooldownComponent::SetCooldown(FCooldownData* CooldownData)
 {
 	CooldownData->bIsCompleted = false;
 	ResetTime(CooldownData);
-	CooldownDatas.Add(CooldownData);
+	int32 ID = CooldownDatas.Add(CooldownData);
+	CooldownData->ID = ID;
 }
 
 void UCooldownComponent::Tick(float DeltaSeconds)

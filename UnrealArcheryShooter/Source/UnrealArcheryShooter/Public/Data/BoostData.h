@@ -5,30 +5,30 @@
 #include "Engine.h"
 #include "BoostData.generated.h"
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct UNREALARCHERYSHOOTER_API FBoostData
 {
 	GENERATED_BODY()
 
 public:
-	FBoostData() { }
+	FBoostData() {}
 	FBoostData(float Power, float TimeLast)
 	{
 		this->Power = Power;
 		this->TimeLast = TimeLast;
 	}
 
-	~FBoostData() { }
-
-	FTimerHandle TimerHandle;
+	~FBoostData() {}
 
 	UPROPERTY(VisibleAnywhere)
 		AActor* AppliedActor;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float Power = 1;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float TimeLast = 1;
+
+	FTimerHandle TimerHandle;
 
 };

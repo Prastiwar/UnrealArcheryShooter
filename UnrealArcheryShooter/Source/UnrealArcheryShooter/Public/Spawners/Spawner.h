@@ -10,14 +10,32 @@ UCLASS()
 class UNREALARCHERYSHOOTER_API ASpawner : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	ASpawner();
 
 	UFUNCTION(BlueprintCallable)
 		void Spawn();
 
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TArray<TSubclassOf<class ASpawnableActor>> SpawnableActors;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FVector2D SpawnTimeRange;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float TimeToSpawn;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float TimeToDecreaseTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FVector Force;
+
+	FTimerHandle SpawnTimerHandle;
+	FTimerHandle FrequencyTimerHandle;
+
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
@@ -25,23 +43,4 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 		void SetSpawnTimer();
-
-	FTimerHandle SpawnTimerHandle;
-	FTimerHandle FrequencyTimerHandle;
-	
-	UPROPERTY(EditAnywhere, Category = "Spawner")
-		FVector2D SpawnTimeRange;
-
-	UPROPERTY(EditAnywhere, Category = "Spawner")
-		float TimeToSpawn;
-
-	UPROPERTY(EditAnywhere, Category = "Spawner")
-		float TimeToDecreaseTime;
-
-	UPROPERTY(EditAnywhere, Category = "Spawner")
-		TArray<TSubclassOf<class ASpawnableActor>> SpawnableActors;
-
-	UPROPERTY(EditAnywhere, Category = "Spawner")
-		FVector Force;
-
 };
