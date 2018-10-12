@@ -32,15 +32,12 @@ void UPlayerHUD::SetGrid(TArray<UWeaponItem*> WeaponItems)
 					bool bSelect = Index == SelectedWeaponIndex;
 					WeaponItems[Index]->SetItem(UIWeapon->Icon, bSelect);
 
-					auto Lambda = [WeaponItems, Index](float Value) { WeaponItems[Index]->SetProgressPercentage(Value); };
+					auto Lambda = [WeaponItems, Index](float Value) {
+						WeaponItems[Index]->SetProgressPercentage(Value);
+					};
 					PlayerWeapon.FireCooldown.OnValueChanged.AddLambda(Lambda);
 				}
 			}
 		}
 	}
-}
-
-void UPlayerHUD::TestVoid(float Score)
-{
-	GLog->Log(TEXT("is called"));
 }

@@ -30,7 +30,4 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void SetGrid(TArray<UWeaponItem*> WeaponItems);
 
-	UFUNCTION(BlueprintCallable)
-		void TestVoid(float Score);
-
 };

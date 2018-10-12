@@ -22,7 +22,10 @@ void UCooldownComponent::Tick(float DeltaSeconds)
 		{
 			FCooldownData* CD = CooldownDatas[Index];
 			CD->CooldownTime -= DeltaSeconds * CD->TickRateMultiplier;
-			CD->OnValueChanged.Broadcast(CD->CooldownTime);
+			if (CD->OnValueChanged.IsBound())
+			{
+				CD->OnValueChanged.Broadcast(CD->CooldownTime);
+			}
 			if (CD->CooldownTime <= 0.0f)
 			{
 				Complete(CD);
