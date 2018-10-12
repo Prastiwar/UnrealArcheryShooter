@@ -15,16 +15,23 @@ class UNREALARCHERYSHOOTER_API UWeaponItem : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-		UImage* ItemImage;
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE UProgressBar* GetCooldownProgress() { return CooldownProgress; }
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-		UProgressBar* CooldownProgress;
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE UImage* GetItemImage() { return ItemImage; }
 
 	UFUNCTION(BlueprintCallable)
 		void SetItem(UTexture2D* Icon, bool bSelected);
 
 	UFUNCTION(BlueprintCallable)
 		void SetProgressPercentage(float Percentage);
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		UImage* ItemImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		UProgressBar* CooldownProgress;
 
 };

@@ -15,11 +15,10 @@ class UNREALARCHERYSHOOTER_API ABeamAttacher : public AToggleActor
 public:
 	ABeamAttacher();
 
-protected:
-	virtual void BeginPlay() override;
-	virtual void Activated(bool bActive, AActor* OverlappedActor) override;
-	virtual void AttachBeam();
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE FVector GetAttachOffset() { return AttachOffset; }
 
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UParticleSystemComponent* BeamParticle;
 
@@ -29,5 +28,9 @@ protected:
 	AUASCharacter* Player;
 	FTimerHandle TimerHandle;
 	float UpdateRate;
+
+	virtual void BeginPlay() override;
+	virtual void Activated(bool bActive, AActor* OverlappedActor) override;
+	virtual void AttachBeam();
 
 };

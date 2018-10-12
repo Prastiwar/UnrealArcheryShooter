@@ -15,14 +15,14 @@ public:
 	AToggleActor();
 
 protected:
-	virtual void BeginPlay() override;
-	virtual void BeginTrigger(AActor* OtherActor);
-	virtual void EndTrigger(AActor* OtherActor);
-	virtual void Activated(bool bActive, AActor* OverlappedActor) {}
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bActiveOnOverlap;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UBoxComponent* TriggerBox;
+
+	virtual void BeginPlay() override;
+	virtual void BeginTrigger(AActor* OtherActor);
+	virtual void EndTrigger(AActor* OtherActor);
+	virtual void Activated(bool bActive, AActor* OverlappedActor) {}
 };

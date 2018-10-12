@@ -14,6 +14,9 @@ class UNREALARCHERYSHOOTER_API ALift : public ATriggerActor
 public:
 	ALift();
 
+	UFUNCTION(BlueprintCallable)
+		virtual void LiftActor(AActor* Actor);
+
 protected:
 	virtual void BeginTrigger(AActor* OtherActor) override;
 

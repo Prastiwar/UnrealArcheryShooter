@@ -4,8 +4,6 @@
 
 ASpawnableRing::ASpawnableRing()
 {
-	PrimaryActorTick.bCanEverTick = false;
-
 	DestructibleMesh = CreateDefaultSubobject<UDestructibleComponent>("Mesh");
 	DestructibleMesh->GetBodyInstance()->SetInstanceSimulatePhysics(true);
 	DestructibleMesh->bApplyImpulseOnDamage = true;
@@ -23,13 +21,7 @@ ASpawnableRing::ASpawnableRing()
 	Light->SetupAttachment(DestructibleMesh);
 }
 
-void ASpawnableRing::BeginPlay()
-{
-	Super::BeginPlay();
-	DestructibleMesh->SetSimulatePhysics(true);
-}
-
-bool ASpawnableRing::CanSpawn()
+bool ASpawnableRing::CanBeSpawned()
 {
 	Light->SetLightColor(FLinearColor::MakeRandomColor());
 	return true;

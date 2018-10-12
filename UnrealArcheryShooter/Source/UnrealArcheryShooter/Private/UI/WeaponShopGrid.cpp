@@ -5,6 +5,7 @@
 void UWeaponShopGrid::NativeConstruct()
 {
 	Super::NativeConstruct();
+
 	if (ExitButton)
 	{
 		ExitButton->OnClicked.AddDynamic(this, &UWeaponShopGrid::ExitShop);
@@ -32,34 +33,37 @@ void UWeaponShopGrid::FillGrid()
 
 void UWeaponShopGrid::SetGrid(TArray<UWeaponShopItem*> WeaponWidgetItems)
 {
-	if (AUnrealArcheryShooterGameMode::SetUIInput(GetWorld()))
+	if (!AUnrealArcheryShooterGameMode::SetUIInput(GetWorld()))
+	{
+		return;
+	}
+
+	TArray<FUIWeaponData*> DTWeapons = WeaponShop->GetDefaultObject<AWeaponShop>()->GetItemsArray<FUIWeaponData>();
+	if (DTWeapons.Num() <= WeaponWidgetItems.Num())
 	{
 		AUASCharacter* Player = AUASCharacter::GetUASCharacter(GetWorld());
-		// Weapons From Data Table
-		TArray<FUIWeaponData*> Weapons = WeaponShop->GetDefaultObject<AWeaponShop>()->GetItemsArray<FUIWeaponData>();
-
-		uint8 WeaponsCount = Weapons.Num();
-		uint8 WidgetsCount = WeaponWidgetItems.Num();
-
-		if (WeaponsCount <= WidgetsCount)
+		uint8 WidgetIndex = 0; // We want set widget independently on order between Player Weapons and Weapons from DT
+		for (uint8 DTWeaponIndex = 0; DTWeaponIndex < DTWeapons.Num(); DTWeaponIndex++)
 		{
-			uint8 WidgetIndex = 0;
-			for (uint8 WeaponIndex = 0; WeaponIndex < WeaponsCount; WeaponIndex++)
+			FUIWeaponData* UIWeapon = DTWeapons[DTWeaponIndex];
+			FWeaponData& Weapon = UIWeapon->Weapon;
+			// Don't sell items that Player already has
+			if (!Player->HasWeapon(Weapon))
 			{
-				if (!Player->HasWeapon(Weapons[WeaponIndex]->Weapon))
-				{
-					WeaponWidgetItems[WidgetIndex]->SetShopItem(Weapons[WeaponIndex]->Icon,
-						FText::FromName(Weapons[WeaponIndex]->Weapon.Name),
-						FText::AsNumber(Weapons[WeaponIndex]->Cost));
-					WeaponWidgetItems[WidgetIndex]->SetButton(WeaponIndex, WeaponShop);
-					WeaponWidgetItems[WidgetIndex]->OnBuy.AddDynamic(this, &UWeaponShopGrid::TryExitShop);
-					WidgetIndex++;
-				}
+				WeaponWidgetItems[WidgetIndex]->SetShopItem(
+					UIWeapon->Icon,
+					FText::FromName(Weapon.Name),
+					FText::AsNumber(UIWeapon->Cost),
+					DTWeaponIndex,
+					WeaponShop
+				);
+				WeaponWidgetItems[WidgetIndex]->OnBuy.AddDynamic(this, &UWeaponShopGrid::TryExitShop);
+				WidgetIndex++;
 			}
 		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("WeaponShopGrid: There is more weapons than item widgets!"));
-		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("WeaponShopGrid: There is more weapons than item widgets!"));
 	}
 }

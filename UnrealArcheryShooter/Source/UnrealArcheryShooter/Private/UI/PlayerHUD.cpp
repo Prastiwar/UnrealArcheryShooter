@@ -17,27 +17,32 @@ void UPlayerHUD::RefreshScore(float Score)
 
 void UPlayerHUD::SetGrid(TArray<UWeaponItem*> WeaponItems)
 {
-	if (AUASCharacter* Player = AUASCharacter::GetUASCharacter(GetWorld()))
+	AUASCharacter* Player = AUASCharacter::GetUASCharacter(GetWorld());
+	if (!Player)
 	{
-		TArray<FWeaponData>* PlayerWeaponsPtr = Player->GetWeaponsPtr();
-		for (uint8 Index = 0; Index < WeaponItems.Num(); Index++)
-		{
-			if (PlayerWeaponsPtr->IsValidIndex(Index))
-			{
-				FWeaponData& PlayerWeapon = PlayerWeaponsPtr->operator [](Index);
-				FUIWeaponData* UIWeapon = WeaponsTable->FindRow<FUIWeaponData>(PlayerWeapon.Name, TEXT(""));
-				if (UIWeapon)
-				{
-					int SelectedWeaponIndex = Player->GetCurrentWeaponIndex();
-					bool bSelect = Index == SelectedWeaponIndex;
-					WeaponItems[Index]->SetItem(UIWeapon->Icon, bSelect);
+		return;
+	}
 
-					auto Lambda = [WeaponItems, Index](float Value) {
-						WeaponItems[Index]->SetProgressPercentage(Value);
-					};
-					PlayerWeapon.FireCooldown.OnValueChanged.AddLambda(Lambda);
-				}
-			}
+	TArray<FWeaponData>* PlayerWeaponsPtr = Player->GetWeaponsPtr();
+	for (uint8 Index = 0; Index < WeaponItems.Num(); Index++)
+	{
+		if (!PlayerWeaponsPtr->IsValidIndex(Index))
+		{
+			continue;
+		}
+
+		FWeaponData& PlayerWeapon = PlayerWeaponsPtr->operator [](Index);
+		FUIWeaponData* UIWeapon = WeaponsTable->FindRow<FUIWeaponData>(PlayerWeapon.Name, TEXT(""));
+		if (UIWeapon)
+		{
+			int SelectedWeaponIndex = Player->GetCurrentWeaponIndex();
+			bool bSelect = Index == SelectedWeaponIndex;
+			WeaponItems[Index]->SetItem(UIWeapon->Icon, bSelect);
+
+			auto Lambda = [WeaponItems, Index](float Value) {
+				WeaponItems[Index]->SetProgressPercentage(Value);
+			};
+			PlayerWeapon.FireCooldown.OnValueChanged.AddLambda(Lambda);
 		}
 	}
 }

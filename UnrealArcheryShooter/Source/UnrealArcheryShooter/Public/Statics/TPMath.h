@@ -28,6 +28,7 @@ struct UNREALARCHERYSHOOTER_API FTPMath : public FGenericPlatformMath
 		return FMath::Clamp(RepeatValue, 0, MaxValue);
 	}
 
+
 	/** Ping pongs value from 0 to MaxValue */
 	static FORCEINLINE double PingPong(const double& Value, const double& MaxValue)
 	{

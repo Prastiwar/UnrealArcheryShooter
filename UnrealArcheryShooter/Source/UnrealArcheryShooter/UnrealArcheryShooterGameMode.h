@@ -22,7 +22,7 @@ public:
 	{
 		return World ? World->GetAuthGameMode<AUnrealArcheryShooterGameMode>() : nullptr;
 	}
-	
+
 	static FORCEINLINE bool SetUIInput(const UWorld* World)
 	{
 		if (World)

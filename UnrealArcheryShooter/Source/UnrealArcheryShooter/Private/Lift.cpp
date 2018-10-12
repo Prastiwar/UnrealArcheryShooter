@@ -11,6 +11,11 @@ ALift::ALift()
 
 void ALift::BeginTrigger(AActor* OtherActor)
 {
-	OtherActor->SetActorLocation(OtherActor->GetActorLocation() + NextLocation);
+	LiftActor(OtherActor);
+}
+
+void ALift::LiftActor(AActor* Actor)
+{
+	Actor->SetActorLocation(Actor->GetActorLocation() + NextLocation);
 }
 

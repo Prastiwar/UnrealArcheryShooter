@@ -15,8 +15,7 @@ class UNREALARCHERYSHOOTER_API ASpawnableRing : public ASpawnableActor
 public:
 	ASpawnableRing();
 
-	virtual void BeginPlay() override;
-	virtual bool CanSpawn() override;
+	virtual bool CanBeSpawned() override;
 
 	UFUNCTION(BlueprintCallable)
 		float GetScore();

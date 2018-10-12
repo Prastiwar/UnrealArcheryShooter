@@ -2,12 +2,7 @@
 
 #include "SpawnableBoost.h"
 
-ASpawnableBoost::ASpawnableBoost()
-{
-	PrimaryActorTick.bCanEverTick = false;
-}
-
-bool ASpawnableBoost::CanSpawn()
+bool ASpawnableBoost::CanBeSpawned()
 {
 	ABoost* Boost = nullptr;
 	if (BoostToSpawn)

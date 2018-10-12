@@ -15,6 +15,25 @@ class UNREALARCHERYSHOOTER_API UWeaponShopItem : public UUserWidget
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBuyButtonClicked, bool, bBought);
 
 public:
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+		FBuyButtonClicked OnBuy;
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE UImage* GetImage() { return ItemImage; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE UButton* GetButton() { return Button; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE UTextBlock* GetNameText() { return ItemName; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE UTextBlock* GetCostText() { return ItemCost; }
+
+	UFUNCTION(BlueprintCallable)
+		void SetShopItem(UTexture2D* Icon, FText Name, FText Cost, int DTWeaponIndex, TSubclassOf<class AWeaponShop> WeaponShop);
+
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		UImage* ItemImage;
 
@@ -27,20 +46,11 @@ public:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 		UTextBlock* ItemCost;
 
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
-		FBuyButtonClicked OnBuy;
-
-	UFUNCTION(BlueprintCallable)
-		void SetShopItem(UTexture2D* Icon, FText Name, FText Cost);
-
-	UFUNCTION(BlueprintCallable)
-		void SetButton(int WeaponIndex, TSubclassOf<class AWeaponShop> WeaponShop);
-
 private:
 	int WeaponIndex;
 	TSubclassOf<class AWeaponShop> WeaponShop;
 
 	UFUNCTION()
-		void ButtonClick();
+		void Buy();
 
 };

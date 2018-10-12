@@ -13,6 +13,7 @@ AToggleActor::AToggleActor()
 void AToggleActor::BeginPlay()
 {
 	Super::BeginPlay();
+
 	this->SetActorHiddenInGame(bActiveOnOverlap);
 }
 

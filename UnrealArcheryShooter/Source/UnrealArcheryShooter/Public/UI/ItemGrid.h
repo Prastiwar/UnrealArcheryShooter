@@ -15,33 +15,23 @@ class UNREALARCHERYSHOOTER_API UItemGrid : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		uint8 RowCount;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		uint8 ColumnCount;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TSubclassOf<class UUserWidget> ItemWidgetClass;
-
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-		UUniformGridPanel* Grid;
-
-	virtual void FillGrid() { FillUserGrid(); }
+	virtual void FillGrid() { FillGridUserWidget(); }
 
 	virtual void SynchronizeProperties() override;
+
 	UFUNCTION(BlueprintNativeEvent)
 		void OnSynchronizeProperties();
 	void OnSynchronizeProperties_Implementation() { FillGrid(); }
 
-	UFUNCTION(BlueprintCallable)
-		void SetDirty() { OnDirty(); }
 	UFUNCTION(BlueprintNativeEvent)
 		void OnDirty();
 	void OnDirty_Implementation() { FillGrid(); }
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE TArray<UUserWidget*> FillUserGrid() { return FillItemGrid<UUserWidget>(); }
+		void SetDirty() { OnDirty(); }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE TArray<UUserWidget*> FillGridUserWidget() { return FillItemGrid<UUserWidget>(); }
 
 	template<typename T>
 	FORCEINLINE TArray<T*> FillItemGrid() { return FillItemGridImpl<T>(RowCount, ColumnCount); }
@@ -72,5 +62,18 @@ public:
 		}
 		return Items;
 	}
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		uint8 RowCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		uint8 ColumnCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TSubclassOf<class UUserWidget> ItemWidgetClass;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		UUniformGridPanel* Grid;
 
 };
