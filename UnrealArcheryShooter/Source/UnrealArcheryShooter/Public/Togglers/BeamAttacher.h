@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Togglers/ToggleActor.h"
+#include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
 #include "CoreGame/UASCharacter.h"
 #include "BeamAttacher.generated.h"
 

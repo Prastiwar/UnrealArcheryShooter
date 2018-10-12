@@ -8,13 +8,16 @@
 #include "WeaponShopItem.generated.h"
 
 UCLASS()
-class UNREALARCHERYSHOOTER_API UWeaponShopItem : public UWeaponItem
+class UNREALARCHERYSHOOTER_API UWeaponShopItem : public UUserWidget
 {
 	GENERATED_BODY()
 
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBuyButtonClicked, bool, bBought);
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		UImage* ItemImage;
+
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 		UButton* Button;
 

@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Engine.h"
+#include "CoreMinimal.h"
 #include "Data/CooldownData.h"
 #include "CooldownComponent.generated.h"
 

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "TriggerActor.h"
+#include "Components/BoxComponent.h"
 #include "UnrealArcheryShooterGameMode.h"
 #include "Shop.generated.h"
 

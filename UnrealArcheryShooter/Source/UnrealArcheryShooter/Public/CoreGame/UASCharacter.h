@@ -71,6 +71,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		TArray<FWeaponData> GetWeapons() { return Weapons; }
+	TArray<FWeaponData>* GetWeaponsPtr() { return &Weapons; }
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		bool AddWeapon(FWeaponData& Weapon);
@@ -127,14 +128,14 @@ protected:
 
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override; // APawn interface
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, Category = Weapon)
+		TArray<FWeaponData> Weapons;
+
+	UPROPERTY(BlueprintReadOnly)
 		UCooldownComponent* CooldownComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UAttributeComponent* AttributeComponent;
-
-	UPROPERTY(EditAnywhere, Category = Weapon)
-		TArray<FWeaponData> Weapons;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Score")
 		FPlayerData PlayerData;

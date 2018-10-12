@@ -7,7 +7,7 @@ ASpawnableRing::ASpawnableRing()
 	PrimaryActorTick.bCanEverTick = false;
 
 	DestructibleMesh = CreateDefaultSubobject<UDestructibleComponent>("Mesh");
-	DestructibleMesh->SetSimulatePhysics(true);
+	DestructibleMesh->GetBodyInstance()->SetInstanceSimulatePhysics(true);
 	DestructibleMesh->bApplyImpulseOnDamage = true;
 	DestructibleMesh->SetMobility(EComponentMobility::Movable);
 

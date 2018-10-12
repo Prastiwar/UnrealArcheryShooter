@@ -7,3 +7,8 @@ void UWeaponItem::SetItem(UTexture2D* Icon, bool bSelected)
 	ItemImage->SetBrushFromTexture(Icon); 
 	ItemImage->SetOpacity(bSelected ? 1.0f : 0.2f);
 }
+
+void UWeaponItem::SetProgressPercentage(float Percentage)
+{
+	CooldownProgress->SetPercent(Percentage);
+}

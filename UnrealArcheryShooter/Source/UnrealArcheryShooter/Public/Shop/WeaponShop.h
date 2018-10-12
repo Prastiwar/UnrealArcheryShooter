@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Shop/Shop.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Data/UIWeaponData.h"
 #include "WeaponShop.generated.h"
 

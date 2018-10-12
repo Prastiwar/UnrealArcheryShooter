@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "UMG/Public/Components/Image.h"
 #include "UMG/Public/Components/TextBlock.h"
+#include "UMG/Public/Components/ProgressBar.h"
 #include "WeaponItem.generated.h"
 
 UCLASS()
@@ -17,7 +18,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		UImage* ItemImage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+		UProgressBar* CooldownProgress;
+
 	UFUNCTION(BlueprintCallable)
 		void SetItem(UTexture2D* Icon, bool bSelected);
+
+	UFUNCTION(BlueprintCallable)
+		void SetProgressPercentage(float Percentage);
 
 };

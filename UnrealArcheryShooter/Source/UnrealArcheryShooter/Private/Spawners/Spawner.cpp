@@ -1,7 +1,7 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "Spawner.h"
-#include "Engine.h"
+#include "CoreMinimal.h"
 #include "DestructibleComponent.h"
 
 ASpawner::ASpawner()

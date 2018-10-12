@@ -3,12 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UMG/Public/Components/ProgressBar.h"
 #include "CooldownData.generated.h"
 
 USTRUCT(BlueprintType)
 struct UNREALARCHERYSHOOTER_API FCooldownData
 {
 	GENERATED_BODY()
+	DECLARE_MULTICAST_DELEGATE_OneParam(FOnValueChanged, float);
 
 public:
 	FCooldownData() {}
@@ -26,11 +28,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsCompleted = true;
 
+	FOnValueChanged OnValueChanged;
 	int ID;
 
 	FORCEINLINE bool operator==(const FCooldownData &Other) const { return ID == Other.ID; }
 	FORCEINLINE bool operator!=(const FCooldownData &Other) const { return !(ID == Other.ID); }
-	
+
 	friend uint32 GetTypeHash(const FCooldownData& Other)
 	{
 		return GetTypeHash(Other.ID)

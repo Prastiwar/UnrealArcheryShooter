@@ -3,6 +3,8 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "Components/ShapeComponent.h"
+#include "Components/BoxComponent.h"
 #include "Data/BoostData.h"
 #include "Statics/ActorHelper.h"
 #include "CoreGame/UASCharacter.h"

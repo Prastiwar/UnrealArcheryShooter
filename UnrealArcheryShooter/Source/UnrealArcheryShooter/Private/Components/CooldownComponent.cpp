@@ -18,11 +18,16 @@ void UCooldownComponent::Tick(float DeltaSeconds)
 {
 	for (uint8 Index = 0; Index < CooldownDatas.Num(); Index++)
 	{
-		CooldownDatas[Index]->CooldownTime -= DeltaSeconds * CooldownDatas[Index]->TickRateMultiplier;
-		if (CooldownDatas[Index]->CooldownTime <= 0.0f)
+		if (CooldownDatas.IsValidIndex(Index))
 		{
-			Complete(CooldownDatas[Index]);
-			Index--;
+			FCooldownData* CD = CooldownDatas[Index];
+			CD->CooldownTime -= DeltaSeconds * CD->TickRateMultiplier;
+			CD->OnValueChanged.Broadcast(CD->CooldownTime);
+			if (CD->CooldownTime <= 0.0f)
+			{
+				Complete(CD);
+				Index--;
+			}
 		}
 	}
 }

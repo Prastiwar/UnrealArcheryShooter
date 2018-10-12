@@ -3,6 +3,7 @@
 #pragma once
 
 #include "TriggerActor.h"
+#include "Components/BoxComponent.h"
 #include "ToggleActor.generated.h"
 
 UCLASS()

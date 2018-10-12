@@ -3,6 +3,8 @@
 #pragma once
 
 #include "Boost.h"
+#include "UASCharacter.h"
+#include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "SpeedBoost.generated.h"
 
 UCLASS()
