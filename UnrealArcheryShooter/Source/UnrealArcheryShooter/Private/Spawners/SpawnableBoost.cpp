@@ -2,19 +2,19 @@
 
 #include "SpawnableBoost.h"
 
-bool ASpawnableBoost::CanBeSpawned()
+bool ASpawnableBoost::CanBeSpawned() const
 {
 	ABoost* Boost = nullptr;
 	if (BoostToSpawn)
 	{
 		TArray<FHitResult> HitResults;
-		FVector Location = GetActorLocation();
-		ECollisionChannel ECC = ECollisionChannel::ECC_Visibility;
+		const FVector Location = GetActorLocation();
+		const ECollisionChannel ECC = ECollisionChannel::ECC_Visibility;
 		FCollisionShape CollisionShape;
 		CollisionShape.ShapeType = ECollisionShape::Box;
 		CollisionShape.SetBox(GetActorScale() / 2);
 
-		bool bHitSomething = GetWorld()->SweepMultiByChannel(HitResults, Location, Location, FQuat::FQuat(), ECC, CollisionShape);
+		const bool bHitSomething = GetWorld()->SweepMultiByChannel(HitResults, Location, Location, FQuat::FQuat(), ECC, CollisionShape);
 		if (!bHitSomething)
 		{
 			Boost = GetWorld()->SpawnActor<ABoost>(BoostToSpawn, GetTransform());

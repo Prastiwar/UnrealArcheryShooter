@@ -22,10 +22,10 @@ public:
 		FORCEINLINE UImage* GetItemImage() { return ItemImage; }
 
 	UFUNCTION(BlueprintCallable)
-		void SetItem(UTexture2D* Icon, bool bSelected);
+		void SetItem(UTexture2D* Icon, const bool bSelected);
 
 	UFUNCTION(BlueprintCallable)
-		void SetProgressPercentage(float Percentage);
+		void SetProgressPercentage(const float Percentage);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))

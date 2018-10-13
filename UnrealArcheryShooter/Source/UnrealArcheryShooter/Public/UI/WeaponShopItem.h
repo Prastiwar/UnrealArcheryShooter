@@ -31,7 +31,7 @@ public:
 		FORCEINLINE UTextBlock* GetCostText() { return ItemCost; }
 
 	UFUNCTION(BlueprintCallable)
-		void SetShopItem(UTexture2D* Icon, FText Name, FText Cost, int DTWeaponIndex, TSubclassOf<class AWeaponShop> WeaponShop);
+		void SetShopItem(UTexture2D* const Icon, const FText& Name, const FText& Cost, const int32 DTWeaponIndex, const TSubclassOf<class AWeaponShop>& WeaponShop);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))

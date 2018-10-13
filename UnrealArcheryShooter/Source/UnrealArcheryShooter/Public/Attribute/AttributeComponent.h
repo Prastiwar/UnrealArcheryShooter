@@ -16,10 +16,10 @@ public:
 	UAttributeComponent();
 
 	UFUNCTION(BlueprintCallable)
-		TArray<UTPAttribute*> GetAttributes() { return Attributes; }
+		FORCEINLINE TArray<UTPAttribute*> GetAttributes() const { return Attributes; }
 
 	UFUNCTION(BlueprintCallable)
-		TArray<UAutoSkillWorker*> GetAutoSkillWorkers() { return AutoSkillWorkers; }
+		FORCEINLINE TArray<UAutoSkillWorker*> GetAutoSkillWorkers() const { return AutoSkillWorkers; }
 
 protected:
 	virtual void BeginPlay() override;

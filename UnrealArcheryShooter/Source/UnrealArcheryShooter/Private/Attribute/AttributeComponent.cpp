@@ -25,16 +25,16 @@ void UAttributeComponent::BeginPlay()
 
 	if (bFillWorkersWithArray)
 	{
-		if (AutoSkillWorkers.Num() > AutoSkillWorkers.Num())
-		{
-			UE_LOG(LogTemp, Error, TEXT("You can't fill AutoSkillWorkers from Attributes array if there are less attributes than workers"));
-		}
-		else
+		if (Attributes.Num() >= AutoSkillWorkers.Num())
 		{
 			for (int32 Index = 0; Index < AutoSkillWorkers.Num(); Index++)
 			{
 				AutoSkillWorkers[Index]->SkillAttribute = Attributes[Index];
 			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("You can't fill AutoSkillWorkers from Attributes array if there are less attributes than workers"));
 		}
 	}
 }

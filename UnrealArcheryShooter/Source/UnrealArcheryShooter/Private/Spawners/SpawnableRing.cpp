@@ -21,7 +21,7 @@ ASpawnableRing::ASpawnableRing()
 	Light->SetupAttachment(DestructibleMesh);
 }
 
-bool ASpawnableRing::CanBeSpawned()
+bool ASpawnableRing::CanBeSpawned() const
 {
 	Light->SetLightColor(FLinearColor::MakeRandomColor());
 	return true;

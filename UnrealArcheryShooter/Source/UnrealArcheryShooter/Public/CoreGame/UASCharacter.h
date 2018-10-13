@@ -15,7 +15,7 @@ class UNREALARCHERYSHOOTER_API AUASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
+		DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScoreChanged, float, Score);
 
 public:
@@ -36,16 +36,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FirstPersonCameraComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gameplay)
+		USceneComponent* MuzzleLocation;
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
-		float BaseTurnRate;
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE float GetBaseTurnRate() const { return BaseTurnRate; }
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
-		float BaseLookUpRate;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		USceneComponent* MuzzleLocation;
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE float GetBaseLookUpRate() const { return BaseLookUpRate; }
 
 	static FORCEINLINE AUASCharacter* GetUASCharacter(const UWorld* World)
 	{
@@ -70,23 +70,23 @@ public:
 	// Weapon Functionality
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
-		TArray<FWeaponData> GetWeapons() { return Weapons; }
+		TArray<FWeaponData> GetWeapons() const { return Weapons; }
 	TArray<FWeaponData>* GetWeaponsPtr() { return &Weapons; }
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
-		bool AddWeapon(FWeaponData& Weapon);
+		bool AddWeapon(const FWeaponData& Weapon);
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
-		bool HasWeapon(FWeaponData& Weapon);
+		bool HasWeapon(const FWeaponData& Weapon);
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
-		void SetWeapons(TArray<FWeaponData> OtherWeapons);
+		void SetWeapons(const TArray<FWeaponData> OtherWeapons);
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
-		void SetWeapon(int Index);
+		void SetWeapon(const int Index);
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
-		int GetCurrentWeaponIndex() { return CurrentWeaponIndex; }
+		FORCEINLINE int GetCurrentWeaponIndex() const { return CurrentWeaponIndex; }
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		void SwitchNextWeapon();
@@ -97,36 +97,28 @@ public:
 	// Score Functionality
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		float GetScore();
+		FORCEINLINE float GetScore() const { return PlayerData.Score; }
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		void AddScore(float Score);
+		FORCEINLINE float GetScoreMultiplier() const { return ScoreMultiplier; }
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		void SetScore(float Score);
+		void AddScore(const float Score);
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		float GetScoreMultiplier();
+		void SetScore(const float Score);
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
-		void SetScoreMultiplier(float ScoreMultiplier);
+		void SetScoreMultiplier(const float ScoreMultiplier);
 
 protected:
-	virtual void BeginPlay();
-	virtual void Tick(float DeltaSeconds) override;
+	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+		float BaseTurnRate;
 
-	void OnFire();
-	void PlayFireAnim();
-	void MoveForward(float Value);
-	void MoveSide(float Value);
-
-	/**
-	 * Called via input to turn at a given rate.
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
-	void TurnAtRate(float Rate);
-
-	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override; // APawn interface
+	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+		float BaseLookUpRate;
 
 	UPROPERTY(EditAnywhere, Category = Weapon)
 		TArray<FWeaponData> Weapons;
@@ -134,7 +126,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		UCooldownComponent* CooldownComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		UAttributeComponent* AttributeComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Score")
@@ -145,5 +137,15 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
 		float ScoreMultiplier;
+
+	virtual void BeginPlay();
+	virtual void Tick(float DeltaSeconds) override;
+
+	void OnFire();
+	void PlayFireAnim();
+	void MoveForward(const float Value);
+	void MoveSide(const float Value);
+
+	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override; // APawn interface
 
 };

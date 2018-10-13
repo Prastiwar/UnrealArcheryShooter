@@ -4,24 +4,18 @@
 
 bool AWeaponShop::BuyItem(const UObject* WorldContextObject, const int32 WeaponIndex)
 {
-	TArray<FUIWeaponData*> Weapons = GetItemsArray<FUIWeaponData>();
+	const TArray<FUIWeaponData*> Weapons = GetItemsArray<FUIWeaponData>();
 	if (Weapons.IsValidIndex(WeaponIndex))
 	{
-		AUASCharacter* Player = AUASCharacter::GetUASCharacter(WorldContextObject->GetWorld());
+		AUASCharacter* const Player = AUASCharacter::GetUASCharacter(WorldContextObject->GetWorld());
 		if (Player->GetScore() >= Weapons[WeaponIndex]->Cost)
 		{
 			Player->AddScore(-Weapons[WeaponIndex]->Cost);
 			Player->AddWeapon(Weapons[WeaponIndex]->Weapon);
-			if (SuccessSound != NULL)
-			{
-				UGameplayStatics::PlaySoundAtLocation(WorldContextObject, SuccessSound, GetActorLocation());
-			}
+			FActorHelper::SafePlaySound(WorldContextObject, SuccessSound, GetActorLocation());
 			return true;
 		}
 	}
-	if (FailSound != NULL)
-	{
-		UGameplayStatics::PlaySoundAtLocation(WorldContextObject, FailSound, GetActorLocation());
-	}
+	FActorHelper::SafePlaySound(WorldContextObject, FailSound, GetActorLocation());
 	return false;
 }

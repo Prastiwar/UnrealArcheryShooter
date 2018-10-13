@@ -11,7 +11,7 @@ AScoreBoost::AScoreBoost()
 
 void AScoreBoost::PickBoostImpl(AActor* AppliedActor)
 {
-	AUASCharacter* Player = Cast<AUASCharacter>(AppliedActor);
+	AUASCharacter* const Player = Cast<AUASCharacter>(AppliedActor);
 	if (Player)
 	{
 		Player->SetScoreMultiplier(Player->GetScoreMultiplier() + Boost.Power);
@@ -20,7 +20,7 @@ void AScoreBoost::PickBoostImpl(AActor* AppliedActor)
 
 void AScoreBoost::RevertBoostImpl(AActor* AppliedActor)
 {
-	AUASCharacter* Player = Cast<AUASCharacter>(AppliedActor);
+	AUASCharacter* const Player = Cast<AUASCharacter>(AppliedActor);
 	if (Player)
 	{
 		Player->SetScoreMultiplier(Player->GetScoreMultiplier() - Boost.Power);

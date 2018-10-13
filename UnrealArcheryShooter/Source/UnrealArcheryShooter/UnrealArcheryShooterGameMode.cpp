@@ -35,7 +35,7 @@ void AUnrealArcheryShooterGameMode::ApplyPlayerHUD()
 	}
 }
 
-bool AUnrealArcheryShooterGameMode::ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, bool bShowCursor, bool bEnableClickEvents)
+bool AUnrealArcheryShooterGameMode::ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, const bool bShowCursor, const bool bEnableClickEvents)
 {
 	if (CurrentWidget)
 	{
@@ -46,7 +46,7 @@ bool AUnrealArcheryShooterGameMode::ApplyNewHUD(TSubclassOf<class UUserWidget> H
 		CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), Hud);
 		if (CurrentWidget)
 		{
-			APlayerController* Controller = GetWorld()->GetFirstPlayerController();
+			APlayerController* const Controller = GetWorld()->GetFirstPlayerController();
 			Controller->bShowMouseCursor = bShowCursor;
 			Controller->bEnableClickEvents = bEnableClickEvents;
 			CurrentWidget->AddToViewport();

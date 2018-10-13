@@ -15,7 +15,7 @@ void ABeamAttacher::BeginPlay()
 	Player = Cast<AUASCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 }
 
-void ABeamAttacher::Activated(bool bActive, AActor* OverlappedActor)
+void ABeamAttacher::Activated(const bool bActive, AActor* OverlappedActor)
 {
 	if (Cast<AUASCharacter>(OverlappedActor))
 	{

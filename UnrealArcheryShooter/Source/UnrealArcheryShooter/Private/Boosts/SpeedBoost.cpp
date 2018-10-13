@@ -11,7 +11,7 @@ ASpeedBoost::ASpeedBoost()
 
 void ASpeedBoost::PickBoostImpl(AActor* AppliedActor)
 {
-	AUASCharacter* Player = Cast<AUASCharacter>(AppliedActor);
+	AUASCharacter* const Player = Cast<AUASCharacter>(AppliedActor);
 	if (Player)
 	{
 		TArray<UCharacterMovementComponent*> MoveComponents;
@@ -26,7 +26,7 @@ void ASpeedBoost::PickBoostImpl(AActor* AppliedActor)
 
 void ASpeedBoost::RevertBoostImpl(AActor* AppliedActor)
 {
-	AUASCharacter* Player = Cast<AUASCharacter>(AppliedActor);
+	AUASCharacter* const Player = Cast<AUASCharacter>(AppliedActor);
 	if (Player)
 	{
 		TArray<UCharacterMovementComponent*> MoveComponents;

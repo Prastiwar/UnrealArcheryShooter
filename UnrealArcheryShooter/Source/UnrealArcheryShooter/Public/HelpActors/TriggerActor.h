@@ -16,9 +16,9 @@ public:
 
 protected:
 	template<class TReturnType>
-	FORCEINLINE TReturnType* SetTrigger(FName TriggerName, bool bTransient = false)
+	FORCEINLINE TReturnType* SetTrigger(const FName TriggerName, const bool bTransient = false)
 	{
-		TReturnType* Trigger = CreateDefaultSubobject<TReturnType>("TriggerName", bTransient);
+		TReturnType* Trigger = CreateDefaultSubobject<TReturnType>(TriggerName, bTransient);
 		Trigger->OnComponentBeginOverlap.AddDynamic(this, &ATriggerActor::BeginOverlap);
 		Trigger->OnComponentEndOverlap.AddDynamic(this, &ATriggerActor::EndOverlap);
 		return Trigger;
@@ -29,9 +29,9 @@ protected:
 
 	UFUNCTION()
 		void BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-			UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+			UPrimitiveComponent* OtherComp, const int OtherBodyIndex, const bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-		void EndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex);
+		void EndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, const int OtherBodyIndex);
 
 };

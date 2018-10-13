@@ -37,7 +37,7 @@ public:
 	FORCEINLINE TArray<T*> FillItemGrid() { return FillItemGridImpl<T>(RowCount, ColumnCount); }
 
 	template<typename T>
-	FORCEINLINE TArray<T*> FillItemGridImpl(uint32 RowCount, uint32 ColumnCount)
+	FORCEINLINE TArray<T*> FillItemGridImpl(const uint32 RowCount, const uint32 ColumnCount)
 	{
 		TArray<T*> Items = TArray<T*>();
 		if (Grid && ItemWidgetClass)
@@ -48,7 +48,7 @@ public:
 				for (uint32 Column = 0; Column < ColumnCount; Column++)
 				{
 					UUserWidget* Widget = CreateWidget<UUserWidget>(GetWorld(), ItemWidgetClass);
-					int Index = Items.Add(Cast<T>(Widget));
+					const int Index = Items.Add(Cast<T>(Widget));
 
 					UUniformGridSlot* GridSlot = Grid->AddChildToUniformGrid(Widget);
 					GridSlot->SetColumn(Column);

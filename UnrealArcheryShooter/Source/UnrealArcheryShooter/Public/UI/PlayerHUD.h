@@ -18,7 +18,7 @@ public:
 		virtual void FillGrid() override;
 
 	UFUNCTION(BlueprintCallable)
-		void RefreshScore(float Score);
+		void RefreshScore(const float Score);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
@@ -28,6 +28,6 @@ protected:
 		UDataTable* WeaponsTable;
 
 	UFUNCTION(BlueprintCallable)
-		void SetGrid(TArray<UWeaponItem*> WeaponItems);
+		void SetGrid(TArray<UWeaponItem*>& WeaponItems);
 
 };

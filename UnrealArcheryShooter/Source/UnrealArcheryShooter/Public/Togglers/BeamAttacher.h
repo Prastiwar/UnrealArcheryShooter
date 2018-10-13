@@ -16,10 +16,10 @@ public:
 	ABeamAttacher();
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE FVector GetAttachOffset() { return AttachOffset; }
+		FORCEINLINE FVector GetAttachOffset() const { return AttachOffset; }
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		UParticleSystemComponent* BeamParticle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -30,7 +30,7 @@ protected:
 	float UpdateRate;
 
 	virtual void BeginPlay() override;
-	virtual void Activated(bool bActive, AActor* OverlappedActor) override;
+	virtual void Activated(const bool bActive, AActor* OverlappedActor) override;
 	virtual void AttachBeam();
 
 };

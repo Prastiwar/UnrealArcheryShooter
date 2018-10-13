@@ -13,7 +13,7 @@ class UNREALARCHERYSHOOTER_API URunSkillWorker : public UAutoSkillWorker
 
 public:
 	virtual void Initialize(const UWorld* World) override;
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void Tick(const float DeltaSeconds) override;
 	virtual void ModifyAttribute() override;
 
 protected:

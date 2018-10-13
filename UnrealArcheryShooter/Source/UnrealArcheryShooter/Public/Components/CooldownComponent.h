@@ -12,8 +12,6 @@ class UNREALARCHERYSHOOTER_API UCooldownComponent : public UObject
 	GENERATED_BODY()
 
 public:
-	UCooldownComponent();
-
 	TArray<FCooldownData*> CooldownDatas;
 
 	void SetCooldown(FCooldownData* CooldownData);

@@ -12,7 +12,7 @@ class UNREALARCHERYSHOOTER_API ASpawnableBoost : public ASpawnableActor
 	GENERATED_BODY()
 
 public:
-	virtual bool CanBeSpawned() override;
+	virtual bool CanBeSpawned() const override;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

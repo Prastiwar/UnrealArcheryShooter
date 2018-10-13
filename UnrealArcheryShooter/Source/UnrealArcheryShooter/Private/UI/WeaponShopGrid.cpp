@@ -17,7 +17,7 @@ void UWeaponShopGrid::ExitShop()
 	GetWorld()->GetAuthGameMode<AUnrealArcheryShooterGameMode>()->ApplyPlayerHUD();
 }
 
-void UWeaponShopGrid::TryExitShop(bool bBought)
+void UWeaponShopGrid::TryExitShop(const bool bBought)
 {
 	if (bBought)
 	{
@@ -31,22 +31,22 @@ void UWeaponShopGrid::FillGrid()
 	SetGrid(WeaponItems);
 }
 
-void UWeaponShopGrid::SetGrid(TArray<UWeaponShopItem*> WeaponWidgetItems)
+void UWeaponShopGrid::SetGrid(const TArray<UWeaponShopItem*>& WeaponWidgetItems)
 {
 	if (!AUnrealArcheryShooterGameMode::SetUIInput(GetWorld()))
 	{
 		return;
 	}
 
-	TArray<FUIWeaponData*> DTWeapons = WeaponShop->GetDefaultObject<AWeaponShop>()->GetItemsArray<FUIWeaponData>();
+	const TArray<FUIWeaponData*> DTWeapons = WeaponShop->GetDefaultObject<AWeaponShop>()->GetItemsArray<FUIWeaponData>();
 	if (DTWeapons.Num() <= WeaponWidgetItems.Num())
 	{
 		AUASCharacter* Player = AUASCharacter::GetUASCharacter(GetWorld());
 		uint8 WidgetIndex = 0; // We want set widget independently on order between Player Weapons and Weapons from DT
 		for (uint8 DTWeaponIndex = 0; DTWeaponIndex < DTWeapons.Num(); DTWeaponIndex++)
 		{
-			FUIWeaponData* UIWeapon = DTWeapons[DTWeaponIndex];
-			FWeaponData& Weapon = UIWeapon->Weapon;
+			const FUIWeaponData* UIWeapon = DTWeapons[DTWeaponIndex];
+			const FWeaponData& Weapon = UIWeapon->Weapon;
 			// Don't sell items that Player already has
 			if (!Player->HasWeapon(Weapon))
 			{

@@ -27,7 +27,7 @@ public:
 	{
 		if (World)
 		{
-			if (APlayerController* Player = World->GetFirstPlayerController())
+			if (APlayerController* const Player = World->GetFirstPlayerController())
 			{
 				Player->SetInputMode(FInputModeUIOnly());
 				Player->SetIgnoreMoveInput(true);
@@ -40,7 +40,7 @@ public:
 
 	UUserWidget* GetCurrentWidget() { return CurrentWidget; }
 	void ApplyPlayerHUD();
-	bool ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, bool bShowCursor, bool bEnableClickEvents);
+	bool ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, const bool bShowCursor, const bool bEnableClickEvents);
 
 protected:
 	virtual void BeginPlay() override;

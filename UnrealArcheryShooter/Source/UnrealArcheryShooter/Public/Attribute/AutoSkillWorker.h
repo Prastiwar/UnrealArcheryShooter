@@ -21,7 +21,7 @@ public:
 	UTPAttribute* SkillAttribute;
 
 	virtual void Initialize(const UWorld* World) { unimplemented(); }
-	virtual void Tick(float DeltaSeconds) { unimplemented(); }
+	virtual void Tick(const float DeltaSeconds) { unimplemented(); }
 	virtual void ModifyAttribute() { unimplemented(); }
 
 protected:

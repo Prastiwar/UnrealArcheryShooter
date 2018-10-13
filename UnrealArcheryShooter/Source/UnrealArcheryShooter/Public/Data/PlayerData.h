@@ -12,7 +12,7 @@ struct UNREALARCHERYSHOOTER_API FPlayerData
 
 public:
 	FPlayerData() {}
-	FPlayerData(float Score) { this->Score = Score; }
+	FPlayerData(const float Score) { this->Score = Score; }
 	~FPlayerData() {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

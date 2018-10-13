@@ -12,7 +12,7 @@ struct UNREALARCHERYSHOOTER_API FBoostData
 
 public:
 	FBoostData() {}
-	FBoostData(float Power, float TimeLast)
+	FBoostData(const float Power, const float TimeLast)
 	{
 		this->Power = Power;
 		this->TimeLast = TimeLast;

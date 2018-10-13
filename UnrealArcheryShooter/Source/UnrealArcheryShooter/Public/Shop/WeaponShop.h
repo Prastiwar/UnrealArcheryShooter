@@ -5,6 +5,7 @@
 #include "Shop/Shop.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Data/UIWeaponData.h"
+#include "Statics/ActorHelper.h"
 #include "WeaponShop.generated.h"
 
 UCLASS()
@@ -17,10 +18,10 @@ public:
 		virtual bool BuyItem(const UObject* WorldContextObject, const int32 ItemIndex) override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		USoundBase* SuccessSound;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		USoundBase* FailSound;
 
 };

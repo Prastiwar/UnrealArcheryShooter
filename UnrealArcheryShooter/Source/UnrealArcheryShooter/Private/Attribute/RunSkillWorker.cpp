@@ -10,7 +10,7 @@ void URunSkillWorker::Initialize(const UWorld* World)
 	Player = AUASCharacter::GetUASCharacter(World);
 }
 
-void URunSkillWorker::Tick(float DeltaSeconds)
+void URunSkillWorker::Tick(const float DeltaSeconds)
 {
 	if (!Player->GetVelocity().IsZero())
 	{

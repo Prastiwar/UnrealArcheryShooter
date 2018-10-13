@@ -27,7 +27,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Boost")
 		FBoostData Boost;
 
-	UPROPERTY(EditAnywhere, Category = "Boost")
+	UPROPERTY(VisibleAnywhere, Category = "Boost")
 		UStaticMeshComponent* StaticMesh;
 
 private:
@@ -36,6 +36,6 @@ private:
 
 	UFUNCTION()
 		void BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-			UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+			UPrimitiveComponent* OtherComp, const int OtherBodyIndex, const bool bFromSweep, const FHitResult& SweepResult);
 
 };

@@ -30,10 +30,10 @@ protected:
 	virtual void NativeConstruct() override;
 
 	UFUNCTION(BlueprintCallable)
-		void SetGrid(TArray<UWeaponShopItem*> WeaponItems);
+		void SetGrid(const TArray<UWeaponShopItem*>& WeaponItems);
 
 private:
 	UFUNCTION()
-		void TryExitShop(bool bBought);
+		void TryExitShop(const bool bBought);
 
 };

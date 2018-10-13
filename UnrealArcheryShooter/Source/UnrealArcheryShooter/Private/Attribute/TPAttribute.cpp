@@ -2,10 +2,6 @@
 
 #include "TPAttribute.h"
 
-UTPAttribute::UTPAttribute()
-{
-}
-
 void UTPAttribute::Recalculate()
 {
 	Value = BaseValue;
@@ -31,7 +27,7 @@ void UTPAttribute::Recalculate()
 	OnChanged.Broadcast(Value);
 }
 
-void UTPAttribute::SetBaseValue(float NewValue)
+void UTPAttribute::SetBaseValue(const float NewValue)
 {
 	BaseValue = NewValue;
 	Recalculate();

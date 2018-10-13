@@ -2,15 +2,11 @@
 
 #include "CooldownComponent.h"
 
-UCooldownComponent::UCooldownComponent()
-{
-}
-
 void UCooldownComponent::SetCooldown(FCooldownData* CooldownData)
 {
 	CooldownData->bIsCompleted = false;
 	ResetTime(CooldownData);
-	int32 ID = CooldownDatas.Add(CooldownData);
+	const int32 ID = CooldownDatas.Add(CooldownData);
 	CooldownData->ID = ID;
 }
 

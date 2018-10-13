@@ -13,6 +13,6 @@ class UNREALARCHERYSHOOTER_API ASpawnableActor : public AActor
 public:	
 	ASpawnableActor();
 
-	virtual bool CanBeSpawned() { return true; }
+	virtual bool CanBeSpawned() const { return true; }
 
 };

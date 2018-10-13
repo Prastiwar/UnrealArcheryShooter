@@ -27,7 +27,7 @@ public:
 	}
 
 protected:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 		UBoxComponent* BoxTrigger;
 
 	UPROPERTY(EditAnywhere)
@@ -40,8 +40,8 @@ protected:
 	void BeginTrigger(AActor* OtherActor) override;
 	void EndTrigger(AActor* OtherActor) override;
 
-	FORCEINLINE AUASCharacter* GetPlayerCharacter() { return PlayerCharacter; }
-	FORCEINLINE AUnrealArcheryShooterGameMode* GetGameMode() { return GameMode; }
+	FORCEINLINE AUASCharacter* GetPlayerCharacter() const { return PlayerCharacter; }
+	FORCEINLINE AUnrealArcheryShooterGameMode* GetGameMode() const { return GameMode; }
 
 private:
 	AUASCharacter* PlayerCharacter;

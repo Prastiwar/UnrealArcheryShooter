@@ -8,14 +8,14 @@ void UPlayerHUD::FillGrid()
 	SetGrid(WeaponItems);
 }
 
-void UPlayerHUD::RefreshScore(float Score)
+void UPlayerHUD::RefreshScore(const float Score)
 {
 	FNumberFormattingOptions options = FNumberFormattingOptions();
 	options.SetMaximumFractionalDigits(0);
 	ScoreText->SetText(FText::AsNumber(Score, &options));
 }
 
-void UPlayerHUD::SetGrid(TArray<UWeaponItem*> WeaponItems)
+void UPlayerHUD::SetGrid(TArray<UWeaponItem*>& WeaponItems)
 {
 	AUASCharacter* Player = AUASCharacter::GetUASCharacter(GetWorld());
 	if (!Player)
@@ -32,11 +32,11 @@ void UPlayerHUD::SetGrid(TArray<UWeaponItem*> WeaponItems)
 		}
 
 		FWeaponData& PlayerWeapon = PlayerWeaponsPtr->operator [](Index);
-		FUIWeaponData* UIWeapon = WeaponsTable->FindRow<FUIWeaponData>(PlayerWeapon.Name, TEXT(""));
+		const FUIWeaponData* UIWeapon = WeaponsTable->FindRow<FUIWeaponData>(PlayerWeapon.Name, TEXT(""));
 		if (UIWeapon)
 		{
-			int SelectedWeaponIndex = Player->GetCurrentWeaponIndex();
-			bool bSelect = Index == SelectedWeaponIndex;
+			const int SelectedWeaponIndex = Player->GetCurrentWeaponIndex();
+			const bool bSelect = Index == SelectedWeaponIndex;
 			WeaponItems[Index]->SetItem(UIWeapon->Icon, bSelect);
 
 			auto Lambda = [WeaponItems, Index](float Value) {

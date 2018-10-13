@@ -8,7 +8,7 @@ ATriggerActor::ATriggerActor()
 }
 
 void ATriggerActor::BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+	UPrimitiveComponent* OtherComp, const int OtherBodyIndex, const bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor && OtherActor != this)
 	{
@@ -16,7 +16,7 @@ void ATriggerActor::BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	}
 }
 
-void ATriggerActor::EndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex)
+void ATriggerActor::EndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, const int OtherBodyIndex)
 {
 	if (OtherActor && OtherActor != this)
 	{

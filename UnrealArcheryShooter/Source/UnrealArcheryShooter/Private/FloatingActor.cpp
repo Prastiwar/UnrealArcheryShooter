@@ -2,7 +2,6 @@
 
 #include "FloatingActor.h"
 #include "TPMath.h"
-#include "CoreMinimal.h"
 
 AFloatingActor::AFloatingActor()
 {
@@ -25,8 +24,8 @@ void AFloatingActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	EvaluateTime += DeltaTime * TimeScale;
-	float Time = FTPMath::PingPong(EvaluateTime, 1.0f);
-	float EvaluatedAlpha = CurveFloat->GetFloatValue(Time);
-	FVector NewLocation = FMath::Lerp(InitLocation, TargetLocation, EvaluatedAlpha);
+	const float Time = FTPMath::PingPong(EvaluateTime, 1.0f);
+	const float EvaluatedAlpha = CurveFloat->GetFloatValue(Time);
+	const FVector NewLocation = FMath::Lerp(InitLocation, TargetLocation, EvaluatedAlpha);
 	SetActorLocation(NewLocation);
 }

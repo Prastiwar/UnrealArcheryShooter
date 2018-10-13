@@ -16,7 +16,7 @@ void ABoost::SetTriggerComponent(UShapeComponent* Trigger)
 }
 
 void ABoost::BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+	UPrimitiveComponent* OtherComp, const int OtherBodyIndex, const bool bFromSweep, const FHitResult& SweepResult)
 {
 	Boost.AppliedActor = OtherActor;
 	PickBoostImpl(OtherActor);

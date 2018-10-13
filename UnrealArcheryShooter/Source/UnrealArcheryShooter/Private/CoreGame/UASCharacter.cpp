@@ -10,8 +10,6 @@
 #include "CoreGame/SaveState.h"
 #include "Attribute/TPAttribute.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
-
 AUASCharacter::AUASCharacter()
 {
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
@@ -68,7 +66,7 @@ void AUASCharacter::Tick(float DeltaSeconds)
 
 void AUASCharacter::SavePlayer()
 {
-	USaveState* SaveInstance = USaveState::Get();
+	USaveState* const SaveInstance = USaveState::Get();
 	SaveInstance->SavePlayer(this);
 	if (!SaveInstance->Save(SaveInstance))
 	{
@@ -78,7 +76,7 @@ void AUASCharacter::SavePlayer()
 
 void AUASCharacter::Load()
 {
-	USaveState* SaveInstance = USaveState::Load();
+	USaveState* const SaveInstance = USaveState::Load();
 	if (SaveInstance)
 	{
 		SaveInstance->LoadPlayer(this);
@@ -107,7 +105,7 @@ void AUASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AUASCharacter::OnFire);
 
-	// Bind Persistance
+	// Bind Persistence
 	PlayerInputComponent->BindAction("SaveGame", IE_Pressed, this, &AUASCharacter::SavePlayer);
 	PlayerInputComponent->BindAction("LoadGame", IE_Pressed, this, &AUASCharacter::Load);
 
@@ -115,11 +113,7 @@ void AUASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 	PlayerInputComponent->BindAxis("MoveForward", this, &AUASCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveSide", this, &AUASCharacter::MoveSide);
 
-	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
-	// "turn" handles devices that provide an absolute delta, such as a mouse.
-	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("TurnRate", this, &AUASCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 }
 
@@ -135,7 +129,7 @@ void AUASCharacter::OnFire()
 				FActorSpawnParameters SpawnParams;
 				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
-				AProjectile* Projectile = World->SpawnActor<AProjectile>(
+				AProjectile* const Projectile = World->SpawnActor<AProjectile>(
 					Weapons[CurrentWeaponIndex].Projectile, MuzzleLocation->GetComponentLocation(), GetControlRotation(), SpawnParams);
 				if (Projectile)
 				{
@@ -152,7 +146,7 @@ void AUASCharacter::PlayFireAnim()
 {
 	if (Weapons[CurrentWeaponIndex].FireAnimation != NULL)
 	{
-		UAnimInstance* AnimInstance = FirstPersonMeshViewed->GetAnimInstance();
+		UAnimInstance* const AnimInstance = FirstPersonMeshViewed->GetAnimInstance();
 		if (AnimInstance != NULL)
 		{
 			AnimInstance->Montage_Play(Weapons[CurrentWeaponIndex].FireAnimation, 1.f);
@@ -160,7 +154,7 @@ void AUASCharacter::PlayFireAnim()
 	}
 }
 
-void AUASCharacter::MoveForward(float Value)
+void AUASCharacter::MoveForward(const float Value)
 {
 	if (Value != 0.0f)
 	{
@@ -168,7 +162,7 @@ void AUASCharacter::MoveForward(float Value)
 	}
 }
 
-void AUASCharacter::MoveSide(float Value)
+void AUASCharacter::MoveSide(const float Value)
 {
 	if (Value != 0.0f)
 	{
@@ -176,13 +170,7 @@ void AUASCharacter::MoveSide(float Value)
 	}
 }
 
-void AUASCharacter::TurnAtRate(float Rate)
-{
-	// calculate delta for this frame from the rate information
-	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
-}
-
-void AUASCharacter::AddScore(float Score)
+void AUASCharacter::AddScore(const float Score)
 {
 	PlayerData.Score += Score * GetScoreMultiplier();
 	if (PlayerData.Score < 0.0f)
@@ -192,27 +180,17 @@ void AUASCharacter::AddScore(float Score)
 	OnScoreChanged.Broadcast(PlayerData.Score);
 }
 
-float AUASCharacter::GetScoreMultiplier()
-{
-	return ScoreMultiplier;
-}
-
-float AUASCharacter::GetScore()
-{
-	return PlayerData.Score;
-}
-
-void AUASCharacter::SetScore(float Score)
+void AUASCharacter::SetScore(const float Score)
 {
 	PlayerData.Score = Score;
 }
 
-void AUASCharacter::SetScoreMultiplier(float ScoreMultiplier)
+void AUASCharacter::SetScoreMultiplier(const float ScoreMultiplier)
 {
 	this->ScoreMultiplier = ScoreMultiplier;
 }
 
-bool AUASCharacter::AddWeapon(FWeaponData& Weapon)
+bool AUASCharacter::AddWeapon(const FWeaponData& Weapon)
 {
 	if (!HasWeapon(Weapon))
 	{
@@ -222,12 +200,12 @@ bool AUASCharacter::AddWeapon(FWeaponData& Weapon)
 	return false;
 }
 
-bool AUASCharacter::HasWeapon(FWeaponData& Weapon)
+bool AUASCharacter::HasWeapon(const FWeaponData& Weapon)
 {
 	return Weapons.Contains(Weapon);
 }
 
-void AUASCharacter::SetWeapons(TArray<FWeaponData> OtherWeapons)
+void AUASCharacter::SetWeapons(const TArray<FWeaponData> OtherWeapons)
 {
 	Weapons = OtherWeapons;
 }
@@ -242,7 +220,7 @@ void AUASCharacter::SwitchNextWeapon()
 	SetWeapon(CurrentWeaponIndex + 1);
 }
 
-void AUASCharacter::SetWeapon(int Index)
+void AUASCharacter::SetWeapon(const int Index)
 {
 	CurrentWeaponIndex = Index;
 	if (CurrentWeaponIndex >= Weapons.Num())

@@ -20,7 +20,7 @@ public:
 protected:
 	virtual void BeginTrigger(AActor* OtherActor) override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		UBoxComponent* Box;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

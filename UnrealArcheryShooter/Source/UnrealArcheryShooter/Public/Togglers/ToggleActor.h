@@ -18,11 +18,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bActiveOnOverlap;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		UBoxComponent* TriggerBox;
 
 	virtual void BeginPlay() override;
 	virtual void BeginTrigger(AActor* OtherActor);
 	virtual void EndTrigger(AActor* OtherActor);
-	virtual void Activated(bool bActive, AActor* OverlappedActor) {}
+	virtual void Activated(const bool bActive, AActor* OverlappedActor) {}
 };

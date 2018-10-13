@@ -21,15 +21,22 @@ public:
 
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
-			UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+			UPrimitiveComponent* OtherComp, const FVector NormalImpulse, const FHitResult& Hit);
 
-	FORCEINLINE float GetFireCost() { return FireScoreCost; }
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE float GetFireCost() const { return FireScoreCost; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE float GetSphereRadius() const { return SphereRadius; }
+
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE float GetRadialStrength() const { return RadialStrength; }
 
 protected:
-	virtual void OnHitImpl();
+	virtual void OnHitImpl(const bool bHitSomething, TArray<FHitResult> HitResults);
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		UStaticMeshComponent* StaticMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

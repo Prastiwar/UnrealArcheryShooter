@@ -20,7 +20,7 @@ protected:
 	virtual void RevertBoostImpl(AActor* AppliedActor) override;
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 		UBoxComponent* BoxTrigger;
 
 };
