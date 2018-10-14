@@ -19,8 +19,8 @@
 
 ## Overview
 
-![Screenshot1](https://i.imgur.com/n0a5DZJ.jpg) 
-![Screenshot1](https://i.imgur.com/7Pxh6bn.jpg) 
+![Screenshot1](https://i.imgur.com/HeS0x8s.png) 
+![Screenshot1](https://i.imgur.com/0c0E6zq.png) 
 
 
 ## Contributing

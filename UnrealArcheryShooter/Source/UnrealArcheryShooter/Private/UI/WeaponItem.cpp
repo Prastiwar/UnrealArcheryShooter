@@ -10,8 +10,5 @@ void UWeaponItem::SetItem(UTexture2D* Icon, const bool bSelected)
 
 void UWeaponItem::SetProgressPercentage(const float Percentage)
 {
-	if (CooldownProgress->CanSafelyRouteEvent())
-	{
-		CooldownProgress->SetPercent(Percentage);
-	}
+	CooldownProgress->SetPercent(Percentage);
 }
