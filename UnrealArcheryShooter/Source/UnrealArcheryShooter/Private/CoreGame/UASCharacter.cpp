@@ -33,7 +33,7 @@ AUASCharacter::AUASCharacter()
 
 	// Create a gun mesh component
 	GunMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
-	GunMesh->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
+	GunMesh->SetOnlyOwnerSee(true); // only the owning player will see this mesh
 	GunMesh->bCastDynamicShadow = false;
 	GunMesh->CastShadow = false;
 	GunMesh->SetupAttachment(RootComponent);
@@ -57,6 +57,7 @@ void AUASCharacter::BeginPlay()
 	GunMesh->AttachToComponent(FirstPersonMeshViewed, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 	FirstPersonMeshViewed->SetHiddenInGame(false, true);
 	CooldownComponent = NewObject<UCooldownComponent>();
+	ZoomImpl(false);
 }
 
 void AUASCharacter::Tick(float DeltaSeconds)
@@ -102,8 +103,9 @@ void AUASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("E", IE_Pressed, this, &AUASCharacter::SwitchNextWeapon);
 	PlayerInputComponent->BindAction("Q", IE_Pressed, this, &AUASCharacter::SwitchPreviousWeapon);
 
-	// Bind fire event
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AUASCharacter::OnFire);
+	// Bind fire events
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AUASCharacter::Fire);
+	PlayerInputComponent->BindAction("Zoom", IE_Pressed, this, &AUASCharacter::Zoom);
 
 	// Bind Persistence
 	PlayerInputComponent->BindAction("SaveGame", IE_Pressed, this, &AUASCharacter::SavePlayer);
@@ -117,7 +119,7 @@ void AUASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 }
 
-void AUASCharacter::OnFire()
+void AUASCharacter::Fire()
 {
 	if (Weapons.IsValidIndex(CurrentWeaponIndex))
 	{
@@ -151,6 +153,24 @@ void AUASCharacter::PlayFireAnim()
 		{
 			AnimInstance->Montage_Play(Weapons[CurrentWeaponIndex].FireAnimation, 1.f);
 		}
+	}
+}
+
+void AUASCharacter::Zoom()
+{
+	bIsZoomed = !bIsZoomed;
+	ZoomImpl(bIsZoomed);
+}
+
+void AUASCharacter::ZoomImpl(const bool bToZoom)
+{
+	if (bToZoom)
+	{
+		FirstPersonMeshViewed->SetRelativeLocation(FPMeshZoomPosition);
+	}
+	else
+	{
+		FirstPersonMeshViewed->SetRelativeLocation(FPMeshFreePosition);
 	}
 }
 

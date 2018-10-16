@@ -27,6 +27,12 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FScoreChanged OnScoreChanged;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FVector FPMeshFreePosition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FVector FPMeshZoomPosition;
+
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 		class USkeletalMeshComponent* FirstPersonMeshViewed;
 
@@ -138,10 +144,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
 		float ScoreMultiplier;
 
+	bool bIsZoomed;
+
 	virtual void BeginPlay();
 	virtual void Tick(float DeltaSeconds) override;
 
-	void OnFire();
+	void Fire();
+	void Zoom();
+	void ZoomImpl(const bool bToZoom);
 	void PlayFireAnim();
 	void MoveForward(const float Value);
 	void MoveSide(const float Value);
