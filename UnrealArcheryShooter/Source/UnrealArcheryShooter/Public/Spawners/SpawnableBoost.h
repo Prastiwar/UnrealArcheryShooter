@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Spawners/SpawnableActor.h"
-#include "Boosts/Boost.h"
 #include "SpawnableBoost.generated.h"
 
 UCLASS()
@@ -16,6 +15,6 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TSubclassOf<ABoost> BoostToSpawn;
+		TSubclassOf<class ABoost> BoostToSpawn;
 
 };

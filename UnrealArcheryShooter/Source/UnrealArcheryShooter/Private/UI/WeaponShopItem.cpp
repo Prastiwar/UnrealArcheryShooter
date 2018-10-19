@@ -2,7 +2,7 @@
 
 #include "WeaponShopItem.h"
 
-void UWeaponShopItem::SetShopItem(UTexture2D* const Icon, const FText& Name, const FText& Cost, const int32 DTWeaponIndex, const TSubclassOf<class AWeaponShop>& WeaponShop)
+void UWeaponShopItem::SetShopItem(UTexture2D* const Icon, const FText& Name, const FText& Cost, const int32 DTWeaponIndex, const TSubclassOf<AWeaponShop>& WeaponShop)
 {
 	ItemImage->SetBrushFromTexture(Icon);
 	ItemName->SetText(Name);

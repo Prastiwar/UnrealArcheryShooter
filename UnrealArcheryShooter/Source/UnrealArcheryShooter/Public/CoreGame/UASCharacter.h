@@ -3,11 +3,9 @@
 #pragma once
 
 #include "GameFramework/Character.h"
-#include "Data/PlayerData.h"
-#include "Data/WeaponData.h"
-#include "Attribute/TPAttribute.h"
-#include "CooldownComponent.h"
-#include "Attribute/AttributeComponent.h"
+#include "CoreGame/PlayerData.h"
+#include "Weapon/WeaponData.h"
+#include "Cooldown/CooldownComponent.h"
 #include "UASCharacter.generated.h"
 
 UCLASS(config = Game)
@@ -133,7 +131,7 @@ protected:
 		UCooldownComponent* CooldownComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		UAttributeComponent* AttributeComponent;
+		class UAttributeComponent* AttributeComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Score")
 		FPlayerData PlayerData;

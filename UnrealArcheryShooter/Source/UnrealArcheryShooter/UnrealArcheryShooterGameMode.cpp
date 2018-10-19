@@ -35,7 +35,7 @@ void AUnrealArcheryShooterGameMode::ApplyPlayerHUD()
 	}
 }
 
-bool AUnrealArcheryShooterGameMode::ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, const bool bShowCursor, const bool bEnableClickEvents)
+bool AUnrealArcheryShooterGameMode::ApplyNewHUD(TSubclassOf<UUserWidget> Hud, const bool bShowCursor, const bool bEnableClickEvents)
 {
 	if (CurrentWidget)
 	{

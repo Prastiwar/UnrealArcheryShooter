@@ -4,7 +4,6 @@
 
 #include "Togglers/ToggleActor.h"
 #include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
-#include "CoreGame/UASCharacter.h"
 #include "BeamAttacher.generated.h"
 
 UCLASS()
@@ -25,7 +24,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FVector AttachOffset;
 
-	AUASCharacter* Player;
+	class AUASCharacter* Player;
 	FTimerHandle TimerHandle;
 	float UpdateRate;
 

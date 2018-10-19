@@ -3,7 +3,6 @@
 #pragma once
 
 #include "TriggerActor.h"
-#include "Components/BoxComponent.h"
 #include "Lift.generated.h"
 
 UCLASS()
@@ -21,7 +20,7 @@ protected:
 	virtual void BeginTrigger(AActor* OtherActor) override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		UBoxComponent* Box;
+		class UBoxComponent* Box;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FVector NextLocation;

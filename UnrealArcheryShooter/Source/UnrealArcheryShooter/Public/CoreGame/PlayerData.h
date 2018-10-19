@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "PlayerData.generated.h"
 
 USTRUCT(BlueprintType)

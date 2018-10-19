@@ -2,10 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "UMG/Public/Components/Image.h"
-#include "UMG/Public/Components/TextBlock.h"
 #include "UMG/Public/Components/ProgressBar.h"
 #include "WeaponItem.generated.h"
 

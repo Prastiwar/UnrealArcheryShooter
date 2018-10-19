@@ -3,7 +3,6 @@
 #pragma once
 
 #include "TriggerActor.h"
-#include "Components/BoxComponent.h"
 #include "ToggleActor.generated.h"
 
 UCLASS()
@@ -19,7 +18,7 @@ protected:
 		bool bActiveOnOverlap;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		UBoxComponent* TriggerBox;
+		class UBoxComponent* TriggerBox;
 
 	virtual void BeginPlay() override;
 	virtual void BeginTrigger(AActor* OtherActor);

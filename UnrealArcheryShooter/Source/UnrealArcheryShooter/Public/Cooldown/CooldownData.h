@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "UMG/Public/Components/ProgressBar.h"
 #include "CooldownData.generated.h"
 
 USTRUCT(BlueprintType)

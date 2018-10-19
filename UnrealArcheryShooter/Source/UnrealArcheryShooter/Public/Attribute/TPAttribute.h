@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "TPModifier.h"
 #include "TPAttribute.generated.h"
 
@@ -11,7 +10,7 @@ class UNREALARCHERYSHOOTER_API UTPAttribute : public UObject
 {
 	GENERATED_BODY()
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FValueChanged, float, Value);
+		DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FValueChanged, float, Value);
 
 public:
 	UPROPERTY(BlueprintAssignable)

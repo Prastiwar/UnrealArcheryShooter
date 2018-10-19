@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "WeaponData.h"
 #include "Engine/DataTable.h"
 #include "UIWeaponData.generated.h"
 
@@ -17,7 +16,7 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FWeaponData Weapon;
+		struct FWeaponData Weapon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float Cost;

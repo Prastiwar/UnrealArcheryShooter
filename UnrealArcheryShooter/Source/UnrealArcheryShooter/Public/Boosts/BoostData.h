@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "BoostData.generated.h"
 
 USTRUCT(BlueprintType)

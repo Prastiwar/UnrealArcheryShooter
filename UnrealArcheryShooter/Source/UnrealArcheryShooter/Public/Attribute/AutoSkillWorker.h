@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Attribute/TPAttribute.h"
-#include "Attribute/TPModifier.h"
 #include "AutoSkillWorker.generated.h"
 
 UCLASS(BlueprintType, Abstract)
@@ -16,7 +15,7 @@ public:
 	~UAutoSkillWorker() {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		FTPModifier Modifier;
+		struct FTPModifier Modifier;
 
 	UTPAttribute* SkillAttribute;
 

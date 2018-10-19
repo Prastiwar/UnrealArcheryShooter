@@ -4,10 +4,8 @@
 
 #include "GameFramework/Actor.h"
 #include "Components/ShapeComponent.h"
-#include "Components/BoxComponent.h"
-#include "Data/BoostData.h"
+#include "Boosts/BoostData.h"
 #include "Statics/ActorHelper.h"
-#include "CoreGame/UASCharacter.h"
 #include "Boost.generated.h"
 
 UCLASS()

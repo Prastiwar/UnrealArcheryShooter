@@ -3,10 +3,11 @@
 #pragma once
 
 #include "UI/ItemGrid.h"
-#include "Shop/WeaponShop.h"
 #include "UI/WeaponShopItem.h"
-#include "UnrealArcheryShooterGameMode.h"
+#include "Shop/WeaponShop.h"
 #include "WeaponShopGrid.generated.h"
+
+class AUnrealArcheryShooterGameMode;
 
 UCLASS()
 class UNREALARCHERYSHOOTER_API UWeaponShopGrid : public UItemGrid
@@ -15,7 +16,7 @@ class UNREALARCHERYSHOOTER_API UWeaponShopGrid : public UItemGrid
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TSubclassOf<class AWeaponShop> WeaponShop;
+		TSubclassOf<AWeaponShop> WeaponShop;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UButton* ExitButton;

@@ -6,9 +6,9 @@
 #include "Statics/ActorHelper.h"
 #include "Components/SphereComponent.h"
 #include "EngineUtils.h"
-#include "UASCharacter.h"
+#include "CoreGame/UASCharacter.h"
+#include "CoreGame/PlayerData.h"
 #include "Spawners/SpawnableRing.h"
-#include "Data/PlayerData.h"
 
 AProjectile::AProjectile()
 {

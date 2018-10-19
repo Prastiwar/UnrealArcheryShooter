@@ -4,7 +4,6 @@
 
 #include "Components/ActorComponent.h"
 #include "Attribute/AutoSkillWorker.h"
-#include "Attribute/TPAttribute.h"
 #include "AttributeComponent.generated.h"
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -16,17 +15,17 @@ public:
 	UAttributeComponent();
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE TArray<UTPAttribute*> GetAttributes() const { return Attributes; }
+		FORCEINLINE TArray<class UTPAttribute*> GetAttributes() const { return Attributes; }
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE TArray<UAutoSkillWorker*> GetAutoSkillWorkers() const { return AutoSkillWorkers; }
+		FORCEINLINE TArray<class UAutoSkillWorker*> GetAutoSkillWorkers() const { return AutoSkillWorkers; }
 
 protected:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction);
 
-	TArray<UTPAttribute*> Attributes;
-	TArray<UAutoSkillWorker*> AutoSkillWorkers;
+	TArray<class UTPAttribute*> Attributes;
+	TArray<class UAutoSkillWorker*> AutoSkillWorkers;
 
 	UPROPERTY(EditAnywhere)
 		TArray<TSubclassOf<class UAutoSkillWorker>> AutoSkillWorkerClasses;

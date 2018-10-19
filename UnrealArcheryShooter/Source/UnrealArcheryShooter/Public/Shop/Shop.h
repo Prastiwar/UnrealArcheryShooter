@@ -3,9 +3,9 @@
 #pragma once
 
 #include "TriggerActor.h"
-#include "Components/BoxComponent.h"
-#include "UnrealArcheryShooterGameMode.h"
 #include "Shop.generated.h"
+
+class AUnrealArcheryShooterGameMode;
 
 UCLASS(Abstract)
 class UNREALARCHERYSHOOTER_API AShop : public ATriggerActor
@@ -28,13 +28,13 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere)
-		UBoxComponent* BoxTrigger;
+		class UBoxComponent* BoxTrigger;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class UUserWidget> ShopHud;
 
 	UPROPERTY(EditAnywhere)
-		UDataTable* ItemsTable;
+		class UDataTable* ItemsTable;
 
 	virtual void BeginPlay() override;
 	void BeginTrigger(AActor* OtherActor) override;

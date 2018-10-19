@@ -2,7 +2,8 @@
 
 #pragma once
 
-#include "Boost.h"
+#include "Boosts/Boost.h"
+#include "Components/BoxComponent.h"
 #include "ScoreBoost.generated.h"
 
 UCLASS()

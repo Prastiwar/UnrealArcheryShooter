@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Engine/Classes/Kismet/GameplayStatics.h"
 
 struct UNREALARCHERYSHOOTER_API FActorHelper

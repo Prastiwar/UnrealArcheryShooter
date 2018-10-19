@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GenericPlatformMath.h"
 
 struct UNREALARCHERYSHOOTER_API FTPMath : public FGenericPlatformMath

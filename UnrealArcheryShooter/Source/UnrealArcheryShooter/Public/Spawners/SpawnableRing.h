@@ -25,6 +25,6 @@ protected:
 		UDestructibleComponent* DestructibleMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		UPointLightComponent* Light;
+		class UPointLightComponent* Light;
 
 };

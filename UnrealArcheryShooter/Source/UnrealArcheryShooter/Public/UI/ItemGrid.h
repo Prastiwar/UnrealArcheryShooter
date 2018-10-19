@@ -2,11 +2,9 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "UMG/Public/Components/UniformGridPanel.h"
 #include "UMG/Public/Components/UniformGridSlot.h"
-#include "UMG/Public/Components/Button.h"
 #include "ItemGrid.generated.h"
 
 UCLASS()
@@ -71,7 +69,7 @@ protected:
 		uint8 ColumnCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TSubclassOf<class UUserWidget> ItemWidgetClass;
+		TSubclassOf<UUserWidget> ItemWidgetClass;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 		UUniformGridPanel* Grid;

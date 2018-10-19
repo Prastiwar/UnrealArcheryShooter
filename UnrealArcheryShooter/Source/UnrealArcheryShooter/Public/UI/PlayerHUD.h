@@ -4,8 +4,7 @@
 
 #include "UI/ItemGrid.h"
 #include "UI/WeaponItem.h"
-#include "CoreGame/UASCharacter.h"
-#include "Data/UIWeaponData.h"
+#include "UMG/Public/Components/TextBlock.h"
 #include "PlayerHUD.generated.h"
 
 UCLASS()
@@ -25,9 +24,9 @@ protected:
 		UTextBlock* ScoreText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		UDataTable* WeaponsTable;
+		class UDataTable* WeaponsTable;
 
 	UFUNCTION(BlueprintCallable)
-		void SetGrid(TArray<UWeaponItem*>& WeaponItems);
+		void SetGrid(TArray<class UWeaponItem*>& WeaponItems);
 
 };

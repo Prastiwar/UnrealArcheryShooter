@@ -4,11 +4,11 @@
 
 #include "GameFramework/GameModeBase.h"
 #include "CoreGame/UASCharacter.h"
-#include "UI/PlayerHUD.h"
-#include "UASHUD.h"
 #include "Blueprint/UserWidget.h"
-#include "UObject/ConstructorHelpers.h"
 #include "UnrealArcheryShooterGameMode.generated.h"
+
+class UASHUD;
+class UPlayerHUD;
 
 UCLASS()
 class UNREALARCHERYSHOOTER_API AUnrealArcheryShooterGameMode : public AGameModeBase
@@ -40,13 +40,13 @@ public:
 
 	UUserWidget* GetCurrentWidget() { return CurrentWidget; }
 	void ApplyPlayerHUD();
-	bool ApplyNewHUD(TSubclassOf<class UUserWidget> Hud, const bool bShowCursor, const bool bEnableClickEvents);
+	bool ApplyNewHUD(TSubclassOf<UUserWidget> Hud, const bool bShowCursor, const bool bEnableClickEvents);
 
 protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TSubclassOf<class UUserWidget> PlayerHUD;
+		TSubclassOf<UUserWidget> PlayerHUD;
 
 	UPROPERTY(BlueprintReadOnly)
 		UUserWidget* CurrentWidget;

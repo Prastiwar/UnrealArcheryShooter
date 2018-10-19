@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Spawners/SpawnableActor.h"
 #include "OvertimeSpawner.generated.h"

@@ -2,8 +2,7 @@
 
 #pragma once
 
-#include "Projectile.h"
-#include "CooldownData.h"
+#include "Cooldown/CooldownData.h"
 #include "WeaponData.generated.h"
 
 USTRUCT(BlueprintType)

@@ -2,8 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "Data/CooldownData.h"
+#include "Cooldown/CooldownData.h"
 #include "CooldownComponent.generated.h"
 
 UCLASS()

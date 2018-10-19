@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "UI/WeaponItem.h"
 #include "Shop/WeaponShop.h"
 #include "UMG/Public/Components/Button.h"
 #include "WeaponShopItem.generated.h"
@@ -31,7 +30,7 @@ public:
 		FORCEINLINE UTextBlock* GetCostText() { return ItemCost; }
 
 	UFUNCTION(BlueprintCallable)
-		void SetShopItem(UTexture2D* const Icon, const FText& Name, const FText& Cost, const int32 DTWeaponIndex, const TSubclassOf<class AWeaponShop>& WeaponShop);
+		void SetShopItem(UTexture2D* const Icon, const FText& Name, const FText& Cost, const int32 DTWeaponIndex, const TSubclassOf<AWeaponShop>& WeaponShop);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -48,7 +47,7 @@ protected:
 
 private:
 	int WeaponIndex;
-	TSubclassOf<class AWeaponShop> WeaponShop;
+	TSubclassOf<AWeaponShop> WeaponShop;
 
 	UFUNCTION()
 		void Buy();
