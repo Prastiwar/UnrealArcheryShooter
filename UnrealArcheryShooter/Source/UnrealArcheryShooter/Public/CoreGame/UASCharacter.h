@@ -6,6 +6,7 @@
 #include "CoreGame/PlayerData.h"
 #include "Weapon/WeaponData.h"
 #include "Cooldown/CooldownComponent.h"
+#include "Core/Public/Templates/Function.h"
 #include "UASCharacter.generated.h"
 
 UCLASS(config = Game)
