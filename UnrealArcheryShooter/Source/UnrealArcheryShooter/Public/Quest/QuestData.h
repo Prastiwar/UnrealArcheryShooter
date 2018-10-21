@@ -16,8 +16,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		int32 ID;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		class ANPC* QuestGiver;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		//class AQuestGiver* QuestGiver;
 
 	FORCEINLINE bool operator==(const FQuestData &Other) const { return ID == Other.ID; }
 	FORCEINLINE bool operator!=(const FQuestData &Other) const { return !(ID == Other.ID); }

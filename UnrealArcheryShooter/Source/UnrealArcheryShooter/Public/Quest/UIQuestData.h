@@ -2,10 +2,12 @@
 
 #pragma once
 
+#include "Engine/DataTable.h"
+#include "Quest/QuestData.h"
 #include "UIQuestData.generated.h"
 
 USTRUCT(BlueprintType)
-struct UNREALARCHERYSHOOTER_API FUIQuestData
+struct UNREALARCHERYSHOOTER_API FUIQuestData : public FTableRowBase
 {
 	GENERATED_BODY()
 
@@ -14,7 +16,7 @@ public:
 	~FUIQuestData() {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		struct FQuestData QuestData;
+		FQuestData QuestData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FText Name;

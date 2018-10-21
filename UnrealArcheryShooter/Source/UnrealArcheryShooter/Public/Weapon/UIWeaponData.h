@@ -14,7 +14,6 @@ public:
 	FUIWeaponData() {}
 	~FUIWeaponData() {}
 
-public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		struct FWeaponData Weapon;
 
