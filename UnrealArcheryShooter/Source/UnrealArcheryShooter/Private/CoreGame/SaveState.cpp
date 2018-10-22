@@ -1,6 +1,8 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "SaveState.h"
+#include "UnrealArcheryShooterGameMode.h"
+#include "CoreGame/UASCharacter.h"
 
 USaveState::USaveState()
 {
@@ -16,7 +18,7 @@ void USaveState::SavePlayer(AUASCharacter* Player)
 	PlayerScore = Player->GetScore();
 }
 
-void USaveState::LoadPlayer(AUASCharacter* Player)
+void USaveState::LoadPlayer(AUASCharacter* Player) const
 {
 	Player->SetWeapons(PlayerWeapons); 
 	Player->SetActorLocation(PlayerLocation);

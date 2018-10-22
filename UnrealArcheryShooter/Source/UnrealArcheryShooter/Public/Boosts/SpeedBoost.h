@@ -3,8 +3,6 @@
 #pragma once
 
 #include "Boosts/Boost.h"
-#include "UASCharacter.h"
-#include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 #include "SpeedBoost.generated.h"
 
 UCLASS()
@@ -21,6 +19,6 @@ protected:
 
 private:
 	UPROPERTY(VisibleAnywhere)
-		UBoxComponent* BoxTrigger;
+		class UBoxComponent* BoxTrigger;
 
 };

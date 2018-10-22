@@ -3,9 +3,8 @@
 #pragma once
 
 #include "GameFramework/SaveGame.h"
-#include "UnrealArcheryShooterGameMode.h"
-#include "CoreGame/UASCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Weapon/WeaponData.h"
 #include "SaveState.generated.h"
 
 UCLASS()
@@ -37,7 +36,7 @@ public:
 		void SavePlayer(AUASCharacter* Player);
 
 	UFUNCTION(BlueprintCallable)
-		void LoadPlayer(AUASCharacter* Player);
+		void LoadPlayer(AUASCharacter* Player) const;
 
 private:
 	UPROPERTY(EditAnywhere)

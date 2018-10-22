@@ -3,8 +3,6 @@
 #pragma once
 
 #include "Blueprint/UserWidget.h"
-#include "UMG/Public/Components/Image.h"
-#include "UMG/Public/Components/ProgressBar.h"
 #include "WeaponItem.generated.h"
 
 UCLASS()
@@ -14,10 +12,10 @@ class UNREALARCHERYSHOOTER_API UWeaponItem : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE UProgressBar* GetCooldownProgress() { return CooldownProgress; }
+		FORCEINLINE class UProgressBar* GetCooldownProgress() const { return CooldownProgress; }
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE UImage* GetItemImage() { return ItemImage; }
+		FORCEINLINE class UImage* GetItemImage() const { return ItemImage; }
 
 	UFUNCTION(BlueprintCallable)
 		void SetItem(UTexture2D* Icon, const bool bSelected);
@@ -27,9 +25,9 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-		UImage* ItemImage;
+		class UImage* ItemImage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-		UProgressBar* CooldownProgress;
+		class UProgressBar* CooldownProgress;
 
 };

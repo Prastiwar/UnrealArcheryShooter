@@ -1,6 +1,7 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "FloatingActor.h"
+#include "Components/TimelineComponent.h"
 #include "TPMath.h"
 
 AFloatingActor::AFloatingActor()

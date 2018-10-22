@@ -17,6 +17,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FVector Force;
 
-	virtual void SpawnImpl(ASpawnableActor* SpawnedActor) override;
+	virtual void SpawnImpl(class ASpawnableActor* SpawnedActor) override;
 
 };

@@ -27,7 +27,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TArray<FString> MeasureNames;
 
-	void Void() {}
+	void Void() const {}
 	virtual void RunTest()
 	{
 		MeasureAverageRepeat();
@@ -48,7 +48,7 @@ protected:
 	}
 
 	// Iterate over GetMeasureActions() and shows their results with FTPMeasure::MeasureAverage(MeasureNames[i])
-	void MeasureAverage()
+	void MeasureAverage() 
 	{
 		int32 Length = 0;
 		TArray<TFunction<void()>> Actions = GetMeasureActionsSafe(Length);
@@ -81,15 +81,16 @@ protected:
 	}
 
 	// Spawns and returns array of ActorClass
-	FORCEINLINE TArray<AActor*> SpawnActors(int32 Count, AActor* ActorClass)
+	FORCEINLINE TArray<AActor*> SpawnActors(int32 Count, UClass* ActorClass)
 	{
 		TArray<AActor*> SpawnedActors = TArray<AActor*>();
 		SpawnedActors.Reserve(Count);
-		if (const UWorld* World = GetWorld())
+		if (UWorld* World = GetWorld())
 		{
 			for (int32 i = 0; i < Count; i++)
 			{
-				//AActor* SpawnedActor = World->SpawnActor(ActorClass);
+				AActor* SpawnedActor = World->SpawnActor(ActorClass);
+				SpawnedActors.Add(SpawnedActor);
 			}
 		}
 		return SpawnedActors;

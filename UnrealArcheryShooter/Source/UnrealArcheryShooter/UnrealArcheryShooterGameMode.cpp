@@ -1,6 +1,7 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "UnrealArcheryShooterGameMode.h"
+#include "CoreGame/UASCharacter.h"
 
 AUnrealArcheryShooterGameMode::AUnrealArcheryShooterGameMode() : Super()
 {

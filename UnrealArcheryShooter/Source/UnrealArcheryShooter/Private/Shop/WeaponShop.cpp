@@ -1,6 +1,8 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "WeaponShop.h"
+#include "Weapon/UIWeaponData.h"
+#include "Statics/ActorHelper.h"
 
 bool AWeaponShop::BuyItem(const UObject* WorldContextObject, const int32 WeaponIndex)
 {

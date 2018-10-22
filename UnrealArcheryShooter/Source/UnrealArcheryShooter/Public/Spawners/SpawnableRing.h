@@ -4,7 +4,6 @@
 
 #include "Spawners/SpawnableActor.h"
 #include "DestructibleComponent.h"
-#include "Components/PointLightComponent.h"
 #include "SpawnableRing.generated.h"
 
 UCLASS()
@@ -18,7 +17,7 @@ public:
 	virtual bool CanBeSpawned() const override;
 
 	UFUNCTION(BlueprintCallable)
-		float GetScore();
+		float GetScore() const;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

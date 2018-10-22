@@ -13,7 +13,7 @@ public:
 	}
 	~FTPMeasureResult() {}
 
-	FORCEINLINE void ShowLog()
+	FORCEINLINE void ShowLog() const
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *ResultLabel);
 	}

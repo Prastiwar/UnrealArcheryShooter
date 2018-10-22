@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Togglers/ToggleActor.h"
-#include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
 #include "BeamAttacher.generated.h"
 
 UCLASS()
@@ -19,7 +18,7 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		UParticleSystemComponent* BeamParticle;
+		class UParticleSystemComponent* BeamParticle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FVector AttachOffset;

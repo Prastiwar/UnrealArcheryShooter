@@ -3,9 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "Components/ShapeComponent.h"
 #include "Boosts/BoostData.h"
-#include "Statics/ActorHelper.h"
 #include "Boost.generated.h"
 
 UCLASS()
@@ -20,7 +18,7 @@ protected:
 	virtual void PickBoostImpl(AActor* AppliedActor) {}
 	virtual void RevertBoostImpl(AActor* AppliedActor) {}
 
-	void SetTriggerComponent(UShapeComponent* Trigger);
+	void SetTriggerComponent(class UShapeComponent* Trigger);
 
 	UPROPERTY(EditAnywhere, Category = "Boost")
 		FBoostData Boost;

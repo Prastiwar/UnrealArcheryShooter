@@ -19,7 +19,7 @@ public:
 		TSubclassOf<AWeaponShop> WeaponShop;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-		UButton* ExitButton;
+		class UButton* ExitButton;
 
 	UFUNCTION(BlueprintCallable)
 		void ExitShop();

@@ -1,6 +1,7 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "WeaponShopGrid.h"
+#include "UMG/Public/Components/Button.h"
 
 void UWeaponShopGrid::NativeConstruct()
 {

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "Components/TimelineComponent.h"
 #include "FloatingActor.generated.h"
 
 UCLASS()
@@ -28,7 +27,7 @@ protected:
 		FVector FloatDirection;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		UCurveFloat* CurveFloat;
+		class UCurveFloat* CurveFloat;
 
 private:
 	FVector InitLocation;

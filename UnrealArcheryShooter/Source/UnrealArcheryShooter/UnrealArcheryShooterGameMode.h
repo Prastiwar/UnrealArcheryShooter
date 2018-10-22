@@ -3,7 +3,6 @@
 #pragma once
 
 #include "GameFramework/GameModeBase.h"
-#include "CoreGame/UASCharacter.h"
 #include "Blueprint/UserWidget.h"
 #include "UnrealArcheryShooterGameMode.generated.h"
 
@@ -38,7 +37,8 @@ public:
 		return false;
 	}
 
-	UUserWidget* GetCurrentWidget() { return CurrentWidget; }
+	FORCEINLINE UUserWidget* GetCurrentWidget() const { return CurrentWidget; }
+
 	void ApplyPlayerHUD();
 	bool ApplyNewHUD(TSubclassOf<UUserWidget> Hud, const bool bShowCursor, const bool bEnableClickEvents);
 

@@ -5,8 +5,6 @@
 #include "GameFramework/Character.h"
 #include "CoreGame/PlayerData.h"
 #include "Weapon/WeaponData.h"
-#include "Cooldown/CooldownComponent.h"
-#include "Core/Public/Templates/Function.h"
 #include "UASCharacter.generated.h"
 
 UCLASS(config = Game)
@@ -82,7 +80,7 @@ public:
 		bool AddWeapon(const FWeaponData& Weapon);
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
-		bool HasWeapon(const FWeaponData& Weapon);
+		bool HasWeapon(const FWeaponData& Weapon) const;
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		void SetWeapons(const TArray<FWeaponData> OtherWeapons);
@@ -129,7 +127,7 @@ protected:
 		TArray<FWeaponData> Weapons;
 
 	UPROPERTY(BlueprintReadOnly)
-		UCooldownComponent* CooldownComponent;
+		class UCooldownComponent* CooldownComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		class UAttributeComponent* AttributeComponent;

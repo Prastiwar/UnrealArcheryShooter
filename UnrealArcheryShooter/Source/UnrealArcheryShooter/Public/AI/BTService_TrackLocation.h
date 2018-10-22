@@ -28,6 +28,9 @@ class UNREALARCHERYSHOOTER_API UBTService_TrackLocation : public UBTService
 {
 	GENERATED_BODY()
 
+public:
+	UBTService_TrackLocation();
+
 protected:
 	UPROPERTY(EditAnywhere)
 		TArray<FActorLocationPair> TrackActorLocations;

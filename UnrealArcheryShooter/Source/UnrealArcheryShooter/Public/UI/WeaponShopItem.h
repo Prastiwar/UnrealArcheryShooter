@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Shop/WeaponShop.h"
-#include "UMG/Public/Components/Button.h"
 #include "WeaponShopItem.generated.h"
 
 UCLASS()
@@ -18,16 +17,16 @@ public:
 		FBuyButtonClicked OnBuy;
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE UImage* GetImage() { return ItemImage; }
+		FORCEINLINE UImage* GetImage() const { return ItemImage; }
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE UButton* GetButton() { return Button; }
+		FORCEINLINE class UButton* GetButton() const { return Button; }
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE UTextBlock* GetNameText() { return ItemName; }
+		FORCEINLINE UTextBlock* GetNameText() const { return ItemName; }
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE UTextBlock* GetCostText() { return ItemCost; }
+		FORCEINLINE UTextBlock* GetCostText() const { return ItemCost; }
 
 	UFUNCTION(BlueprintCallable)
 		void SetShopItem(UTexture2D* const Icon, const FText& Name, const FText& Cost, const int32 DTWeaponIndex, const TSubclassOf<AWeaponShop>& WeaponShop);
@@ -37,7 +36,7 @@ protected:
 		UImage* ItemImage;
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
-		UButton* Button;
+		class UButton* Button;
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 		UTextBlock* ItemName;

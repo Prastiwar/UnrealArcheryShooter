@@ -4,6 +4,10 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
 
+UBTService_TrackLocation::UBTService_TrackLocation()
+{
+}
+
 void UBTService_TrackLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
@@ -14,6 +18,10 @@ void UBTService_TrackLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		if (Actor)
 		{
 			OwnerComp.GetBlackboardComponent()->SetValueAsVector(Pair.VectorKey.SelectedKeyName, Actor->GetActorLocation());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Cant resolve ActorKey from BTService_TrackLocation"));
 		}
 	}
 }

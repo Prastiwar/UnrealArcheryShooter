@@ -3,7 +3,6 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "Spawners/SpawnableActor.h"
 #include "OvertimeSpawner.generated.h"
 
 UCLASS()
@@ -44,7 +43,7 @@ protected:
 
 	// Returns index of Actor to be spawned from SpawnableActors
 	virtual int GetSpawnableIndex();
-	virtual void SpawnImpl(ASpawnableActor* SpawnedActor) {}
+	virtual void SpawnImpl(class ASpawnableActor* SpawnedActor) {}
 	virtual void BeginPlay() override;
 	
 };

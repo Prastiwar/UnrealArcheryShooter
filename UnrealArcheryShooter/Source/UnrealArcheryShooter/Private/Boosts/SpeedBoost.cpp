@@ -1,6 +1,8 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "SpeedBoost.h"
+#include "UASCharacter.h"
+#include "Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h"
 
 ASpeedBoost::ASpeedBoost()
 {

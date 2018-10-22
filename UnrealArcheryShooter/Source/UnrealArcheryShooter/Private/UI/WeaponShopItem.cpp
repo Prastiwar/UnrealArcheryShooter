@@ -1,6 +1,7 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "WeaponShopItem.h"
+#include "UMG/Public/Components/Button.h"
 
 void UWeaponShopItem::SetShopItem(UTexture2D* const Icon, const FText& Name, const FText& Cost, const int32 DTWeaponIndex, const TSubclassOf<AWeaponShop>& WeaponShop)
 {

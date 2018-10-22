@@ -3,7 +3,6 @@
 #pragma once
 
 #include "BehaviorTree/BTTaskNode.h"
-#include "AIController.h"
 #include "BTTask_Wander.generated.h"
 
 UCLASS()
@@ -12,6 +11,8 @@ class UNREALARCHERYSHOOTER_API UBTTask_Wander : public UBTTaskNode
 	GENERATED_BODY()
 
 public:
+	UBTTask_Wander();
+
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 protected:
@@ -24,22 +25,22 @@ protected:
 	UPROPERTY(EditAnywhere)
 		float AcceptanceRadius;
 
-	/** Cached AIController owner of BehaviorTreeComponent. */
+	// Cached AIController owner of BehaviorTreeComponent
 	UPROPERTY(Transient)
 		class AAIController* AIOwner;
 
-	/** Cached actor owner of BehaviorTreeComponent. */
+	// Cached actor owner of BehaviorTreeComponent
 	UPROPERTY(Transient)
 		AActor* ActorOwner;
 
-	/** Cached UBehaviorTreeComponent. */
+	// Cached UBehaviorTreeComponent
 	UPROPERTY(Transient)
 		UBehaviorTreeComponent* OwnerComp;
 
-	//UFUNCTION()
-		void CompleteMove(FAIRequestID RequestID, const FPathFollowingResult& Result);
+	void CompleteMove(struct FAIRequestID RequestID, const struct FPathFollowingResult& Result);
+	virtual EBTNodeResult::Type AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
-	virtual void SetOwner(AActor* ActorOwner) override;
+	virtual void SetOwner(AActor* OwnerActor) override;
 
 	virtual void OnGameplayTaskDeactivated(class UGameplayTask& Task) { Super::OnGameplayTaskDeactivated(Task); }
 	virtual void OnGameplayTaskActivated(class UGameplayTask& Task) { Super::OnGameplayTaskActivated(Task); }

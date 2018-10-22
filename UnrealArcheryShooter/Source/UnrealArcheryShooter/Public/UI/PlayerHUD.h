@@ -3,8 +3,6 @@
 #pragma once
 
 #include "UI/ItemGrid.h"
-#include "UI/WeaponItem.h"
-#include "UMG/Public/Components/TextBlock.h"
 #include "PlayerHUD.generated.h"
 
 UCLASS()
@@ -21,7 +19,7 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-		UTextBlock* ScoreText;
+		class UTextBlock* ScoreText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		class UDataTable* WeaponsTable;

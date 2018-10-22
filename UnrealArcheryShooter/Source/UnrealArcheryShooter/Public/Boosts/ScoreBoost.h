@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Boosts/Boost.h"
-#include "Components/BoxComponent.h"
 #include "ScoreBoost.generated.h"
 
 UCLASS()
@@ -20,6 +19,6 @@ protected:
 
 private:
 	UPROPERTY(VisibleAnywhere)
-		UBoxComponent* BoxTrigger;
+		class UBoxComponent* BoxTrigger;
 	
 };

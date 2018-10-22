@@ -1,6 +1,7 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "RunSkillWorker.h"
+#include "CoreGame/UASCharacter.h"
 
 void URunSkillWorker::Initialize(const UWorld* World)
 {

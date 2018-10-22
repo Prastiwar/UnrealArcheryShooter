@@ -1,6 +1,6 @@
 # UnrealArcheryShooter
 
-***Game based on medieval archery mechanic - fun shooting to rings***
+***Game based on medieval archery mechanic - fun shooting to rings. Game fully written in C++***
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/Prastiwar/UnrealArcheryShooter.svg?label=Updated&style=flat-square&longCache=true)](https://github.com/Prastiwar/UnrealArcheryShooter/commits/master)
 [![license](https://img.shields.io/github/license/Prastiwar/UnrealArcheryShooter.svg?style=flat-square&longCache=true)](https://github.com/Prastiwar/UnrealArcheryShooter/blob/master/LICENSE)

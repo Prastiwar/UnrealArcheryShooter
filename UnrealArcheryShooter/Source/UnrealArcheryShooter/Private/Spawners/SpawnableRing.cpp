@@ -1,6 +1,7 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "SpawnableRing.h"
+#include "Components/PointLightComponent.h"
 
 ASpawnableRing::ASpawnableRing()
 {
@@ -27,7 +28,7 @@ bool ASpawnableRing::CanBeSpawned() const
 	return true;
 }
 
-float ASpawnableRing::GetScore()
+float ASpawnableRing::GetScore() const
 {
 	return FMath::RandRange(10.0f, 200.0f);
 }

@@ -1,6 +1,8 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "Boost.h"
+#include "Components/ShapeComponent.h"
+#include "Statics/ActorHelper.h"
 
 ABoost::ABoost()
 {

@@ -5,6 +5,7 @@
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Cooldown/CooldownComponent.h"
 #include "CoreGame/SaveState.h"
 
 AUASCharacter::AUASCharacter()
@@ -217,7 +218,7 @@ bool AUASCharacter::AddWeapon(const FWeaponData& Weapon)
 	return false;
 }
 
-bool AUASCharacter::HasWeapon(const FWeaponData& Weapon)
+bool AUASCharacter::HasWeapon(const FWeaponData& Weapon) const
 {
 	return Weapons.Contains(Weapon);
 }

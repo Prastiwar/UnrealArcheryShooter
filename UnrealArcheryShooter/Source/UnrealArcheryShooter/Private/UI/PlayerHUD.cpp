@@ -1,6 +1,8 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "PlayerHUD.h"
+#include "UI/WeaponItem.h"
+#include "UMG/Public/Components/TextBlock.h"
 
 void UPlayerHUD::FillGrid()
 {

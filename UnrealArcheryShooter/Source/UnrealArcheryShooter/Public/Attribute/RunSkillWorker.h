@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Attribute/AutoSkillWorker.h"
-#include "CoreGame/UASCharacter.h"
 #include "RunSkillWorker.generated.h"
 
 UCLASS(Blueprintable, BlueprintType)
@@ -22,7 +21,7 @@ protected:
 		int32 InitialRunTime = 1;
 
 	int32 RunTime;
-	AUASCharacter* Player;
+	class AUASCharacter* Player;
 	const UWorld* World;
 
 };
