@@ -1,0 +1,27 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "TPQuest",
+	"Description": "Quest framework",
+	"Category": "TPPrastiwar",
+	"CreatedBy": "Tomasz Piowczyk",
+	"CreatedByURL": "https://www.github.com/Prastiwar",
+	"DocsURL": "https://github.com/Prastiwar/TPQuestPlugin/wiki",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "TPQuest",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "TPQuestEditor",
+			"Type": "Editor"
+		}
+	]
+}
