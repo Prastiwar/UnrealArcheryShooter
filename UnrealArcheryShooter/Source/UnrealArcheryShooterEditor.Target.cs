@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 using UnrealBuildTool;
 using System.Collections.Generic;
@@ -9,6 +9,6 @@ public class UnrealArcheryShooterEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 
-		ExtraModuleNames.AddRange( new string[] { "UnrealArcheryShooter", "ApexDestruction" } );
+		ExtraModuleNames.AddRange( new string[] { "UnrealArcheryShooter", "TPMeasure", "ApexDestruction" } );
 	}
 }

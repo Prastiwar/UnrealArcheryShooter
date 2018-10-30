@@ -39,7 +39,6 @@ void UBTTask_Wander::CompleteMove(FAIRequestID RequestID, const FPathFollowingRe
 
 EBTNodeResult::Type UBTTask_Wander::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Hey"));
 	return EBTNodeResult::Failed;
 }
 

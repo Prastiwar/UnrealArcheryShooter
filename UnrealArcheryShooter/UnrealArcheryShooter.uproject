@@ -13,6 +13,11 @@
 				"UMG",
 				"AIModule"
 			]
+		},
+		{
+			"Name": "TPMeasure",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
