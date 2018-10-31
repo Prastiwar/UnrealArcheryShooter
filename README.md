@@ -17,6 +17,12 @@
 
 [![Made with Unreal Engine](https://img.shields.io/badge/Made%20with-Unreal%20Engine-000000.svg?longCache=true&style=for-the-badge&colorA=666677&colorB=222222)](https://www.unrealengine.com) 
 
+## Getting started
+
+Unreal Engine version: 4.20.3
+External plugins: [TPQuestPlugin](https://github.com/Prastiwar/TPQuestPlugin) 
+
+
 ## Overview
 
 ![Screenshot1](https://i.imgur.com/HeS0x8s.png) 
