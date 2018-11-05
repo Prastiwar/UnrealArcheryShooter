@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Cooldown/CooldownComponent.h"
 #include "CoreGame/SaveState.h"
+#include "ObjectPool/ActorPool.h"
 
 AUASCharacter::AUASCharacter()
 {
@@ -56,6 +57,7 @@ void AUASCharacter::BeginPlay()
 	FirstPersonMeshViewed->SetHiddenInGame(false, true);
 	CooldownComponent = NewObject<UCooldownComponent>();
 	ZoomImpl(false);
+	SetWeapons(Weapons);
 }
 
 void AUASCharacter::Tick(float DeltaSeconds)
@@ -129,12 +131,17 @@ void AUASCharacter::Fire()
 				FActorSpawnParameters SpawnParams;
 				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
-				AProjectile* const Projectile = World->SpawnActor<AProjectile>(
-					Weapons[CurrentWeaponIndex].Projectile, MuzzleLocation->GetComponentLocation(), GetControlRotation(), SpawnParams);
+				AProjectile* const Projectile = 
+					Weapons[CurrentWeaponIndex].ProjectilePool->PopActor<AProjectile>(MuzzleLocation->GetComponentLocation(), GetControlRotation(), SpawnParams);
 				if (Projectile)
 				{
+					UE_LOG(LogTemp, Warning, TEXT("Projectile shoot"));
 					AddScore(-Projectile->GetFireCost());
 					CooldownComponent->SetCooldown(&Weapons[CurrentWeaponIndex].FireCooldown);
+				}
+				else
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Nullptr projectile"));
 				}
 			}
 			PlayFireAnim();
@@ -208,10 +215,11 @@ void AUASCharacter::SetScoreMultiplier(const float ScoreMultiplier)
 	this->ScoreMultiplier = ScoreMultiplier;
 }
 
-bool AUASCharacter::AddWeapon(const FWeaponData& Weapon)
+bool AUASCharacter::AddWeapon(FWeaponData& Weapon)
 {
 	if (!HasWeapon(Weapon))
 	{
+		Weapon.Initialize(this);
 		Weapons.Add(Weapon);
 		return true;
 	}
@@ -226,6 +234,10 @@ bool AUASCharacter::HasWeapon(const FWeaponData& Weapon) const
 void AUASCharacter::SetWeapons(const TArray<FWeaponData> OtherWeapons)
 {
 	Weapons = OtherWeapons;
+	for (FWeaponData& Weapon : Weapons)
+	{
+		Weapon.Initialize(this);
+	}
 }
 
 void AUASCharacter::SwitchPreviousWeapon()

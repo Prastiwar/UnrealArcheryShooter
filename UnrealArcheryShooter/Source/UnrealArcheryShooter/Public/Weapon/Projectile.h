@@ -2,11 +2,12 @@
 
 #pragma once
 
-#include "GameFramework/Actor.h"
+#include "ObjectPool/PoolableActor.h"
+#include "ObjectPool/ActorPool.h"
 #include "Projectile.generated.h"
 
 UCLASS(config = Game)
-class UNREALARCHERYSHOOTER_API AProjectile : public AActor
+class UNREALARCHERYSHOOTER_API AProjectile : public APoolableActor
 {
 	GENERATED_BODY()
 
@@ -16,7 +17,7 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
 		class USphereComponent* CollisionComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
 		class UProjectileMovementComponent* ProjectileMovement;
 
 	UFUNCTION()
@@ -32,9 +33,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FORCEINLINE float GetRadialStrength() const { return RadialStrength; }
 
+	virtual void Disable() override;
+	virtual void Enable() override;
+
 protected:
 	virtual void OnHitImpl(const bool bHitSomething, TArray<FHitResult> HitResults);
-	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		UStaticMeshComponent* StaticMesh;

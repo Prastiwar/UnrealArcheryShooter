@@ -3,6 +3,8 @@
 #pragma once
 
 #include "Cooldown/CooldownData.h"
+#include "ActorPool.h"
+#include "Weapon/Projectile.h"
 #include "WeaponData.generated.h"
 
 USTRUCT(BlueprintType)
@@ -17,8 +19,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FName Name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TSubclassOf<class AProjectile> Projectile;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int32 InitPoolSize;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		class UAnimMontage* FireAnimation;
@@ -28,6 +30,19 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FCooldownData FireCooldown;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AProjectile> Projectile;
+
+	UPROPERTY(BlueprintReadOnly)
+		UActorPool* ProjectilePool;
+
+	FORCEINLINE void Initialize(UObject* const Outer)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("InitPoolSize %s"), *FString::FromInt(InitPoolSize));
+		ProjectilePool = NewObject<UActorPool>(Outer);
+		ProjectilePool->Initialize(Outer->GetWorld(), Projectile, InitPoolSize);
+	}
 
 	FORCEINLINE bool operator==(const FWeaponData &Other) const { return Name == Other.Name; }
 	FORCEINLINE bool operator!=(const FWeaponData &Other) const { return !(Name == Other.Name); }

@@ -12,6 +12,11 @@ struct UNREALARCHERYSHOOTER_API FActorHelper
 		Actor->SetActorHiddenInGame(!Active);
 		Actor->SetActorEnableCollision(Active);
 		Actor->SetActorTickEnabled(Active);
+
+		for (UActorComponent* Comp : Actor->GetComponents())
+		{
+			Comp->SetActive(Active);
+		}
 	}
 
 	/** If false, actor is hidden in game with disabled tick and collision*/

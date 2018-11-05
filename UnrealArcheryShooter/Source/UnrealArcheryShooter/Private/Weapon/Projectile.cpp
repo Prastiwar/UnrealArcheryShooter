@@ -9,6 +9,7 @@
 #include "CoreGame/UASCharacter.h"
 #include "CoreGame/PlayerData.h"
 #include "Spawners/SpawnableRing.h"
+#include "ObjectPool/ActorPool.h"
 
 AProjectile::AProjectile()
 {
@@ -33,16 +34,23 @@ AProjectile::AProjectile()
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 
-	InitialLifeSpan = 3.0f;
+	InitialLifeSpan = 0;
+	InitialLifeSpanPooled = 3.0f;
 	SphereRadius = 10;
 	RadialStrength = 500;
 	FireScoreCost = 20.0f;
 }
 
-void AProjectile::BeginPlay()
+void AProjectile::Disable()
 {
-	Super::BeginPlay();
+	Super::Disable();
+	ProjectileMovement->Deactivate();
+}
 
+void AProjectile::Enable()
+{
+	Super::Enable();
+	ProjectileMovement->Activate(true);
 	FActorHelper::SafePlaySound(this, FireSound, GetActorLocation());
 }
 
@@ -107,7 +115,11 @@ void AProjectile::OnHitImpl(const bool bHitSomething, TArray<FHitResult> HitResu
 			}
 		}
 	}
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation());
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation(), GetActorRotation(), true, EPSCPoolMethod::AutoRelease);
 	FActorHelper::SafePlaySound(this, HitSound, GetActorLocation());
-	Destroy();
+	if (!ReturnToSelfPool())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No Pool"));
+		Destroy();
+	}
 }

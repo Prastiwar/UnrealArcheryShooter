@@ -12,7 +12,7 @@ class UNREALARCHERYSHOOTER_API AUASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-		DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScoreChanged, float, Score);
 
 public:
@@ -77,7 +77,7 @@ public:
 	TArray<FWeaponData>* GetWeaponsPtr() { return &Weapons; }
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
-		bool AddWeapon(const FWeaponData& Weapon);
+		bool AddWeapon(FWeaponData& Weapon);
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		bool HasWeapon(const FWeaponData& Weapon) const;

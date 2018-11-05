@@ -24,10 +24,6 @@
 		{
 			"Name": "ApexDestruction",
 			"Enabled": true
-		},
-		{
-			"Name": "TPQuest",
-			"Enabled": true
 		}
 	]
 }
