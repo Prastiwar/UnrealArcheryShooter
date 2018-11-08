@@ -126,6 +126,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Weapon)
 		TArray<FWeaponData> Weapons;
 
+	UPROPERTY(EditDefaultsOnly, Category = Weapon)
+		class UDataTable* WeaponsTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = Weapon)
+		TArray<FName> InitialWeaponsNames;
+
 	UPROPERTY(BlueprintReadOnly)
 		class UCooldownComponent* CooldownComponent;
 
@@ -136,7 +142,7 @@ protected:
 		FPlayerData PlayerData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon)
-		int CurrentWeaponIndex;
+		int32 CurrentWeaponIndex;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
 		float ScoreMultiplier;

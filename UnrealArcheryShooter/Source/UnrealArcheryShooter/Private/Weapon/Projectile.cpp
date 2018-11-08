@@ -43,15 +43,20 @@ AProjectile::AProjectile()
 
 void AProjectile::Disable()
 {
-	Super::Disable();
-	ProjectileMovement->Deactivate();
+	//Super::Disable(); // FIXME: temporary fix (no pooling)
+	Destroy(); // FIXME: temporary fix (no pooling)
+	//ProjectileMovement->Deactivate();
+	//ProjectileMovement->UpdatedComponent = nullptr;
+	//ProjectileMovement->bIsActive = 0;
+	//UE_LOG(LogTemp, Warning, TEXT("Disabled"));
 }
 
 void AProjectile::Enable()
 {
-	Super::Enable();
-	ProjectileMovement->Activate(true);
+	//Super::Enable();
+	//ProjectileMovement->Activate();
 	FActorHelper::SafePlaySound(this, FireSound, GetActorLocation());
+	//UE_LOG(LogTemp, Warning, TEXT("Enabled"));
 }
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, const FVector NormalImpulse, const FHitResult& Hit)
@@ -117,9 +122,10 @@ void AProjectile::OnHitImpl(const bool bHitSomething, TArray<FHitResult> HitResu
 	}
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation(), GetActorRotation(), true, EPSCPoolMethod::AutoRelease);
 	FActorHelper::SafePlaySound(this, HitSound, GetActorLocation());
-	if (!ReturnToSelfPool())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No Pool"));
+	// FIXME: temporary fix (no pooling)
+	//if (!ReturnToSelfPool())
+	//{
+		//UE_LOG(LogTemp, Warning, TEXT("No Pool"));
 		Destroy();
-	}
+	//}
 }

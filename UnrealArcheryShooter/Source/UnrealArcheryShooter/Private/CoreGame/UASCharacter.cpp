@@ -8,6 +8,8 @@
 #include "Cooldown/CooldownComponent.h"
 #include "CoreGame/SaveState.h"
 #include "ObjectPool/ActorPool.h"
+#include "Engine/DataTable.h"
+#include "Weapon/UIWeaponData.h"
 
 AUASCharacter::AUASCharacter()
 {
@@ -57,7 +59,15 @@ void AUASCharacter::BeginPlay()
 	FirstPersonMeshViewed->SetHiddenInGame(false, true);
 	CooldownComponent = NewObject<UCooldownComponent>();
 	ZoomImpl(false);
-	SetWeapons(Weapons);
+	for (FName& WeaponName : InitialWeaponsNames)
+	{
+		FUIWeaponData* Weapon = WeaponsTable->FindRow<FUIWeaponData>(WeaponName, TEXT(""));
+		if (Weapon)
+		{
+			AddWeapon(Weapon->Weapon);
+		}
+	}
+	SetWeapon(CurrentWeaponIndex);
 }
 
 void AUASCharacter::Tick(float DeltaSeconds)
@@ -131,7 +141,7 @@ void AUASCharacter::Fire()
 				FActorSpawnParameters SpawnParams;
 				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
-				AProjectile* const Projectile = 
+				AProjectile* const Projectile =
 					Weapons[CurrentWeaponIndex].ProjectilePool->PopActor<AProjectile>(MuzzleLocation->GetComponentLocation(), GetControlRotation(), SpawnParams);
 				if (Projectile)
 				{
@@ -141,7 +151,7 @@ void AUASCharacter::Fire()
 				}
 				else
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Nullptr projectile"));
+					UE_LOG(LogTemp, Warning, TEXT("Fire failed - projectile nullptr"));
 				}
 			}
 			PlayFireAnim();
@@ -250,7 +260,7 @@ void AUASCharacter::SwitchNextWeapon()
 	SetWeapon(CurrentWeaponIndex + 1);
 }
 
-void AUASCharacter::SetWeapon(const int Index)
+void AUASCharacter::SetWeapon(const int32 Index)
 {
 	CurrentWeaponIndex = Index;
 	if (CurrentWeaponIndex >= Weapons.Num())
