@@ -3,6 +3,7 @@
 #include "SaveState.h"
 #include "UnrealArcheryShooterGameMode.h"
 #include "CoreGame/UASCharacter.h"
+#include "Weapon/WeaponComponent.h"
 
 USaveState::USaveState()
 {
@@ -14,13 +15,13 @@ void USaveState::SavePlayer(AUASCharacter* Player)
 {
 	PlayerLocation = Player->GetActorLocation();
 	PlayerRotation = Player->GetActorQuat();
-	PlayerWeapons = Player->GetWeapons();
+	PlayerWeapons = Player->GetWeaponComponent()->GetWeapons();
 	PlayerScore = Player->GetScore();
 }
 
 void USaveState::LoadPlayer(AUASCharacter* Player) const
 {
-	Player->SetWeapons(PlayerWeapons); 
+	Player->GetWeaponComponent()->SetWeapons(PlayerWeapons);
 	Player->SetActorLocation(PlayerLocation);
 	Player->GetController()->SetControlRotation(FRotator(PlayerRotation));
 	Player->SetScore(PlayerScore);

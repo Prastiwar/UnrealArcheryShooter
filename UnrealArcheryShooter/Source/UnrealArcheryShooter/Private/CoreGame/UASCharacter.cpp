@@ -5,11 +5,12 @@
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Cooldown/CooldownComponent.h"
+#include "Cooldown/Cooldown.h"
 #include "CoreGame/SaveState.h"
 #include "ObjectPool/ActorPool.h"
 #include "Engine/DataTable.h"
 #include "Weapon/UIWeaponData.h"
+#include "Weapon/WeaponComponent.h"
 
 AUASCharacter::AUASCharacter()
 {
@@ -39,15 +40,19 @@ AUASCharacter::AUASCharacter()
 	GunMesh->CastShadow = false;
 	GunMesh->SetupAttachment(RootComponent);
 
-	MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
-	MuzzleLocation->SetupAttachment(GunMesh);
-	MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
+	WeaponComponent = CreateDefaultSubobject<UWeaponComponent>(TEXT("WeaponComponent"));
+	WeaponComponent->SetupAttachment(GunMesh);
+	WeaponComponent->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
 
 	AttributeComponent = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
 
-	CurrentWeaponIndex = 0;
 	ScoreMultiplier = 1.0f;
-	PlayerData = FPlayerData();
+	PlayerData = FPlayerData(100);
+}
+
+void AUASCharacter::OnFire(AProjectile* const Projectile)
+{
+	AddScore(-Projectile->GetFireCost());
 }
 
 void AUASCharacter::BeginPlay()
@@ -57,22 +62,27 @@ void AUASCharacter::BeginPlay()
 	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
 	GunMesh->AttachToComponent(FirstPersonMeshViewed, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 	FirstPersonMeshViewed->SetHiddenInGame(false, true);
-	CooldownComponent = NewObject<UCooldownComponent>();
-	ZoomImpl(false);
+
+	WeaponComponent->GunMesh = GunMesh;
+	WeaponComponent->FPMeshViewer = FirstPersonMeshViewed;
+	WeaponComponent->AnimInstance = FirstPersonMeshViewed->GetAnimInstance();
+	WeaponComponent->OnFire.AddDynamic(this, &AUASCharacter::OnFire);
+	WeaponComponent->Zoom(false);
+
 	for (FName& WeaponName : InitialWeaponsNames)
 	{
 		FUIWeaponData* Weapon = WeaponsTable->FindRow<FUIWeaponData>(WeaponName, TEXT(""));
 		if (Weapon)
 		{
-			AddWeapon(Weapon->Weapon);
+			WeaponComponent->AddWeapon(Weapon->Weapon);
 		}
 	}
-	SetWeapon(CurrentWeaponIndex);
+	WeaponComponent->SetWeapon(WeaponComponent->GetCurrentWeaponIndex());
 }
 
 void AUASCharacter::Tick(float DeltaSeconds)
 {
-	CooldownComponent->Tick(DeltaSeconds);
+	Super::Tick(DeltaSeconds);
 }
 
 void AUASCharacter::SavePlayer()
@@ -108,14 +118,14 @@ void AUASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	// Bind weapon change events
-	PlayerInputComponent->BindAction("WheelUp", IE_Pressed, this, &AUASCharacter::SwitchNextWeapon);
-	PlayerInputComponent->BindAction("WheelDown", IE_Pressed, this, &AUASCharacter::SwitchPreviousWeapon);
-	PlayerInputComponent->BindAction("E", IE_Pressed, this, &AUASCharacter::SwitchNextWeapon);
-	PlayerInputComponent->BindAction("Q", IE_Pressed, this, &AUASCharacter::SwitchPreviousWeapon);
+	PlayerInputComponent->BindAction("WheelUp", IE_Pressed, WeaponComponent, &UWeaponComponent::SwitchToNextWeapon);
+	PlayerInputComponent->BindAction("WheelDown", IE_Pressed, WeaponComponent, &UWeaponComponent::SwitchToPreviousWeapon);
+	PlayerInputComponent->BindAction("E", IE_Pressed, WeaponComponent, &UWeaponComponent::SwitchToNextWeapon);
+	PlayerInputComponent->BindAction("Q", IE_Pressed, WeaponComponent, &UWeaponComponent::SwitchToPreviousWeapon);
 
 	// Bind fire events
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AUASCharacter::Fire);
-	PlayerInputComponent->BindAction("Zoom", IE_Pressed, this, &AUASCharacter::Zoom);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &UWeaponComponent::Fire);
+	PlayerInputComponent->BindAction("Zoom", IE_Pressed, WeaponComponent, &UWeaponComponent::ToggleZoom);
 
 	// Bind Persistence
 	PlayerInputComponent->BindAction("SaveGame", IE_Pressed, this, &AUASCharacter::SavePlayer);
@@ -127,66 +137,6 @@ void AUASCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-}
-
-void AUASCharacter::Fire()
-{
-	if (Weapons.IsValidIndex(CurrentWeaponIndex))
-	{
-		if (Weapons[CurrentWeaponIndex].FireCooldown.bIsCompleted)
-		{
-			UWorld* const World = GetWorld();
-			if (World != NULL)
-			{
-				FActorSpawnParameters SpawnParams;
-				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-				AProjectile* const Projectile =
-					Weapons[CurrentWeaponIndex].ProjectilePool->PopActor<AProjectile>(MuzzleLocation->GetComponentLocation(), GetControlRotation(), SpawnParams);
-				if (Projectile)
-				{
-					UE_LOG(LogTemp, Warning, TEXT("Projectile shoot"));
-					AddScore(-Projectile->GetFireCost());
-					CooldownComponent->SetCooldown(&Weapons[CurrentWeaponIndex].FireCooldown);
-				}
-				else
-				{
-					UE_LOG(LogTemp, Warning, TEXT("Fire failed - projectile nullptr"));
-				}
-			}
-			PlayFireAnim();
-		}
-	}
-}
-
-void AUASCharacter::PlayFireAnim()
-{
-	if (Weapons[CurrentWeaponIndex].FireAnimation != NULL)
-	{
-		UAnimInstance* const AnimInstance = FirstPersonMeshViewed->GetAnimInstance();
-		if (AnimInstance != NULL)
-		{
-			AnimInstance->Montage_Play(Weapons[CurrentWeaponIndex].FireAnimation, 1.f);
-		}
-	}
-}
-
-void AUASCharacter::Zoom()
-{
-	bIsZoomed = !bIsZoomed;
-	ZoomImpl(bIsZoomed);
-}
-
-void AUASCharacter::ZoomImpl(const bool bToZoom)
-{
-	if (bToZoom)
-	{
-		FirstPersonMeshViewed->SetRelativeLocation(FPMeshZoomPosition);
-	}
-	else
-	{
-		FirstPersonMeshViewed->SetRelativeLocation(FPMeshFreePosition);
-	}
 }
 
 void AUASCharacter::MoveForward(const float Value)
@@ -223,54 +173,4 @@ void AUASCharacter::SetScore(const float Score)
 void AUASCharacter::SetScoreMultiplier(const float ScoreMultiplier)
 {
 	this->ScoreMultiplier = ScoreMultiplier;
-}
-
-bool AUASCharacter::AddWeapon(FWeaponData& Weapon)
-{
-	if (!HasWeapon(Weapon))
-	{
-		Weapon.Initialize(this);
-		Weapons.Add(Weapon);
-		return true;
-	}
-	return false;
-}
-
-bool AUASCharacter::HasWeapon(const FWeaponData& Weapon) const
-{
-	return Weapons.Contains(Weapon);
-}
-
-void AUASCharacter::SetWeapons(const TArray<FWeaponData> OtherWeapons)
-{
-	Weapons = OtherWeapons;
-	for (FWeaponData& Weapon : Weapons)
-	{
-		Weapon.Initialize(this);
-	}
-}
-
-void AUASCharacter::SwitchPreviousWeapon()
-{
-	SetWeapon(CurrentWeaponIndex - 1);
-}
-
-void AUASCharacter::SwitchNextWeapon()
-{
-	SetWeapon(CurrentWeaponIndex + 1);
-}
-
-void AUASCharacter::SetWeapon(const int32 Index)
-{
-	CurrentWeaponIndex = Index;
-	if (CurrentWeaponIndex >= Weapons.Num())
-	{
-		CurrentWeaponIndex = 0;
-	}
-	else if (CurrentWeaponIndex < 0)
-	{
-		CurrentWeaponIndex = Weapons.Num() - 1;
-	}
-	GunMesh->SetSkeletalMeshWithoutResettingAnimation(Weapons[CurrentWeaponIndex].WeaponMesh);
-	OnWeaponChanged.Broadcast();
 }

@@ -3,10 +3,10 @@
 #pragma once
 
 #include "Cooldown/CooldownData.h"
-#include "CooldownComponent.generated.h"
+#include "Cooldown.generated.h"
 
 UCLASS()
-class UNREALARCHERYSHOOTER_API UCooldownComponent : public UObject
+class UNREALARCHERYSHOOTER_API UCooldown : public UObject
 {
 	GENERATED_BODY()
 

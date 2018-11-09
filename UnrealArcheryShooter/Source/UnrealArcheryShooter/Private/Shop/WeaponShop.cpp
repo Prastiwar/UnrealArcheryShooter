@@ -13,7 +13,7 @@ bool AWeaponShop::BuyItem(const UObject* WorldContextObject, const int32 WeaponI
 		if (Player->GetScore() >= Weapons[WeaponIndex]->Cost)
 		{
 			Player->AddScore(-Weapons[WeaponIndex]->Cost);
-			Player->AddWeapon(Weapons[WeaponIndex]->Weapon);
+			Player->GetWeaponComponent()->AddWeapon(Weapons[WeaponIndex]->Weapon);
 			FActorHelper::SafePlaySound(WorldContextObject, SuccessSound, GetActorLocation());
 			return true;
 		}

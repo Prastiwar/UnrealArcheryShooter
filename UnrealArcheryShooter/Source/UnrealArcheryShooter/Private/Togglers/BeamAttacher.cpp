@@ -33,5 +33,5 @@ void ABeamAttacher::Activated(const bool bActive, AActor* OverlappedActor)
 
 void ABeamAttacher::AttachBeam()
 {
-	BeamParticle->SetBeamTargetPoint(0, Player->MuzzleLocation->GetComponentLocation() + AttachOffset, 0);
+	BeamParticle->SetBeamTargetPoint(0, Player->GetWeaponComponent()->GetComponentLocation() + AttachOffset, 0);
 }

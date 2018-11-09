@@ -49,7 +49,7 @@ void UWeaponShopGrid::SetGrid(const TArray<UWeaponShopItem*>& WeaponWidgetItems)
 			const FUIWeaponData* UIWeapon = DTWeapons[DTWeaponIndex];
 			const FWeaponData& Weapon = UIWeapon->Weapon;
 			// Don't sell items that Player already has
-			if (!Player->HasWeapon(Weapon))
+			if (!Player->GetWeaponComponent()->HasWeapon(Weapon))
 			{
 				WeaponWidgetItems[WidgetIndex]->SetShopItem(
 					UIWeapon->Icon,

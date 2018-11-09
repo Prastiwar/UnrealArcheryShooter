@@ -25,7 +25,7 @@ void UPlayerHUD::SetGrid(TArray<UWeaponItem*>& WeaponItems)
 		return;
 	}
 
-	TArray<FWeaponData>* PlayerWeaponsPtr = Player->GetWeaponsPtr();
+	TArray<FWeaponData>* PlayerWeaponsPtr = Player->GetWeaponComponent()->GetWeaponsPtr();
 	for (uint8 Index = 0; Index < WeaponItems.Num(); Index++)
 	{
 		if (!PlayerWeaponsPtr->IsValidIndex(Index))
@@ -37,14 +37,14 @@ void UPlayerHUD::SetGrid(TArray<UWeaponItem*>& WeaponItems)
 		const FUIWeaponData* UIWeapon = WeaponsTable->FindRow<FUIWeaponData>(PlayerWeapon.Name, TEXT(""));
 		if (UIWeapon)
 		{
-			const int SelectedWeaponIndex = Player->GetCurrentWeaponIndex();
+			const int32 SelectedWeaponIndex = Player->GetWeaponComponent()->GetCurrentWeaponIndex();
 			const bool bSelect = Index == SelectedWeaponIndex;
 			WeaponItems[Index]->SetItem(UIWeapon->Icon, bSelect);
 
-			auto Lambda = [WeaponItems, Index](float Value) {
+			auto SetProgressPercentage = [=](float Value) {
 				WeaponItems[Index]->SetProgressPercentage(Value);
 			};
-			PlayerWeapon.FireCooldown.OnValueChanged.AddLambda(Lambda);
+			PlayerWeapon.FireCooldown.OnValueChanged.AddLambda(SetProgressPercentage); // FIXME: fix adding same, new action every time
 		}
 	}
 }

@@ -4,31 +4,20 @@
 
 #include "GameFramework/Character.h"
 #include "CoreGame/PlayerData.h"
-#include "Weapon/WeaponData.h"
 #include "UASCharacter.generated.h"
+
 
 UCLASS(config = Game)
 class UNREALARCHERYSHOOTER_API AUASCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FScoreChanged, float, Score);
 
 public:
 	AUASCharacter();
 
 	UPROPERTY(BlueprintAssignable)
-		FWeaponChanged OnWeaponChanged;
-
-	UPROPERTY(BlueprintAssignable)
 		FScoreChanged OnScoreChanged;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		FVector FPMeshFreePosition;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		FVector FPMeshZoomPosition;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 		class USkeletalMeshComponent* FirstPersonMeshViewed;
@@ -38,9 +27,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FirstPersonCameraComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gameplay)
-		USceneComponent* MuzzleLocation;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UFUNCTION(BlueprintCallable)
@@ -70,33 +56,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void Load();
 
-	// Weapon Functionality
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-		TArray<FWeaponData> GetWeapons() const { return Weapons; }
-	TArray<FWeaponData>* GetWeaponsPtr() { return &Weapons; }
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-		bool AddWeapon(FWeaponData& Weapon);
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-		bool HasWeapon(const FWeaponData& Weapon) const;
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-		void SetWeapons(const TArray<FWeaponData> OtherWeapons);
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-		void SetWeapon(const int Index);
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-		FORCEINLINE int GetCurrentWeaponIndex() const { return CurrentWeaponIndex; }
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-		void SwitchNextWeapon();
-
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-		void SwitchPreviousWeapon();
-
 	// Score Functionality
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
@@ -104,6 +63,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		FORCEINLINE float GetScoreMultiplier() const { return ScoreMultiplier; }
+
+	UFUNCTION(BlueprintCallable, Category = "Player Score")
+		FORCEINLINE UWeaponComponent* GetWeaponComponent() const { return WeaponComponent; }
 
 	UFUNCTION(BlueprintCallable, Category = "Player Score")
 		void AddScore(const float Score);
@@ -123,39 +85,32 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		float BaseLookUpRate;
 
-	UPROPERTY(EditAnywhere, Category = Weapon)
-		TArray<FWeaponData> Weapons;
-
 	UPROPERTY(EditDefaultsOnly, Category = Weapon)
 		class UDataTable* WeaponsTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = Weapon)
 		TArray<FName> InitialWeaponsNames;
 
-	UPROPERTY(BlueprintReadOnly)
-		class UCooldownComponent* CooldownComponent;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		class UAttributeComponent* AttributeComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		class UWeaponComponent* WeaponComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Score")
 		FPlayerData PlayerData;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon)
-		int32 CurrentWeaponIndex;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
 		float ScoreMultiplier;
+
+	UFUNCTION(BlueprintCallable)
+		void OnFire(AProjectile* const Projectile);
 
 	bool bIsZoomed;
 
 	virtual void BeginPlay();
 	virtual void Tick(float DeltaSeconds) override;
 
-	void Fire();
-	void Zoom();
-	void ZoomImpl(const bool bToZoom);
-	void PlayFireAnim();
 	void MoveForward(const float Value);
 	void MoveSide(const float Value);
 
