@@ -15,14 +15,6 @@ void UWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	Cooldown = NewObject<UCooldown>();
-	if (!GunMesh)
-	{
-		UE_LOG(LogTemp, Error, TEXT("You must initialize GunMesh of Weapon Component!"))
-	}
-	if (!FPMeshViewer)
-	{
-		UE_LOG(LogTemp, Error, TEXT("You must initialize FPMeshViewer of Weapon Component!"))
-	}
 	if (Weapons.Num() > 0)
 	{
 		SetWeapon(CurrentWeaponIndex);
@@ -43,10 +35,9 @@ void UWeaponComponent::Fire()
 		return;
 	}
 
+	FRotator Rotation = GetOwner()->GetActorRotation();
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-	FRotator Rotation = GetOwner()->GetActorRotation();
 
 	APawn* const OwnerPawn = Cast<APawn>(GetOwner());
 	if (OwnerPawn)
@@ -91,13 +82,16 @@ void UWeaponComponent::ToggleZoom()
 
 void UWeaponComponent::Zoom(const bool bToZoom)
 {
-	if (bToZoom)
+	if (FPMeshViewer)
 	{
-		FPMeshViewer->SetRelativeLocation(MeshZoomInPosition);
-	}
-	else
-	{
-		FPMeshViewer->SetRelativeLocation(MeshFreeZoomPosition);
+		if (bToZoom)
+		{
+			FPMeshViewer->SetRelativeLocation(MeshZoomInPosition);
+		}
+		else
+		{
+			FPMeshViewer->SetRelativeLocation(MeshFreeZoomPosition);
+		}
 	}
 }
 bool UWeaponComponent::AddWeapon(FWeaponData& Weapon)
@@ -149,6 +143,9 @@ void UWeaponComponent::SetWeapon(const int32 Index)
 	{
 		CurrentWeaponIndex = Index;
 	}
-	GunMesh->SetSkeletalMeshWithoutResettingAnimation(Weapons[CurrentWeaponIndex].WeaponMesh);
+	if (GunMesh)
+	{
+		GunMesh->SetSkeletalMeshWithoutResettingAnimation(Weapons[CurrentWeaponIndex].WeaponMesh);
+	}
 	OnWeaponChanged.Broadcast();
 }

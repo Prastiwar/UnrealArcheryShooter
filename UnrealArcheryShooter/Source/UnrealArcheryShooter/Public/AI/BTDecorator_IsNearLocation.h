@@ -9,6 +9,7 @@ UCLASS()
 class UNREALARCHERYSHOOTER_API UBTDecorator_IsNearLocation : public UBTDecorator
 {
 	GENERATED_BODY()
+	DECLARE_DELEGATE_RetVal_OneParam(bool, FRawConditionValueCalculation, const UBlackboardComponent*)
 
 public:
 	UBTDecorator_IsNearLocation();
@@ -31,7 +32,11 @@ public:
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
 
 protected:
-	float GetGeometricDistance(const FVector& A, const FVector& B) const;
+	FRawConditionValueCalculation OnCalculate;
+
+	float GetGeometricDistanceSquared(const FVector& A, const FVector& B) const;
+
+	void SetIsNearLocationCalculation();
 
 	bool IsNearLocation(const FVector& A, const FVector& B) const;
 	bool IsNearLocation(const AActor* A, const FVector& B) const;

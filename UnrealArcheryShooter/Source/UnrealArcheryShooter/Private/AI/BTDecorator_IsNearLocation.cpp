@@ -26,82 +26,102 @@ void UBTDecorator_IsNearLocation::InitializeFromAsset(UBehaviorTree& Asset)
 		CheckLocationKey.ResolveSelectedKey(*BBAsset);
 		TargetLocationKey.ResolveSelectedKey(*BBAsset);
 	}
+	SetIsNearLocationCalculation();
+}
+
+void UBTDecorator_IsNearLocation::SetIsNearLocationCalculation()
+{
+	if (TargetLocationKey.SelectedKeyType == UBlackboardKeyType_Object::StaticClass())
+	{
+		if (CheckLocationKey.SelectedKeyType == UBlackboardKeyType_Object::StaticClass())
+		{
+			OnCalculate.BindLambda([this](const UBlackboardComponent* BlackboardComp) {
+				AActor* TargetActor = Cast<AActor>(BlackboardComp->GetValue<UBlackboardKeyType_Object>(TargetLocationKey.GetSelectedKeyID()));
+				AActor* CheckActor = Cast<AActor>(BlackboardComp->GetValue<UBlackboardKeyType_Object>(CheckLocationKey.GetSelectedKeyID()));
+				return IsNearLocation(CheckActor, TargetActor);
+			});
+		}
+		else if (CheckLocationKey.SelectedKeyType == UBlackboardKeyType_Vector::StaticClass())
+		{
+			OnCalculate.BindLambda([this](const UBlackboardComponent* BlackboardComp) {
+				AActor* TargetActor = Cast<AActor>(BlackboardComp->GetValue<UBlackboardKeyType_Object>(TargetLocationKey.GetSelectedKeyID()));
+				const FVector CheckLocation = BlackboardComp->GetValue<UBlackboardKeyType_Vector>(CheckLocationKey.GetSelectedKeyID());
+				return IsNearLocation(CheckLocation, TargetActor);
+			});
+		}
+	}
+	else if (TargetLocationKey.SelectedKeyType == UBlackboardKeyType_Vector::StaticClass())
+	{
+		if (CheckLocationKey.SelectedKeyType == UBlackboardKeyType_Object::StaticClass())
+		{
+			OnCalculate.BindLambda([this](const UBlackboardComponent* BlackboardComp) {
+				const FVector TargetLocation = BlackboardComp->GetValue<UBlackboardKeyType_Vector>(TargetLocationKey.GetSelectedKeyID());
+				AActor* CheckActor = Cast<AActor>(BlackboardComp->GetValue<UBlackboardKeyType_Object>(CheckLocationKey.GetSelectedKeyID()));
+				return IsNearLocation(CheckActor, TargetLocation);
+			});
+		}
+		else if (CheckLocationKey.SelectedKeyType == UBlackboardKeyType_Vector::StaticClass())
+		{
+			OnCalculate.BindLambda([this](const UBlackboardComponent* BlackboardComp) {
+				const FVector TargetLocation = BlackboardComp->GetValue<UBlackboardKeyType_Vector>(TargetLocationKey.GetSelectedKeyID());
+				const FVector CheckLocation = BlackboardComp->GetValue<UBlackboardKeyType_Vector>(CheckLocationKey.GetSelectedKeyID());
+				return IsNearLocation(CheckLocation, TargetLocation);
+			});
+		}
+	}
+	else
+	{
+		OnCalculate.BindLambda([this](const UBlackboardComponent* BlackboardComp) {
+			return false;
+		});
+	}
 }
 
 bool UBTDecorator_IsNearLocation::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {
 	const UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
-
-	if (TargetLocationKey.SelectedKeyType == UBlackboardKeyType_Object::StaticClass())
-	{
-		AActor* TargetActor = Cast<AActor>(BlackboardComp->GetValue<UBlackboardKeyType_Object>(TargetLocationKey.GetSelectedKeyID()));
-		if (CheckLocationKey.SelectedKeyType == UBlackboardKeyType_Object::StaticClass())
-		{
-			AActor* CheckActor = Cast<AActor>(BlackboardComp->GetValue<UBlackboardKeyType_Object>(CheckLocationKey.GetSelectedKeyID()));
-			return IsNearLocation(CheckActor, TargetActor);
-		}
-		else if (CheckLocationKey.SelectedKeyType == UBlackboardKeyType_Vector::StaticClass())
-		{
-			const FVector CheckLocation = BlackboardComp->GetValue<UBlackboardKeyType_Vector>(CheckLocationKey.GetSelectedKeyID());
-			return IsNearLocation(CheckLocation, TargetActor);
-		}
-	}
-	else if (TargetLocationKey.SelectedKeyType == UBlackboardKeyType_Vector::StaticClass())
-	{
-		const FVector TargetLocation = BlackboardComp->GetValue<UBlackboardKeyType_Vector>(TargetLocationKey.GetSelectedKeyID());
-		if (CheckLocationKey.SelectedKeyType == UBlackboardKeyType_Object::StaticClass())
-		{
-			AActor* CheckActor = Cast<AActor>(BlackboardComp->GetValue<UBlackboardKeyType_Object>(CheckLocationKey.GetSelectedKeyID()));
-			return IsNearLocation(CheckActor, TargetLocation);
-		}
-		else if (CheckLocationKey.SelectedKeyType == UBlackboardKeyType_Vector::StaticClass())
-		{
-			const FVector CheckLocation = BlackboardComp->GetValue<UBlackboardKeyType_Vector>(CheckLocationKey.GetSelectedKeyID());
-			return IsNearLocation(CheckLocation, TargetLocation);
-		}
-	}
-	return false;
+	return OnCalculate.Execute(BlackboardComp);
 }
 
 bool UBTDecorator_IsNearLocation::IsNearLocation(const FVector& A, const FVector& B) const
 {
-	return GetGeometricDistance(A, B) < FMath::Square(AcceptableRadius);
+	return GetGeometricDistanceSquared(A, B) < FMath::Square(AcceptableRadius);
 }
 
 bool UBTDecorator_IsNearLocation::IsNearLocation(const AActor* A, const FVector& B) const
 {
-	return A 
-		? GetGeometricDistance(A->GetActorLocation(), B) < FMath::Square(AcceptableRadius)
+	return A
+		? GetGeometricDistanceSquared(A->GetActorLocation(), B) < FMath::Square(AcceptableRadius)
 		: false;
 }
 
 bool UBTDecorator_IsNearLocation::IsNearLocation(const FVector& A, const AActor* B) const
 {
-	return B 
-		? GetGeometricDistance(A, B->GetActorLocation()) < FMath::Square(AcceptableRadius)
+	return B
+		? GetGeometricDistanceSquared(A, B->GetActorLocation()) < FMath::Square(AcceptableRadius)
 		: false;
 }
 
 bool UBTDecorator_IsNearLocation::IsNearLocation(const AActor* A, const AActor* B) const
 {
-	return A && B 
-		? GetGeometricDistance(A->GetActorLocation(), B->GetActorLocation()) < AcceptableRadius
+	return A && B
+		? GetGeometricDistanceSquared(A->GetActorLocation(), B->GetActorLocation()) < FMath::Square(AcceptableRadius)
 		: false;
 }
 
-float UBTDecorator_IsNearLocation::GetGeometricDistance(const FVector& A, const FVector& B) const
+float UBTDecorator_IsNearLocation::GetGeometricDistanceSquared(const FVector& A, const FVector& B) const
 {
 	float Result = MAX_flt;
 	switch (GeometricDistanceType)
 	{
 		case FAIDistanceType::Distance3D:
-			Result = FVector::Dist(A, B);
+			Result = FVector::DistSquared(A, B);
 			break;
 		case FAIDistanceType::Distance2D:
-			Result = FVector::DistXY(A, B);
+			Result = FVector::DistSquaredXY(A, B);
 			break;
 		case FAIDistanceType::DistanceZ:
-			Result = A.Z - B.Z;
+			Result = FMath::Square(A.Z - B.Z);
 			break;
 		default:
 			checkNoEntry();
