@@ -10,7 +10,7 @@ UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UNREALARCHERYSHOOTER_API UWeaponComponent : public USceneComponent
 {
 	GENERATED_BODY()
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
+		DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFire, AProjectile* const, Projectile);
 
 public:
@@ -28,14 +28,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FVector MeshZoomInPosition;
 
-	UPROPERTY(EditAnywhere, Category = Mesh)
-		class USkeletalMeshComponent* FPMeshViewer;
+	UPROPERTY(EditDefaultsOnly)
+		FComponentReference FPMeshViewerRef;
 
-	UPROPERTY(EditAnywhere, Category = Mesh)
-		class USkeletalMeshComponent* GunMesh;
-
-	UPROPERTY(EditAnywhere, Category = Mesh)
-		class UAnimInstance* AnimInstance;
+	UPROPERTY(EditDefaultsOnly)
+		FComponentReference GunMeshRef;
 
 	UFUNCTION(BlueprintCallable)
 		TArray<FWeaponData> GetWeapons() const { return Weapons; }
@@ -52,6 +49,9 @@ public:
 		void SetWeapons(const TArray<FWeaponData> OtherWeapons);
 
 	UFUNCTION(BlueprintCallable)
+		void SetWeaponsByNames(const TArray<FName> WeaponNames);
+
+	UFUNCTION(BlueprintCallable)
 		void SetWeapon(const int Index);
 
 	UFUNCTION(BlueprintCallable)
@@ -61,12 +61,19 @@ public:
 		void SwitchToPreviousWeapon();
 
 	UFUNCTION(BlueprintCallable)
+		void Fire();
+
+	UFUNCTION(BlueprintCallable)
+		void ToggleZoom();
+
+	UFUNCTION(BlueprintCallable)
+		void Zoom(const bool bToZoom);
+
+	UFUNCTION(BlueprintCallable)
 		FORCEINLINE int GetCurrentWeaponIndex() const { return CurrentWeaponIndex; }
 
-	void Fire();
-	void PlayFireAnim();
-	void ToggleZoom();
-	void Zoom(const bool bToZoom);
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE bool IsZooming() const { return bIsZoomed; }
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -78,9 +85,23 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		class UCooldown* Cooldown;
 
+	UPROPERTY(EditDefaultsOnly)
+		class UDataTable* WeaponsTable;
+
+	UPROPERTY(BlueprintReadOnly)
+		class UAnimInstance* AnimInstance;
+
+	UPROPERTY(BlueprintReadOnly)
+		class USkeletalMeshComponent* FPMeshViewer;
+
+	UPROPERTY(BlueprintReadOnly)
+		class USkeletalMeshComponent* GunMesh;
+
 	bool bIsZoomed;
 
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
+	void PlayFireAnim();
 
 };

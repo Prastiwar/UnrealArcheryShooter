@@ -3,6 +3,8 @@
 #include "WeaponComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Projectile.h"
+#include "Engine/DataTable.h"
+#include "Weapon/UIWeaponData.h"
 
 UWeaponComponent::UWeaponComponent()
 {
@@ -15,10 +17,28 @@ void UWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	Cooldown = NewObject<UCooldown>();
+
+	FPMeshViewer = Cast<USkeletalMeshComponent>(FPMeshViewerRef.GetComponent(GetOwner()));
+	if (FPMeshViewer)
+	{
+		AnimInstance = FPMeshViewer->GetAnimInstance();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("FPMeshViewer component not found"));
+	}
+
+	GunMesh = Cast<USkeletalMeshComponent>(GunMeshRef.GetComponent(GetOwner()));
+	if (!GunMesh)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GunMesh component not found"));
+	}
+
 	if (Weapons.Num() > 0)
 	{
 		SetWeapon(CurrentWeaponIndex);
 	}
+	Zoom(false);
 }
 
 void UWeaponComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
@@ -117,6 +137,21 @@ void UWeaponComponent::SetWeapons(const TArray<FWeaponData> OtherWeapons)
 	{
 		Weapon.Initialize(this);
 	}
+	SetWeapon(CurrentWeaponIndex);
+}
+
+void UWeaponComponent::SetWeaponsByNames(const TArray<FName> WeaponNames)
+{
+	Weapons.Empty(WeaponNames.Num());
+	for (FName WeaponName : WeaponNames)
+	{
+		FUIWeaponData* Weapon = WeaponsTable->FindRow<FUIWeaponData>(WeaponName, TEXT(""));
+		if (Weapon)
+		{
+			AddWeapon(Weapon->Weapon);
+		}
+	}
+	SetWeapon(CurrentWeaponIndex);
 }
 
 void UWeaponComponent::SwitchToPreviousWeapon()

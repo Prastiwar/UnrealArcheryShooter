@@ -86,9 +86,6 @@ protected:
 		float BaseLookUpRate;
 
 	UPROPERTY(EditDefaultsOnly, Category = Weapon)
-		class UDataTable* WeaponsTable;
-
-	UPROPERTY(EditDefaultsOnly, Category = Weapon)
 		TArray<FName> InitialWeaponsNames;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

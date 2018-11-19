@@ -8,8 +8,6 @@
 #include "Cooldown/Cooldown.h"
 #include "CoreGame/SaveState.h"
 #include "ObjectPool/ActorPool.h"
-#include "Engine/DataTable.h"
-#include "Weapon/UIWeaponData.h"
 #include "Weapon/WeaponComponent.h"
 
 AUASCharacter::AUASCharacter()
@@ -63,21 +61,8 @@ void AUASCharacter::BeginPlay()
 	GunMesh->AttachToComponent(FirstPersonMeshViewed, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 	FirstPersonMeshViewed->SetHiddenInGame(false, true);
 
-	WeaponComponent->GunMesh = GunMesh;
-	WeaponComponent->FPMeshViewer = FirstPersonMeshViewed;
-	WeaponComponent->AnimInstance = FirstPersonMeshViewed->GetAnimInstance();
 	WeaponComponent->OnFire.AddDynamic(this, &AUASCharacter::OnFire);
-	WeaponComponent->Zoom(false);
-
-	for (FName& WeaponName : InitialWeaponsNames)
-	{
-		FUIWeaponData* Weapon = WeaponsTable->FindRow<FUIWeaponData>(WeaponName, TEXT(""));
-		if (Weapon)
-		{
-			WeaponComponent->AddWeapon(Weapon->Weapon);
-		}
-	}
-	WeaponComponent->SetWeapon(WeaponComponent->GetCurrentWeaponIndex());
+	WeaponComponent->SetWeaponsByNames(InitialWeaponsNames);
 }
 
 void AUASCharacter::Tick(float DeltaSeconds)

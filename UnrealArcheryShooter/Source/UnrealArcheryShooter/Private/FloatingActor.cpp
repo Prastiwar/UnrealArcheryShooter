@@ -1,32 +1,54 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "FloatingActor.h"
-#include "Components/TimelineComponent.h"
-#include "TPMath.h"
 
 AFloatingActor::AFloatingActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	TimeScale = 1.0f;
+	SetMobility(EComponentMobility::Movable);
 }
 
 void AFloatingActor::BeginPlay()
 {
 	Super::BeginPlay();
-
 	InitLocation = GetActorLocation();
-	TargetLocation = InitLocation + FloatDirection; 
-	EvaluateTime = 0;
+	TargetLocation = InitLocation + DirectionOffset;
 }
 
 void AFloatingActor::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Position += DeltaTime * TimeScale;
 
-	EvaluateTime += DeltaTime * TimeScale;
-	const float Time = FTPMath::PingPong(EvaluateTime, 1.0f);
-	const float EvaluatedAlpha = CurveFloat->GetFloatValue(Time);
-	const FVector NewLocation = FMath::Lerp(InitLocation, TargetLocation, EvaluatedAlpha);
+	const bool bReached = Position >= 1.0f;
+	const float InterpValue = GetCurveFloatValue(bReached ? 1.0f : Position);
+	Interp(InterpValue);
+
+	if (bReached)
+	{
+		bIsReversed = !bIsReversed;
+		Position = 0.0f;
+	}
+}
+
+float AFloatingActor::GetCurveFloatValue(float InTime)
+{
+	if (BackCurveFloat)
+	{
+		return bIsReversed
+			? CurveFloat->GetFloatValue(InTime)
+			: BackCurveFloat->GetFloatValue(InTime);
+	}
+	else
+	{
+		return bIsReversed
+			? CurveFloat->GetFloatValue(InTime)
+			: CurveFloat->GetFloatValue(1 - InTime);
+	}
+}
+
+void AFloatingActor::Interp(float Value)
+{
+	const FVector NewLocation = FMath::Lerp(InitLocation, TargetLocation, Value);
 	SetActorLocation(NewLocation);
 }
