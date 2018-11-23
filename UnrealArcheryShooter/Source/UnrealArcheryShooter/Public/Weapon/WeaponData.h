@@ -2,9 +2,7 @@
 
 #pragma once
 
-#include "Cooldown/CooldownData.h"
-#include "ActorPool.h"
-#include "Weapon/Projectile.h"
+#include "Weapon/FireBehavior.h"
 #include "WeaponData.generated.h"
 
 USTRUCT(BlueprintType)
@@ -20,28 +18,17 @@ public:
 		FName Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 InitPoolSize;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		class UAnimMontage* FireAnimation;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USkeletalMesh* WeaponMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FCooldownData FireCooldown;
+		struct FCooldownData FireCooldown;
 
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<AProjectile> Projectile;
+		UFireBehavior* FireBehavior;
 
-	UPROPERTY(BlueprintReadOnly)
-		UActorPool* ProjectilePool;
-
-	FORCEINLINE void Initialize(UObject* const Outer)
+	void Initialize()
 	{
-		UE_LOG(LogTemp, Warning, TEXT("InitPoolSize %s"), *FString::FromInt(InitPoolSize));
-		ProjectilePool = NewObject<UActorPool>(Outer);
-		ProjectilePool->Initialize(Outer->GetWorld(), Projectile, InitPoolSize);
+		FireBehavior = FireBehaviorClass->GetDefaultObject<UFireBehavior>();
 	}
 
 	FORCEINLINE bool operator==(const FWeaponData &Other) const { return Name == Other.Name; }
@@ -50,10 +37,13 @@ public:
 	friend uint32 GetTypeHash(const FWeaponData& Other)
 	{
 		return GetTypeHash(Other.Name)
-			+ GetTypeHash(Other.Projectile)
+			+ GetTypeHash(Other.FireBehavior)
 			+ GetTypeHash(Other.WeaponMesh)
-			+ GetTypeHash(Other.FireAnimation)
 			+ GetTypeHash(Other.FireCooldown);
 	}
+
+private:
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UFireBehavior> FireBehaviorClass;
 
 };

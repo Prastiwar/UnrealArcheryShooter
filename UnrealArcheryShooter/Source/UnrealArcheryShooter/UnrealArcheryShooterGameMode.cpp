@@ -54,9 +54,6 @@ bool AUnrealArcheryShooterGameMode::ApplyNewHUD(TSubclassOf<UUserWidget> Hud, co
 			return true;
 		}
 	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Applying Player HUD error - No World detected"))
-	}
+	UE_LOG(LogTemp, Error, TEXT("Applying Player HUD error - No World detected or CurrentWidget is null"))
 	return false;
 }

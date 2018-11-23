@@ -1,7 +1,7 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "BeamAttacher.h"
-#include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 
 ABeamAttacher::ABeamAttacher()
 {

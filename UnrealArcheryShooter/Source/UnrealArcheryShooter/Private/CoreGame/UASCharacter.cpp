@@ -48,9 +48,9 @@ AUASCharacter::AUASCharacter()
 	PlayerData = FPlayerData(100);
 }
 
-void AUASCharacter::OnFire(AProjectile* const Projectile)
+void AUASCharacter::OnFire(UFireBehavior* const FireBehavior)
 {
-	AddScore(-Projectile->GetFireCost());
+	AddScore(-FireBehavior->GetFireCost());
 }
 
 void AUASCharacter::BeginPlay()

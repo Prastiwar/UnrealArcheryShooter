@@ -21,6 +21,9 @@ public:
 		void SetItem(UTexture2D* Icon, const bool bSelected);
 
 	UFUNCTION(BlueprintCallable)
+		void SetItemSelection(const bool bSelected);
+
+	UFUNCTION(BlueprintCallable)
 		void SetProgressPercentage(const float Percentage);
 
 protected:

@@ -26,9 +26,10 @@ void UWeaponShopGrid::TryExitShop(const bool bBought)
 	}
 }
 
-void UWeaponShopGrid::FillGrid()
+void UWeaponShopGrid::BuildGrid()
 {
-	TArray<UWeaponShopItem*> WeaponItems = FillItemGrid<UWeaponShopItem>();
+	TArray<UWeaponShopItem*> WeaponItems;
+	RebuildGrid<UWeaponShopItem>(WeaponItems);
 	SetGrid(WeaponItems);
 }
 

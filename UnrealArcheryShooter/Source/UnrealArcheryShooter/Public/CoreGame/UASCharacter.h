@@ -6,7 +6,6 @@
 #include "CoreGame/PlayerData.h"
 #include "UASCharacter.generated.h"
 
-
 UCLASS(config = Game)
 class UNREALARCHERYSHOOTER_API AUASCharacter : public ACharacter
 {
@@ -91,7 +90,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		class UAttributeComponent* AttributeComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		class UWeaponComponent* WeaponComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Score")
@@ -101,9 +100,7 @@ protected:
 		float ScoreMultiplier;
 
 	UFUNCTION(BlueprintCallable)
-		void OnFire(AProjectile* const Projectile);
-
-	bool bIsZoomed;
+		void OnFire(UFireBehavior* const Projectile);
 
 	virtual void BeginPlay();
 	virtual void Tick(float DeltaSeconds) override;

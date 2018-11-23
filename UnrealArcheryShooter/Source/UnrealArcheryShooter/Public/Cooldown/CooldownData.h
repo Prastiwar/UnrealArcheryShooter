@@ -4,11 +4,12 @@
 
 #include "CooldownData.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FMDFloatValueChanged, float);
+
 USTRUCT(BlueprintType)
 struct UNREALARCHERYSHOOTER_API FCooldownData
 {
 	GENERATED_BODY()
-	DECLARE_MULTICAST_DELEGATE_OneParam(FOnValueChanged, float);
 
 public:
 	FCooldownData() {}
@@ -26,7 +27,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool bIsCompleted = true;
 
-	FOnValueChanged OnValueChanged;
+	FMDFloatValueChanged OnValueChanged;
 	int ID;
 
 	FORCEINLINE bool operator==(const FCooldownData &Other) const { return ID == Other.ID; }

@@ -7,6 +7,11 @@
 void UWeaponItem::SetItem(UTexture2D* Icon, const bool bSelected)
 {
 	ItemImage->SetBrushFromTexture(Icon);
+	SetItemSelection(bSelected);
+}
+
+void UWeaponItem::SetItemSelection(const bool bSelected)
+{
 	ItemImage->SetOpacity(bSelected ? 1.0f : 0.2f);
 }
 

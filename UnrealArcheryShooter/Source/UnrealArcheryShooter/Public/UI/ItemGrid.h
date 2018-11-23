@@ -13,31 +13,34 @@ class UNREALARCHERYSHOOTER_API UItemGrid : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	virtual void FillGrid() { FillGridUserWidget(); }
+	virtual void BuildGrid() { TArray<UUserWidget*> Array; RebuildGridDefault(Array); }
 
 	virtual void SynchronizeProperties() override;
 
 	UFUNCTION(BlueprintNativeEvent)
 		void OnSynchronizeProperties();
-	void OnSynchronizeProperties_Implementation() { FillGrid(); }
+	void OnSynchronizeProperties_Implementation() { BuildGrid(); }
 
 	UFUNCTION(BlueprintNativeEvent)
 		void OnDirty();
-	void OnDirty_Implementation() { FillGrid(); }
+	virtual void OnDirty_Implementation() { BuildGrid(); }
 
 	UFUNCTION(BlueprintCallable)
 		void SetDirty() { OnDirty(); }
 
-	UFUNCTION(BlueprintCallable)
-		FORCEINLINE TArray<UUserWidget*> FillGridUserWidget() { return FillItemGrid<UUserWidget>(); }
+	// Shortcut for RebuildGrid<UUserWidget>(..)
+	FORCEINLINE UFUNCTION(BlueprintCallable)
+		void RebuildGridDefault(TArray<UUserWidget*>& OutArray) { RebuildGrid<UUserWidget>(OutArray); }
 
+	// Clears grid, fills with ItemWidgetClass'es with RowCount and ColumnCount and add them to OutArray.
 	template<typename T>
-	FORCEINLINE TArray<T*> FillItemGrid() { return FillItemGridImpl<T>(RowCount, ColumnCount); }
+	FORCEINLINE void RebuildGrid(TArray<T*>& OutArray) { RebuildGrid<T>(RowCount, ColumnCount, OutArray); }
 
+	// Clears grid, fills with ItemWidgetClass'es and add them to OutArray
 	template<typename T>
-	FORCEINLINE TArray<T*> FillItemGridImpl(const uint32 RowCount, const uint32 ColumnCount)
+	FORCEINLINE void RebuildGrid(const uint32 RowCount, const uint32 ColumnCount, TArray<T*>& OutArray)
 	{
-		TArray<T*> Items = TArray<T*>();
+		TArray<T*> Array = TArray<T*>();
 		if (Grid && ItemWidgetClass)
 		{
 			Grid->ClearChildren();
@@ -46,8 +49,7 @@ public:
 				for (uint32 Column = 0; Column < ColumnCount; Column++)
 				{
 					UUserWidget* Widget = CreateWidget<UUserWidget>(GetWorld(), ItemWidgetClass);
-					const int Index = Items.Add(Cast<T>(Widget));
-
+					const int32 Index = Array.Add(Cast<T>(Widget));
 					UUniformGridSlot* GridSlot = Grid->AddChildToUniformGrid(Widget);
 					GridSlot->SetColumn(Column);
 					GridSlot->SetRow(Row);
@@ -58,7 +60,7 @@ public:
 		{
 			UE_LOG(LogTemp, Error, TEXT("There is no Grid or ItemWidgetClass"));
 		}
-		return Items;
+		OutArray = Array;
 	}
 
 protected:

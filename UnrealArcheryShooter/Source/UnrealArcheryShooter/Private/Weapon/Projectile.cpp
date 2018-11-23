@@ -11,28 +11,15 @@
 #include "Spawners/SpawnableRing.h"
 #include "ObjectPool/ActorPool.h"
 
+#include "Kismet/KismetSystemLibrary.h"
+#include "Engine/Private/KismetTraceUtils.h"
+#include "Particles/ParticleSystemComponent.h"
+
 AProjectile::AProjectile()
 {
-	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
-	CollisionComp->InitSphereRadius(5.0f);
-	CollisionComp->SetSimulatePhysics(true);
-	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
-	CollisionComp->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
-
-	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
-	CollisionComp->CanCharacterStepUpOn = ECB_No;
-
-	RootComponent = CollisionComp;
-
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
-	StaticMesh->SetupAttachment(RootComponent);
-
-	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
-	ProjectileMovement->UpdatedComponent = CollisionComp;
-	ProjectileMovement->InitialSpeed = 3000.f;
-	ProjectileMovement->MaxSpeed = 3000.f;
-	ProjectileMovement->bRotationFollowsVelocity = true;
-	ProjectileMovement->bShouldBounce = true;
+	PrimaryActorTick.bCanEverTick = true;
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+	RootComponent = StaticMesh;
 
 	InitialLifeSpan = 0;
 	InitialLifeSpanPooled = 3.0f;
@@ -59,73 +46,94 @@ void AProjectile::Enable()
 	//UE_LOG(LogTemp, Warning, TEXT("Enabled"));
 }
 
-void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, const FVector NormalImpulse, const FHitResult& Hit)
+void AProjectile::Fire()
 {
-	TArray<FHitResult> HitResults;
-	const FVector StartLocation = GetActorLocation();
-	const FVector EndLocation = GetActorLocation();
-	const ECollisionChannel ECC = ECollisionChannel::ECC_Visibility;
-	FCollisionShape CollisionShape;
-	CollisionShape.ShapeType = ECollisionShape::Sphere;
-	CollisionShape.SetSphere(SphereRadius);
-	const bool bHitSomething = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::FQuat(), ECC, CollisionShape);
+	FHitResult OutHit;
+	const FVector Start = GetActorLocation();
+	FVector ForwardVector = GetActorForwardVector();
+	FVector End = ((ForwardVector * RangeTrace) + Start);
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
 
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
+	DrawDebugLine(GetWorld(), Start, End, FColor::Green, true, 1.5f, 0, 2);
+	const bool bTraceHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
+	if (bTraceHit && OutHit.bBlockingHit)
 	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
 	}
-	OnHitImpl(bHitSomething, HitResults);
+	UParticleSystemComponent* ParticleComp = 
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BeamParticle, GetActorLocation(), GetActorRotation(), true, EPSCPoolMethod::AutoRelease);
+	ParticleComp->SetBeamSourcePoint(0, Start, 0);
+	ParticleComp->SetBeamTargetPoint(0, End, 0);
 }
 
-bool AProjectile::TryAddScoreFromActor(AActor* OtherActor)
-{
-	if (ASpawnableRing* const ScoreActor = Cast<ASpawnableRing>(OtherActor))
-	{
-		for (TActorIterator<AUASCharacter> ActorItr(GetWorld()); ActorItr; ++ActorItr)
-		{
-			ActorItr->AddScore(ScoreActor->GetScore());
-		}
-		return true;
-	}
-	return false;
-}
-
-void AProjectile::OnHitImpl(const bool bHitSomething, TArray<FHitResult> HitResults)
-{
-	if (bHitSomething)
-	{
-		if (CameraShake)
-		{
-			GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(CameraShake);
-		}
-		for (auto It = HitResults.CreateIterator(); It; It++)
-		{
-			AActor* const HitActor = It->GetActor();
-			if (!HitActor || HitActor == this)
-			{
-				continue;
-			}
-			TryAddScoreFromActor(HitActor);
-			if (USceneComponent* SceneComponent = HitActor->GetRootComponent())
-			{
-				if (UStaticMeshComponent* SM = Cast<UStaticMeshComponent>(SceneComponent))
-				{
-					SM->AddRadialImpulse(GetActorLocation(), SphereRadius, RadialStrength, ERadialImpulseFalloff::RIF_Linear, true);
-				}
-				else if (UDestructibleComponent* DM = Cast<UDestructibleComponent>(SceneComponent))
-				{
-					DM->ApplyRadiusDamage(1000, GetActorLocation(), SphereRadius, RadialStrength, true);
-					DM->AddRadialImpulse(GetActorLocation(), SphereRadius, RadialStrength, ERadialImpulseFalloff::RIF_Linear, true);
-				}
-			}
-		}
-	}
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation(), GetActorRotation(), true, EPSCPoolMethod::AutoRelease);
-	FActorHelper::SafePlaySound(this, HitSound, GetActorLocation());
-	// FIXME: temporary fix (no pooling)
-	//if (!ReturnToSelfPool())
-	//{
-		//UE_LOG(LogTemp, Warning, TEXT("No Pool"));
-		Destroy();
-	//}
-}
+//void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, const FVector NormalImpulse, const FHitResult& Hit)
+//{
+//	TArray<FHitResult> HitResults;
+//	const FVector StartLocation = GetActorLocation();
+//	const FVector EndLocation = GetActorLocation();
+//	const ECollisionChannel ECC = ECollisionChannel::ECC_Visibility;
+//	FCollisionShape CollisionShape;
+//	CollisionShape.ShapeType = ECollisionShape::Sphere;
+//	CollisionShape.SetSphere(SphereRadius);
+//	const bool bHitSomething = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::FQuat(), ECC, CollisionShape);
+//
+//	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
+//	{
+//		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+//	}
+//	OnHitImpl(bHitSomething, HitResults);
+//}
+//
+//bool AProjectile::TryAddScoreFromActor(AActor* OtherActor)
+//{
+//	if (ASpawnableRing* const ScoreActor = Cast<ASpawnableRing>(OtherActor))
+//	{
+//		for (TActorIterator<AUASCharacter> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+//		{
+//			ActorItr->AddScore(ScoreActor->GetScore());
+//		}
+//		return true;
+//	}
+//	return false;
+//}
+//
+//void AProjectile::OnHitImpl(const bool bHitSomething, TArray<FHitResult> HitResults)
+//{
+//	if (bHitSomething)
+//	{
+//		if (CameraShake)
+//		{
+//			GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(CameraShake);
+//		}
+//		for (auto It = HitResults.CreateIterator(); It; It++)
+//		{
+//			AActor* const HitActor = It->GetActor();
+//			if (!HitActor || HitActor == this)
+//			{
+//				continue;
+//			}
+//			TryAddScoreFromActor(HitActor);
+//			if (USceneComponent* SceneComponent = HitActor->GetRootComponent())
+//			{
+//				if (UStaticMeshComponent* SM = Cast<UStaticMeshComponent>(SceneComponent))
+//				{
+//					SM->AddRadialImpulse(GetActorLocation(), SphereRadius, RadialStrength, ERadialImpulseFalloff::RIF_Linear, true);
+//				}
+//				else if (UDestructibleComponent* DM = Cast<UDestructibleComponent>(SceneComponent))
+//				{
+//					DM->ApplyRadiusDamage(1000, GetActorLocation(), SphereRadius, RadialStrength, true);
+//					DM->AddRadialImpulse(GetActorLocation(), SphereRadius, RadialStrength, ERadialImpulseFalloff::RIF_Linear, true);
+//				}
+//			}
+//		}
+//	}
+//	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation(), GetActorRotation(), true, EPSCPoolMethod::AutoRelease);
+//	FActorHelper::SafePlaySound(this, HitSound, GetActorLocation());
+//	// FIXME: temporary fix (no pooling)
+//	//if (!ReturnToSelfPool())
+//	//{
+//		//UE_LOG(LogTemp, Warning, TEXT("No Pool"));
+//		Destroy();
+//	//}
+//}

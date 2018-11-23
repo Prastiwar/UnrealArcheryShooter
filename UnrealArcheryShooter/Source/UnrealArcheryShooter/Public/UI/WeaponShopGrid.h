@@ -25,7 +25,7 @@ public:
 		void ExitShop();
 
 	UFUNCTION(BlueprintCallable)
-		virtual void FillGrid() override;
+		virtual void BuildGrid() override;
 
 protected:
 	virtual void NativeConstruct() override;

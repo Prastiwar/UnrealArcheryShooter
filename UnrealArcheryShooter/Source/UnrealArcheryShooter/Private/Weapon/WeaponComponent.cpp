@@ -2,9 +2,9 @@
 
 #include "WeaponComponent.h"
 #include "Animation/AnimInstance.h"
-#include "Projectile.h"
 #include "Engine/DataTable.h"
 #include "Weapon/UIWeaponData.h"
+#include "Weapon/FireBehavior.h"
 
 UWeaponComponent::UWeaponComponent()
 {
@@ -34,6 +34,12 @@ void UWeaponComponent::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("GunMesh component not found"));
 	}
 
+	Camera = Cast<UCameraComponent>(CameraRef.GetComponent(GetOwner()));
+	if (!Camera)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Camera component not found"));
+	}
+
 	if (Weapons.Num() > 0)
 	{
 		SetWeapon(CurrentWeaponIndex);
@@ -55,41 +61,22 @@ void UWeaponComponent::Fire()
 		return;
 	}
 
-	FRotator Rotation = GetOwner()->GetActorRotation();
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-	APawn* const OwnerPawn = Cast<APawn>(GetOwner());
-	if (OwnerPawn)
+	Weapons[CurrentWeaponIndex].FireBehavior->Fire(GetWorld(), GetComponentLocation(), Camera->GetForwardVector());
+	OnFire.Broadcast(Weapons[CurrentWeaponIndex].FireBehavior);
+	if (Weapons[CurrentWeaponIndex].FireCooldown.CooldownTime > 0.0f)
 	{
-		Rotation = OwnerPawn->GetControlRotation();
+		Cooldown->SetCooldown(&Weapons[CurrentWeaponIndex].FireCooldown);
 	}
-
-	AProjectile* const Projectile = Weapons[CurrentWeaponIndex].ProjectilePool->PopActor<AProjectile>(GetComponentLocation(), Rotation, SpawnParams);
-	if (Projectile)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Projectile shoot"));
-		OnFire.Broadcast(Projectile);
-		if (Weapons[CurrentWeaponIndex].FireCooldown.CooldownTime > 0.0f)
-		{
-			Cooldown->SetCooldown(&Weapons[CurrentWeaponIndex].FireCooldown);
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Fire failed - projectile nullptr"));
-	}
-
 	PlayFireAnim();
 }
 
 void UWeaponComponent::PlayFireAnim()
 {
-	if (Weapons[CurrentWeaponIndex].FireAnimation != nullptr)
+	if (Weapons[CurrentWeaponIndex].FireBehavior->GetFireAnimation() != nullptr)
 	{
 		if (AnimInstance != nullptr)
 		{
-			AnimInstance->Montage_Play(Weapons[CurrentWeaponIndex].FireAnimation, 1.f);
+			AnimInstance->Montage_Play(Weapons[CurrentWeaponIndex].FireBehavior->GetFireAnimation(), 1.f);
 		}
 	}
 }
@@ -118,7 +105,7 @@ bool UWeaponComponent::AddWeapon(FWeaponData& Weapon)
 {
 	if (!HasWeapon(Weapon))
 	{
-		Weapon.Initialize(this);
+		Weapon.Initialize();
 		Weapons.Add(Weapon);
 		return true;
 	}
@@ -135,7 +122,7 @@ void UWeaponComponent::SetWeapons(const TArray<FWeaponData> OtherWeapons)
 	Weapons = OtherWeapons;
 	for (FWeaponData& Weapon : Weapons)
 	{
-		Weapon.Initialize(this);
+		Weapon.Initialize();
 	}
 	SetWeapon(CurrentWeaponIndex);
 }

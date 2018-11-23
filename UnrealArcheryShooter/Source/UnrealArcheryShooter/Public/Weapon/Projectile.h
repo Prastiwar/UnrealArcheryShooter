@@ -14,16 +14,6 @@ class UNREALARCHERYSHOOTER_API AProjectile : public APoolableActor
 public:
 	AProjectile();
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly)
-		class USphereComponent* CollisionComp;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement)
-		class UProjectileMovementComponent* ProjectileMovement;
-
-	UFUNCTION()
-		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
-			UPrimitiveComponent* OtherComp, const FVector NormalImpulse, const FHitResult& Hit);
-
 	UFUNCTION(BlueprintCallable)
 		FORCEINLINE float GetFireCost() const { return FireScoreCost; }
 
@@ -33,12 +23,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FORCEINLINE float GetRadialStrength() const { return RadialStrength; }
 
+	virtual void Fire();
 	virtual void Disable() override;
 	virtual void Enable() override;
 
 protected:
-	virtual void OnHitImpl(const bool bHitSomething, TArray<FHitResult> HitResults);
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		UStaticMeshComponent* StaticMesh;
 
@@ -63,7 +52,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float RadialStrength;
 
+	UPROPERTY(EditAnywhere)
+		TEnumAsByte<ETraceTypeQuery> TraceType;
+
+	UPROPERTY(EditAnywhere)
+		float RangeTrace;
+
+	UPROPERTY(EditAnywhere)
+		UParticleSystem* BeamParticle;
+
 private:
-	bool TryAddScoreFromActor(AActor* OtherActor);
+	//bool TryAddScoreFromActor(AActor* OtherActor);
 
 };

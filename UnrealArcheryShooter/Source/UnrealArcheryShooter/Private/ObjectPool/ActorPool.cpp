@@ -6,31 +6,29 @@
 
 DEFINE_LOG_CATEGORY(LogObjectPool);
 
-APoolableActor* UActorPool::PopActor(FTransform const* Transform, const FActorSpawnParameters& SpawnParameters /*= FActorSpawnParameters()*/)
+APoolableActor* UActorPool::PopActor(FTransform const* Transform, const FActorSpawnParameters& SpawnParameters)
 {
 	IPoolableObject* PoolableObject = nullptr;
 	if (!Pool.Dequeue(PoolableObject))
 	{
-		UE_LOG(LogObjectPool, Warning, TEXT("RETURN NEW OBJECT"));
-		APoolableActor* PoolableObject = Cast<APoolableActor>(World->SpawnActor(Class, Transform, SpawnParameters));
-		PoolableObject->SetSelfPool(this);
-		PoolableObject->Enable();
-		return PoolableObject;
+		PoolableObject = Cast<IPoolableObject>(World->SpawnActor(Class, Transform, SpawnParameters));
+		if (PoolableObject)
+		{
+			PoolableObject->SetSelfPool(this);
+		}
 	}
 
-	APoolableActor* PoolableActor = Cast<APoolableActor>(PoolableObject);
-
-	if (CanEnable(PoolableActor, Transform, SpawnParameters))
+	if (PoolableObject)
 	{
-		UE_LOG(LogObjectPool, Warning, TEXT("ENABLE CALL"));
-		PoolableActor->Enable();
-		return PoolableActor;
+		APoolableActor* PoolableActor = Cast<APoolableActor>(PoolableObject);
+		if (CanEnable(PoolableActor, Transform, SpawnParameters))
+		{
+			PoolableActor->Enable();
+			return PoolableActor;
+		}
 	}
-	else
-	{
-		UE_LOG(LogObjectPool, Warning, TEXT("ENABLE FAILED !!!"));
-		return nullptr;
-	}
+	UE_LOG(LogObjectPool, Warning, TEXT("PopActor() failed"));
+	return nullptr;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -11,6 +11,8 @@ public class UnrealArcheryShooter : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] {
             "Core", "CoreUObject", "Engine", "InputCore", "UMG", "ApexDestruction", "AIModule", "NavigationSystem"
         });
-		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
+		PrivateDependencyModuleNames.AddRange(new string[] {
+            "Slate", "SlateCore"
+        });
 	}
 }

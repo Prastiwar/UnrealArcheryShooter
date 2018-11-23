@@ -10,8 +10,8 @@ UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UNREALARCHERYSHOOTER_API UWeaponComponent : public USceneComponent
 {
 	GENERATED_BODY()
-		DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFire, AProjectile* const, Projectile);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponChanged);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFire, UFireBehavior* const, FireBehavior);
 
 public:
 	UWeaponComponent();
@@ -32,12 +32,16 @@ public:
 		FComponentReference FPMeshViewerRef;
 
 	UPROPERTY(EditDefaultsOnly)
+		FComponentReference CameraRef;
+
+	UPROPERTY(EditDefaultsOnly)
 		FComponentReference GunMeshRef;
 
 	UFUNCTION(BlueprintCallable)
 		TArray<FWeaponData> GetWeapons() const { return Weapons; }
 
-	TArray<FWeaponData>* GetWeaponsPtr() { return &Weapons; }
+	UFUNCTION(BlueprintCallable)
+		TArray<FWeaponData>& GetWeaponsRef() { return Weapons; }
 
 	UFUNCTION(BlueprintCallable)
 		bool AddWeapon(FWeaponData& Weapon);
@@ -52,7 +56,7 @@ public:
 		void SetWeaponsByNames(const TArray<FName> WeaponNames);
 
 	UFUNCTION(BlueprintCallable)
-		void SetWeapon(const int Index);
+		void SetWeapon(const int32 Index);
 
 	UFUNCTION(BlueprintCallable)
 		void SwitchToNextWeapon();
@@ -79,7 +83,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		int32 CurrentWeaponIndex;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 		TArray<FWeaponData> Weapons;
 
 	UPROPERTY(BlueprintReadOnly)
@@ -96,6 +100,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 		class USkeletalMeshComponent* GunMesh;
+
+	UPROPERTY(BlueprintReadOnly)
+		class UCameraComponent* Camera;
 
 	bool bIsZoomed;
 
