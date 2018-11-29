@@ -28,6 +28,7 @@ public:
 
 	void Initialize()
 	{
+		verifyf(FireBehaviorClass != nullptr, TEXT("You forgot to add FireBehaviorClass to WeaponData %s"), *Name.ToString());
 		FireBehavior = FireBehaviorClass->GetDefaultObject<UFireBehavior>();
 	}
 
