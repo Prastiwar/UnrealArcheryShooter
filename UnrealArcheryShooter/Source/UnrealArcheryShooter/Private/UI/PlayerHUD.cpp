@@ -76,12 +76,11 @@ void UPlayerHUD::SetGrid(TArray<UWeaponItem*>& GridWeaponItems)
 			const bool bSelect = Index == ActualSelectedIndex;
 			GridWeaponItems[Index]->SetItem(UIWeapon->Icon, bSelect);
 
-			auto SetProgressPercentage = [=](float Value) {
+			auto SetProgressPercentageLambda = [=](float Value) {
 				GridWeaponItems[Index]->SetProgressPercentage(Value);
 			};
-			
-			FDelegateHandle Handle =
-				PlayerWeapons[Index].FireCooldown.OnValueChanged.AddLambda(SetProgressPercentage);
+			PlayerWeapons[Index].FireCooldown.OnValueChanged.RemoveAll(this);
+			FDelegateHandle Handle = PlayerWeapons[Index].FireCooldown.OnValueChanged.AddLambda(SetProgressPercentageLambda);
 		}
 	}
 }

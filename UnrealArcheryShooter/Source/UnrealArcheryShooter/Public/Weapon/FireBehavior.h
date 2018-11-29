@@ -8,8 +8,8 @@ UCLASS(BlueprintType, Blueprintable)
 class UNREALARCHERYSHOOTER_API UFireBehavior : public UObject
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	UFireBehavior();
 
 	UFUNCTION(BlueprintCallable)
@@ -18,7 +18,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FORCEINLINE UAnimMontage* GetFireAnimation() const { return FireAnimation; }
 
-	virtual void Fire(const UWorld* World, const FVector Start, const FVector Forward);
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void Fire(const UWorld* World, const FVector Start, const FVector Forward);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -54,7 +55,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		float FireRange;
 
-private:
-	//bool TryAddScoreFromActor(AActor* OtherActor);
-	
+	virtual void Fire_Implementation(const UWorld* World, const FVector Start, const FVector Forward);
+
+	virtual void OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, const FHitResult& Hit) {}
+
 };
