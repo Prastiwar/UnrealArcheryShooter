@@ -28,15 +28,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FVector MeshZoomInPosition;
 
-	UPROPERTY(EditDefaultsOnly)
-		FComponentReference FPMeshViewerRef;
-
-	UPROPERTY(EditDefaultsOnly)
-		FComponentReference CameraRef;
-
-	UPROPERTY(EditDefaultsOnly)
-		FComponentReference GunMeshRef;
-
 	UFUNCTION(BlueprintCallable)
 		TArray<FWeaponData> GetWeapons() const { return Weapons; }
 
@@ -95,6 +86,15 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		class UAnimInstance* AnimInstance;
 
+	UPROPERTY(EditDefaultsOnly)
+		FComponentReference FPMeshViewerRef;
+
+	UPROPERTY(EditDefaultsOnly)
+		FComponentReference CameraRef;
+
+	UPROPERTY(EditDefaultsOnly)
+		FComponentReference GunMeshRef;
+
 	UPROPERTY(BlueprintReadOnly)
 		class USkeletalMeshComponent* FPMeshViewer;
 
@@ -104,11 +104,12 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		class UCameraComponent* Camera;
 
-	bool bIsZoomed;
-
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
 	void PlayFireAnim();
+
+private:
+	bool bIsZoomed;
 
 };

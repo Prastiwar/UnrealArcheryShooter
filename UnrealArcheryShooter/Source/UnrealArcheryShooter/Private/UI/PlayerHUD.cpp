@@ -1,7 +1,9 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "PlayerHUD.h"
+#include "UI/WeaponItem.h"
 #include "Cooldown/CooldownData.h"
+#include "Weapon/WeaponComponent.h"
 #include "UMG/Public/Components/TextBlock.h"
 
 void UPlayerHUD::BuildGrid()
@@ -12,12 +14,17 @@ void UPlayerHUD::BuildGrid()
 
 void UPlayerHUD::OnDirty_Implementation()
 {
-	Super::OnDirty_Implementation(); // temporarily use old behavior
-	// TODO: Change select and add new weapon item if needed
-
-	//AUASCharacter* Player = AUASCharacter::GetUASCharacter(GetWorld());
-	//ActualSelectedIndex = Player->GetWeaponComponent()->GetCurrentWeaponIndex();
-	//SetSelection(ActualSelectedIndex);
+	UWeaponComponent* PlayerWeaponComp = AUASCharacter::GetUASCharacter(GetWorld())->GetWeaponComponent();
+	const int32 PlayerWeaponsNum = PlayerWeaponComp->GetWeaponsRef().Num();
+	const int32 WeaponsInGridNum = FilledWeaponItems.IndexOfByPredicate([](UWeaponItem* Item) { return Item->IsEmpty(); });
+	if (PlayerWeaponsNum != WeaponsInGridNum)
+	{
+		BuildGrid();
+	}
+	else
+	{
+		SetSelection(PlayerWeaponComp->GetCurrentWeaponIndex());
+	}
 }
 
 void UPlayerHUD::RefreshScore(const float Score)
@@ -48,8 +55,8 @@ void UPlayerHUD::SetSelection(int32 NewSelectIndex)
 		NewSelectIndex = FilledWeaponItems.Num() - 1;
 	}
 	FilledWeaponItems[ActualSelectedIndex]->SetItemSelection(false);
+	FilledWeaponItems[NewSelectIndex]->SetItemSelection(true);
 	ActualSelectedIndex = NewSelectIndex;
-	FilledWeaponItems[ActualSelectedIndex]->SetItemSelection(true);
 }
 
 void UPlayerHUD::SetGrid(TArray<UWeaponItem*>& GridWeaponItems)
@@ -67,6 +74,7 @@ void UPlayerHUD::SetGrid(TArray<UWeaponItem*>& GridWeaponItems)
 	{
 		if (!PlayerWeapons.IsValidIndex(Index))
 		{
+			GridWeaponItems[Index]->SetItem(nullptr, false);
 			continue;
 		}
 
@@ -76,11 +84,13 @@ void UPlayerHUD::SetGrid(TArray<UWeaponItem*>& GridWeaponItems)
 			const bool bSelect = Index == ActualSelectedIndex;
 			GridWeaponItems[Index]->SetItem(UIWeapon->Icon, bSelect);
 
-			auto SetProgressPercentageLambda = [=](float Value) {
-				GridWeaponItems[Index]->SetProgressPercentage(Value);
-			};
 			PlayerWeapons[Index].FireCooldown.OnValueChanged.RemoveAll(this);
-			FDelegateHandle Handle = PlayerWeapons[Index].FireCooldown.OnValueChanged.AddLambda(SetProgressPercentageLambda);
+			PlayerWeapons[Index].FireCooldown.OnValueChanged.AddUObject(this, &UPlayerHUD::SetProgressFunc, GridWeaponItems[Index]);
 		}
 	}
+}
+
+void UPlayerHUD::SetProgressFunc(float Value, UWeaponItem* WeaponItem)
+{
+	WeaponItem->SetProgressPercentage(Value);
 }

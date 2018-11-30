@@ -19,7 +19,6 @@ void UFireBehavior::Fire_Implementation(const UWorld* World, const FVector Start
 	const bool bTraceHit = World->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
 	if (bTraceHit && OutHit.bBlockingHit)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *OutHit.GetActor()->GetName()));
 		OnHit(OutHit.GetActor(), OutHit.GetComponent(), OutHit);
 	}
 

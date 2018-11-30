@@ -3,8 +3,9 @@
 #pragma once
 
 #include "UI/ItemGrid.h"
-#include "UI/WeaponItem.h"
 #include "PlayerHUD.generated.h"
+
+class UWeaponItem;
 
 UCLASS()
 class UNREALARCHERYSHOOTER_API UPlayerHUD : public UItemGrid
@@ -43,6 +44,9 @@ protected:
 	int32 ActualSelectedIndex;
 
 	UFUNCTION(BlueprintCallable)
-		void SetGrid(TArray<class UWeaponItem*>& WeaponItems);
+		void SetGrid(TArray<UWeaponItem*>& WeaponItems);
+
+private:
+	void SetProgressFunc(float Value, UWeaponItem* WeaponItem);
 
 };

@@ -6,6 +6,7 @@
 
 void UWeaponItem::SetItem(UTexture2D* Icon, const bool bSelected)
 {
+	bIsEmpty = Icon == nullptr;
 	ItemImage->SetBrushFromTexture(Icon);
 	SetItemSelection(bSelected);
 }

@@ -18,6 +18,9 @@ public:
 		FORCEINLINE class UImage* GetItemImage() const { return ItemImage; }
 
 	UFUNCTION(BlueprintCallable)
+		FORCEINLINE bool IsEmpty() const { return bIsEmpty; }
+
+	UFUNCTION(BlueprintCallable)
 		void SetItem(UTexture2D* Icon, const bool bSelected);
 
 	UFUNCTION(BlueprintCallable)
@@ -32,5 +35,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		class UProgressBar* CooldownProgress;
+
+	bool bIsEmpty;
 
 };
