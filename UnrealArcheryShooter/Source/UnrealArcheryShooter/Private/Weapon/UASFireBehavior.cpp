@@ -40,8 +40,13 @@ void UUASFireBehavior::OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		}
 		OnExplode(HitResults);
 	}
-	UGameplayStatics::SpawnEmitterAtLocation(World, HitParticle, OtherActor->GetActorLocation(), OtherActor->GetActorRotation(), true, EPSCPoolMethod::AutoRelease);
+	UGameplayStatics::SpawnEmitterAtLocation(World, HitParticle, Hit.ImpactPoint, FRotator::ZeroRotator, true, EPSCPoolMethod::AutoRelease);
 	FActorHelper::SafePlaySound(World, HitSound, OtherActor->GetActorLocation());
+}
+
+void UUASFireBehavior::OnMissHit()
+{
+	FActorHelper::SafePlaySound(GetWorld(), HitSound, GetCaller()->GetActorLocation());
 }
 
 void UUASFireBehavior::OnExplode(TArray<FHitResult> HitResults)

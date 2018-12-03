@@ -1,6 +1,7 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "FireBehavior.h"
+#include "TPMeasure/TPMeasure.h"
 
 UFireBehavior::UFireBehavior()
 {
@@ -8,22 +9,44 @@ UFireBehavior::UFireBehavior()
 	ExplodeHitRadialStrength = 500.0f;
 	FireCost = 20.0f;
 	FireRange = 10000.0f;
+	PrecisionOffset = FVector(0.0f, 0.0f, -1000.0f);
 }
 
-void UFireBehavior::Fire_Implementation(const UWorld* World, const FVector Start, const FVector Forward)
+void UFireBehavior::Fire(AActor* Outer, const FVector Start, const FVector Forward)
+{
+	CallerPrivate = Outer;
+	WorldPrivate = Outer->GetWorld();
+	OnFire(Start, Forward);
+}
+
+void UFireBehavior::OnFire_Implementation(const FVector Start, const FVector Forward)
 {
 	FHitResult OutHit;
-	FVector End = ((Forward * FireRange) + Start);
+	FVector End = ((Forward * FireRange) + Start) + PrecisionOffset;
 	FCollisionQueryParams CollisionParams;
 
-	const bool bTraceHit = World->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
+	const bool bTraceHit = WorldPrivate->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
+
+	UParticleSystemComponent* ParticleComp =
+		UGameplayStatics::SpawnEmitterAtLocation(WorldPrivate, BeamParticle, Start, FRotator::ZeroRotator, FVector(1.f), true, EPSCPoolMethod::None);
+	if (ParticleComp)
+	{
+		ParticleComp->SetBeamSourcePoint(0, Start, 0);
+		ParticleComp->SetBeamTargetPoint(0, bTraceHit ? OutHit.ImpactPoint : End, 0);
+	}
+
+	// HACKY BUG FIX - Beam loop ue4 4.20 bug, can't pool it
+	FTimerDelegate LifeTimeDel = FTimerDelegate();
+	FTimerHandle ParticleLifetimeHandle;
+	LifeTimeDel.BindLambda([=]() { ParticleComp->DestroyComponent(); });
+	WorldPrivate->GetTimerManager().SetTimer(ParticleLifetimeHandle, LifeTimeDel, 1, false, ParticleLifetime);
+
 	if (bTraceHit && OutHit.bBlockingHit)
 	{
 		OnHit(OutHit.GetActor(), OutHit.GetComponent(), OutHit);
 	}
-
-	UParticleSystemComponent* ParticleComp =
-		UGameplayStatics::SpawnEmitterAtLocation(World, BeamParticle, Start, FRotator::ZeroRotator, FVector(1.f), true, EPSCPoolMethod::AutoRelease);
-	ParticleComp->SetBeamSourcePoint(0, Start, 0);
-	ParticleComp->SetBeamTargetPoint(0, End, 0);
+	else
+	{
+		OnMissHit();
+	}
 }

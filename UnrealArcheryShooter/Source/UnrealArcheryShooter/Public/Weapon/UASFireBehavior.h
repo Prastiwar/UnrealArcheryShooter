@@ -13,6 +13,8 @@ class UNREALARCHERYSHOOTER_API UUASFireBehavior : public UFireBehavior
 protected:
 	virtual void OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, const FHitResult& Hit) override;
 
+	virtual void OnMissHit() override;
+
 	virtual void OnExplode(TArray<FHitResult> HitResults);
 
 private:

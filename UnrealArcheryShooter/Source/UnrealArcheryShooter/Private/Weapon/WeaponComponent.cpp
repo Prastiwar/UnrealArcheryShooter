@@ -55,13 +55,12 @@ void UWeaponComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, 
 
 void UWeaponComponent::Fire()
 {
-	UWorld* const World = GetWorld();
-	if (!Weapons[CurrentWeaponIndex].FireCooldown.bIsCompleted || World == nullptr)
+	if (!Weapons[CurrentWeaponIndex].FireCooldown.bIsCompleted)
 	{
 		return;
 	}
 
-	Weapons[CurrentWeaponIndex].FireBehavior->Fire(GetWorld(), GetComponentLocation(), Camera->GetForwardVector());
+	Weapons[CurrentWeaponIndex].FireBehavior->Fire(GetOwner(), GetComponentLocation(), Camera->GetForwardVector());
 	OnFire.Broadcast(Weapons[CurrentWeaponIndex].FireBehavior);
 	if (Weapons[CurrentWeaponIndex].FireCooldown.CooldownTime > 0.0f)
 	{

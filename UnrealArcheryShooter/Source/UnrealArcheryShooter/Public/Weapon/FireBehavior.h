@@ -18,8 +18,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FORCEINLINE UAnimMontage* GetFireAnimation() const { return FireAnimation; }
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-		void Fire(const UWorld* World, const FVector Start, const FVector Forward);
+	UFUNCTION(BlueprintCallable)
+		FORCEINLINE AActor* GetCaller() const { return CallerPrivate; }
+
+	virtual class UWorld* GetWorld() const override { return WorldPrivate; }
+
+	void Fire(AActor* Outer, const FVector Start, const FVector Forward);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -52,11 +56,24 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float ExplodeHitRadialStrength;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float FireRange;
 
-	virtual void Fire_Implementation(const UWorld* World, const FVector Start, const FVector Forward);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float ParticleLifetime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FVector PrecisionOffset;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void OnFire(const FVector Start, const FVector Forward);
 
 	virtual void OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, const FHitResult& Hit) {}
+
+	virtual void OnMissHit() {}
+
+private:
+	UWorld* WorldPrivate;
+	AActor* CallerPrivate;
 
 };
