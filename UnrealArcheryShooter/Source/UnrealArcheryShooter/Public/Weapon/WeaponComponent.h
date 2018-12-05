@@ -65,7 +65,7 @@ public:
 		void Zoom(const bool bToZoom);
 
 	UFUNCTION(BlueprintCallable)
-		FORCEINLINE int GetCurrentWeaponIndex() const { return CurrentWeaponIndex; }
+		FORCEINLINE int32 GetCurrentWeaponIndex() const { return CurrentWeaponIndex; }
 
 	UFUNCTION(BlueprintCallable)
 		FORCEINLINE bool IsZooming() const { return bIsZoomed; }

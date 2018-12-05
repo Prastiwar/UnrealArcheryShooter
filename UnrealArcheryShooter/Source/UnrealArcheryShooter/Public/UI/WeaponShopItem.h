@@ -45,7 +45,7 @@ protected:
 		UTextBlock* ItemCost;
 
 private:
-	int WeaponIndex;
+	int32 WeaponIndex;
 	TSubclassOf<AWeaponShop> WeaponShop;
 
 	UFUNCTION()

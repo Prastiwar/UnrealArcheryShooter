@@ -42,7 +42,7 @@ protected:
 		void SetSpawnTimer();
 
 	// Returns index of Actor to be spawned from SpawnableActors
-	virtual int GetSpawnableIndex();
+	virtual int32 GetSpawnableIndex();
 	virtual void SpawnImpl(class ASpawnableActor* SpawnedActor) {}
 	virtual void BeginPlay() override;
 	

@@ -15,7 +15,7 @@ protected:
 
 	virtual void OnMissHit() override;
 
-	virtual void OnExplode(TArray<FHitResult> HitResults);
+	virtual void OnExplode(const FHitResult& ExplodeHit, const TArray<FHitResult>& HitResults);
 
 private:
 	bool TryAddScoreFromActor(AActor* OtherActor);

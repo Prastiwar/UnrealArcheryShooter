@@ -38,7 +38,7 @@ void AOvertimeSpawner::SetSpawnTimer()
 
 void AOvertimeSpawner::Spawn()
 {
-	const int Index = GetSpawnableIndex();
+	const int32 Index = GetSpawnableIndex();
 	ASpawnableActor* Spawnable = GetWorld()->SpawnActor<ASpawnableActor>(SpawnableActors[Index], GetTransform());
 	if (Spawnable->CanBeSpawned())
 	{
@@ -50,7 +50,7 @@ void AOvertimeSpawner::Spawn()
 	}
 }
 
-int AOvertimeSpawner::GetSpawnableIndex()
+int32 AOvertimeSpawner::GetSpawnableIndex()
 {
 	return FMath::RandRange(0, SpawnableActors.Num() - 1);
 }

@@ -14,7 +14,7 @@ class UNREALARCHERYSHOOTER_API AShop : public ATriggerActor
 
 public:
 	AShop();
-	//virtual bool BuyItem(int ItemIndex) { unimplemented(); return false; }
+	//virtual bool BuyItem(int32 ItemIndex) { unimplemented(); return false; }
 	// hack to prevent null GetWorld() bug
 	virtual bool BuyItem(const UObject* WorldContextObject, const int32 ItemIndex) { unimplemented(); return false; }
 

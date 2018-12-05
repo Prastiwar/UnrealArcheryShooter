@@ -21,14 +21,20 @@ void AUnrealArcheryShooterGameMode::ApplyPlayerHUD()
 	if (ApplyNewHUD(PlayerHUD, false, false))
 	{
 		APlayerController* Player = GetWorld()->GetFirstPlayerController();
-		Player->SetInputMode(FInputModeGameOnly());
-		Player->SetIgnoreMoveInput(false);
-		Player->SetIgnoreLookInput(false);
+		if (Player)
+		{
+			Player->SetInputMode(FInputModeGameOnly());
+			Player->SetIgnoreMoveInput(false);
+			Player->SetIgnoreLookInput(false);
+		}
 
 		AUASCharacter* UASCharacter = AUASCharacter::GetUASCharacter(GetWorld());
-		UASCharacter->GetWeaponComponent()->OnWeaponChanged.AddDynamic(Cast<UPlayerHUD>(CurrentWidget), &UPlayerHUD::SetDirty);
-		UASCharacter->OnScoreChanged.AddDynamic(Cast<UPlayerHUD>(CurrentWidget), &UPlayerHUD::RefreshScore);
-		UASCharacter->AddScore(0); // refresh Score Text
+		if (UASCharacter)
+		{
+			UASCharacter->GetWeaponComponent()->OnWeaponChanged.AddDynamic(Cast<UPlayerHUD>(CurrentWidget), &UPlayerHUD::SetDirty);
+			UASCharacter->OnScoreChanged.AddDynamic(Cast<UPlayerHUD>(CurrentWidget), &UPlayerHUD::RefreshScore);
+			UASCharacter->AddScore(0); // refresh Score Text
+		}
 	}
 	else
 	{
@@ -55,5 +61,5 @@ bool AUnrealArcheryShooterGameMode::ApplyNewHUD(TSubclassOf<UUserWidget> Hud, co
 		}
 	}
 	UE_LOG(LogTemp, Error, TEXT("Applying Player HUD error - No World detected or CurrentWidget is null"))
-	return false;
+		return false;
 }

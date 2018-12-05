@@ -2,6 +2,7 @@
 
 #include "UASFireBehavior.h"
 #include "EngineUtils.h"
+#include "DrawDebugHelpers.h"
 
 bool UUASFireBehavior::TryAddScoreFromActor(AActor* OtherActor)
 {
@@ -18,42 +19,48 @@ bool UUASFireBehavior::TryAddScoreFromActor(AActor* OtherActor)
 
 void UUASFireBehavior::OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, const FHitResult& Hit)
 {
+	UWorld* const World = OtherActor->GetWorld();
+
 	TArray<FHitResult> HitResults;
-	const FVector StartLocation = OtherActor->GetActorLocation();
-	const FVector EndLocation = OtherActor->GetActorLocation();
 	const ECollisionChannel ECC = ECollisionChannel::ECC_Visibility;
+
 	FCollisionShape CollisionShape;
 	CollisionShape.ShapeType = ECollisionShape::Sphere;
 	CollisionShape.SetSphere(ExplodeHitRadius);
-	UWorld* const World = OtherActor->GetWorld();
-	const bool bHitSomething = World->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::FQuat(), ECC, CollisionShape);
+	FCollisionQueryParams Params;
+	// Params.AddIgnoredActor(OtherActor);
+
+	DrawDebugSphere(World, Hit.Location, ExplodeHitRadius, 32, FColor::Red, false, 2.0f);
+	const bool bExplodeHit = World->SweepMultiByChannel(HitResults, Hit.Location, Hit.Location, FQuat::FQuat(), ECC, CollisionShape, Params);
+	if (bExplodeHit)
+	{
+		OnExplode(Hit, HitResults);
+	}
 
 	if (OtherActor && OtherComp && OtherComp->IsSimulatingPhysics())
 	{
-		OtherComp->AddImpulseAtLocation(Hit.Normal * ExplodeHitRadius, OtherActor->GetActorLocation());
+		OtherComp->AddRadialForce(Hit.Location, ExplodeHitRadius, ExplodeHitRadialStrength * ExplodeHitRadialStrength, ERadialImpulseFalloff::RIF_Linear);
 	}
-	if (bHitSomething)
+
+	if (CameraShake)
 	{
-		if (CameraShake)
-		{
-			World->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(CameraShake);
-		}
-		OnExplode(HitResults);
+		World->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(CameraShake);
 	}
+
 	UGameplayStatics::SpawnEmitterAtLocation(World, HitParticle, Hit.ImpactPoint, FRotator::ZeroRotator, true, EPSCPoolMethod::AutoRelease);
 	FActorHelper::SafePlaySound(World, HitSound, OtherActor->GetActorLocation());
 }
 
 void UUASFireBehavior::OnMissHit()
 {
-	FActorHelper::SafePlaySound(GetWorld(), HitSound, GetCaller()->GetActorLocation());
+	FActorHelper::SafePlaySound(GetWorld(), FireSound, GetCaller()->GetActorLocation());
 }
 
-void UUASFireBehavior::OnExplode(TArray<FHitResult> HitResults)
+void UUASFireBehavior::OnExplode(const FHitResult& ExplodeHit, const TArray<FHitResult>& HitResults)
 {
-	for (auto It = HitResults.CreateIterator(); It; It++)
+	for (FHitResult It : HitResults)
 	{
-		AActor* const HitActor = It->GetActor();
+		AActor* const HitActor = It.GetActor();
 		if (!HitActor)
 		{
 			continue;
@@ -63,12 +70,15 @@ void UUASFireBehavior::OnExplode(TArray<FHitResult> HitResults)
 		{
 			if (UStaticMeshComponent* SM = Cast<UStaticMeshComponent>(SceneComponent))
 			{
-				SM->AddRadialImpulse(HitActor->GetActorLocation(), ExplodeHitRadius, ExplodeHitRadialStrength, ERadialImpulseFalloff::RIF_Linear, true);
+				if (SM->IsSimulatingPhysics())
+				{
+					SM->AddRadialImpulse(ExplodeHit.Location, ExplodeHitRadius, ExplodeHitRadialStrength, ERadialImpulseFalloff::RIF_Linear, true);
+				}
 			}
 			else if (UDestructibleComponent* DM = Cast<UDestructibleComponent>(SceneComponent))
 			{
-				DM->ApplyRadiusDamage(1000, HitActor->GetActorLocation(), ExplodeHitRadius, ExplodeHitRadialStrength, true);
-				DM->AddRadialImpulse(HitActor->GetActorLocation(), ExplodeHitRadius, ExplodeHitRadialStrength, ERadialImpulseFalloff::RIF_Linear, true);
+				DM->ApplyRadiusDamage(TNumericLimits<float>::Max(), ExplodeHit.Location, ExplodeHitRadius, ExplodeHitRadialStrength, true);
+				DM->AddRadialForce(ExplodeHit.Location, ExplodeHitRadius, ExplodeHitRadialStrength, ERadialImpulseFalloff::RIF_Linear);
 			}
 		}
 	}

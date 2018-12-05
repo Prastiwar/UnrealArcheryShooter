@@ -28,7 +28,7 @@ public:
 		bool bIsCompleted = true;
 
 	FMDFloatValueChanged OnValueChanged;
-	int ID;
+	int32 ID;
 
 	FORCEINLINE bool operator==(const FCooldownData &Other) const { return ID == Other.ID; }
 	FORCEINLINE bool operator!=(const FCooldownData &Other) const { return !(ID == Other.ID); }
