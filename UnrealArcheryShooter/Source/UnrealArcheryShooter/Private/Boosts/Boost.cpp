@@ -2,7 +2,7 @@
 
 #include "Boost.h"
 #include "Components/ShapeComponent.h"
-#include "Statics/ActorHelper.h"
+#include "Static/ActorHelper.h"
 
 ABoost::ABoost()
 {

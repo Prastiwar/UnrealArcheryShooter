@@ -3,7 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "Boosts/BoostData.h"
+#include "BoostData.h"
 #include "Boost.generated.h"
 
 UCLASS()

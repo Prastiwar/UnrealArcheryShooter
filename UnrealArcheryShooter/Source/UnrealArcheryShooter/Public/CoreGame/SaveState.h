@@ -4,7 +4,7 @@
 
 #include "GameFramework/SaveGame.h"
 #include "Kismet/GameplayStatics.h"
-#include "Weapon/WeaponData.h"
+#include "WeaponData.h"
 #include "SaveState.generated.h"
 
 UCLASS()

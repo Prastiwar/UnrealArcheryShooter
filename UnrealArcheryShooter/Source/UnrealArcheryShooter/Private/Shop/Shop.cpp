@@ -1,13 +1,19 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "Shop.h"
-#include "UI/ItemGrid.h"
+#include "ItemGrid.h"
 
 AShop::AShop()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	BoxTrigger = SetTrigger<UBoxComponent>("Box Trigger");
-	RootComponent = BoxTrigger;
+
+	// TODO: Changeable shape
+	TriggerShape = Cast<UShapeComponent>(CreateDefaultSubobject<UTriggerBoxComponent>(TEXT("TriggerShape")));
+	RootComponent = TriggerShape;
+	if (ITrigger* Trigger = Cast<ITrigger>(TriggerShape))
+	{
+		Trigger->BindTrigger(this, &AShop::BeginTrigger, &AShop::EndTrigger);
+	}
 }
 
 void AShop::BeginPlay()
@@ -16,7 +22,7 @@ void AShop::BeginPlay()
 	GameMode = GetWorld()->GetAuthGameMode<AUnrealArcheryShooterGameMode>();
 }
 
-void AShop::BeginTrigger(AActor* OtherActor)
+void AShop::BeginTrigger(AActor* OtherActor, UPrimitiveComponent* OtherComp)
 {
 	PlayerCharacter = Cast<AUASCharacter>(OtherActor);
 	if (PlayerCharacter)
@@ -25,7 +31,7 @@ void AShop::BeginTrigger(AActor* OtherActor)
 	}
 }
 
-void AShop::EndTrigger(AActor* OtherActor)
+void AShop::EndTrigger(AActor* OtherActor, UPrimitiveComponent* OtherComp)
 {
 	if (Cast<AUASCharacter>(OtherActor))
 	{

@@ -2,11 +2,11 @@
 
 #pragma once
 
-#include "TriggerActor.h"
+#include "GameFramework/Actor.h"
 #include "Lift.generated.h"
 
 UCLASS()
-class UNREALARCHERYSHOOTER_API ALift : public ATriggerActor
+class UNREALARCHERYSHOOTER_API ALift : public AActor
 {
 	GENERATED_BODY()
 
@@ -17,10 +17,10 @@ public:
 		virtual void LiftActor(AActor* Actor);
 
 protected:
-	virtual void BeginTrigger(AActor* OtherActor) override;
+	void BeginTrigger(AActor* OtherActor, UPrimitiveComponent* OtherComp);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		class UBoxComponent* Box;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		class UShapeComponent* TriggerShape;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FVector NextLocation;

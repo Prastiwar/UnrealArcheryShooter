@@ -3,7 +3,7 @@
 #pragma once
 
 #include "GameFramework/Character.h"
-#include "CoreGame/PlayerData.h"
+#include "PlayerData.h"
 #include "UASCharacter.generated.h"
 
 UCLASS(config = Game)

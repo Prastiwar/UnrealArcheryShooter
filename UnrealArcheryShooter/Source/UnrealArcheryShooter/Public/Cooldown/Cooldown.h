@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Cooldown/CooldownData.h"
+#include "CooldownData.h"
 #include "Cooldown.generated.h"
 
 UCLASS()

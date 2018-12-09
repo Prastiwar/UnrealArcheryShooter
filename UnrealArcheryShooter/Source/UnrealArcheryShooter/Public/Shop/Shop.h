@@ -2,13 +2,13 @@
 
 #pragma once
 
-#include "TriggerActor.h"
+#include "GameFramework/Actor.h"
 #include "Shop.generated.h"
 
 class AUnrealArcheryShooterGameMode;
 
 UCLASS(Abstract)
-class UNREALARCHERYSHOOTER_API AShop : public ATriggerActor
+class UNREALARCHERYSHOOTER_API AShop : public AActor
 {
 	GENERATED_BODY()
 
@@ -27,21 +27,22 @@ public:
 	}
 
 protected:
-	UPROPERTY(VisibleAnywhere)
-		class UBoxComponent* BoxTrigger;
-
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class UUserWidget> ShopHud;
 
 	UPROPERTY(EditAnywhere)
 		class UDataTable* ItemsTable;
 
-	virtual void BeginPlay() override;
-	void BeginTrigger(AActor* OtherActor) override;
-	void EndTrigger(AActor* OtherActor) override;
+	UPROPERTY(EditAnywhere)
+		class UShapeComponent* TriggerShape;
 
 	FORCEINLINE AUASCharacter* GetPlayerCharacter() const { return PlayerCharacter; }
 	FORCEINLINE AUnrealArcheryShooterGameMode* GetGameMode() const { return GameMode; }
+
+	virtual void BeginPlay() override;
+
+	void BeginTrigger(AActor* OtherActor, UPrimitiveComponent* OtherComp);
+	void EndTrigger(AActor* OtherActor, UPrimitiveComponent* OtherComp);
 
 private:
 	AUASCharacter* PlayerCharacter;

@@ -2,8 +2,8 @@
 
 #include "SaveState.h"
 #include "UnrealArcheryShooterGameMode.h"
-#include "CoreGame/UASCharacter.h"
-#include "Weapon/WeaponComponent.h"
+#include "UASCharacter.h"
+#include "WeaponComponent.h"
 
 USaveState::USaveState()
 {

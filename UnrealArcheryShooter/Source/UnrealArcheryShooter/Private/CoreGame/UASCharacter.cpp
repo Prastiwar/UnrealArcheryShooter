@@ -1,13 +1,13 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "UASCharacter.h"
+#include "Cooldown.h"
+#include "SaveState.h"
+#include "ObjectPool/ActorPool.h"
+#include "WeaponComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Cooldown/Cooldown.h"
-#include "CoreGame/SaveState.h"
-#include "ObjectPool/ActorPool.h"
-#include "Weapon/WeaponComponent.h"
 
 AUASCharacter::AUASCharacter()
 {

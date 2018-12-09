@@ -1,10 +1,12 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "WeaponComponent.h"
+#include "Cooldown.h"
+#include "UIWeaponData.h"
+#include "FireBehavior.h"
+#include "Camera/CameraComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Engine/DataTable.h"
-#include "Weapon/UIWeaponData.h"
-#include "Weapon/FireBehavior.h"
 
 UWeaponComponent::UWeaponComponent()
 {

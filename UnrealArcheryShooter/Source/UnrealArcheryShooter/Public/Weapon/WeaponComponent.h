@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Components/SceneComponent.h"
-#include "Weapon/WeaponData.h"
+#include "WeaponData.h"
 #include "WeaponComponent.generated.h"
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))

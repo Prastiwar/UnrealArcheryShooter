@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Weapon/FireBehavior.h"
+#include "CooldownData.h"
 #include "WeaponData.generated.h"
 
 USTRUCT(BlueprintType)
@@ -21,7 +22,7 @@ public:
 		USkeletalMesh* WeaponMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		struct FCooldownData FireCooldown;
+		FCooldownData FireCooldown;
 
 	UPROPERTY(EditAnywhere)
 		UFireBehavior* FireBehavior;
