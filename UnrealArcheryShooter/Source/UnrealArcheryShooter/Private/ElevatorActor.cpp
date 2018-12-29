@@ -16,7 +16,7 @@ AElevatorActor::AElevatorActor()
 	TriggerShape = Cast<UShapeComponent>(CreateDefaultSubobject<UTriggerBoxComponent>(TEXT("TriggerShape")));
 	if (ITrigger* Trigger = Cast<ITrigger>(TriggerShape))
 	{
-		Trigger->BindTrigger(this, &AElevatorActor::OnTrigger, &AElevatorActor::OnTrigger);
+		Trigger->BindTrigger(this, &AElevatorActor::OnTrigger, nullptr);
 	}
 }
 

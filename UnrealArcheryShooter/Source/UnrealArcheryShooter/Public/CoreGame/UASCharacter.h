@@ -93,6 +93,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		class UWeaponComponent* WeaponComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		class UCooldownComponent* CooldownComponent;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Player Score")
 		FPlayerData PlayerData;
 
@@ -102,8 +105,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void OnFire(UFireBehavior* const Projectile);
 
-	virtual void BeginPlay();
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void BeginPlay() override;
 
 	void MoveForward(const float Value);
 	void MoveSide(const float Value);

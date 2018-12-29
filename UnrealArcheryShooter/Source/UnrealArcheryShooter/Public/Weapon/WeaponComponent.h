@@ -78,7 +78,7 @@ protected:
 		TArray<FWeaponData> Weapons;
 
 	UPROPERTY(BlueprintReadOnly)
-		class UCooldown* Cooldown;
+		class UCooldownComponent* Cooldown;
 
 	UPROPERTY(EditDefaultsOnly)
 		class UDataTable* WeaponsTable;
@@ -105,7 +105,6 @@ protected:
 		class UCameraComponent* Camera;
 
 	virtual void BeginPlay() override;
-	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
 	void PlayFireAnim();
 

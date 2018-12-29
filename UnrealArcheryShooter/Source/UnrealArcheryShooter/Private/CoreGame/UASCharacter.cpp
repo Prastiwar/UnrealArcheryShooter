@@ -1,9 +1,9 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "UASCharacter.h"
-#include "Cooldown.h"
 #include "SaveState.h"
 #include "ObjectPool/ActorPool.h"
+#include "CooldownComponent.h"
 #include "WeaponComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
@@ -42,6 +42,7 @@ AUASCharacter::AUASCharacter()
 	WeaponComponent->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
 
 	AttributeComponent = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
+	CooldownComponent = CreateDefaultSubobject<UCooldownComponent>(TEXT("Cooldown"));
 
 	ScoreMultiplier = 1.0f;
 	PlayerData = FPlayerData(100);
@@ -62,11 +63,6 @@ void AUASCharacter::BeginPlay()
 
 	WeaponComponent->OnFire.AddDynamic(this, &AUASCharacter::OnFire);
 	WeaponComponent->SetWeaponsByNames(InitialWeaponsNames);
-}
-
-void AUASCharacter::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
 }
 
 void AUASCharacter::SavePlayer()

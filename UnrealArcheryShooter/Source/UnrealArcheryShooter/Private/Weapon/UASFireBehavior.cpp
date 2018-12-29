@@ -19,6 +19,8 @@ bool UUASFireBehavior::TryAddScoreFromActor(AActor* OtherActor)
 
 void UUASFireBehavior::OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, const FHitResult& Hit)
 {
+	Super::OnHit(OtherActor, OtherComp, Hit);
+
 	UWorld* const World = OtherActor->GetWorld();
 
 	TArray<FHitResult> HitResults;

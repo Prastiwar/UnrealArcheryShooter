@@ -27,8 +27,11 @@ void UFireBehavior::OnFire_Implementation(const FVector Start, const FVector For
 	FCollisionQueryParams CollisionParams;
 
 	const bool bTraceHit = WorldPrivate->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
+
+	// DEBUG: Drawing trace
 	DrawDebugLine(WorldPrivate, Start, bTraceHit ? OutHit.ImpactPoint : End, FColor::Red, false, 2.0f);
 	DrawDebugPoint(WorldPrivate, bTraceHit ? OutHit.ImpactPoint : End, 16.0f, FColor::Red, false, 2.0f);
+	//////////
 
 	UParticleSystemComponent* ParticleComp =
 		UGameplayStatics::SpawnEmitterAtLocation(WorldPrivate, BeamParticle, Start, FRotator::ZeroRotator, FVector(1.f), true, EPSCPoolMethod::None);
@@ -51,5 +54,19 @@ void UFireBehavior::OnFire_Implementation(const FVector Start, const FVector For
 	else
 	{
 		OnMissHit();
+	}
+}
+
+void UFireBehavior::OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, const FHitResult& Hit)
+{
+	ITrigger* Trigger = Cast<ITrigger>(OtherActor);
+	if (!Trigger)
+	{
+		Trigger = Cast<ITrigger>(OtherComp);
+	}
+	if (Trigger)
+	{
+		Trigger->BeginOverlap(nullptr, OtherActor, OtherComp, 0, false, Hit);
+		Trigger->EndOverlap(nullptr, OtherActor, OtherComp, 0);
 	}
 }

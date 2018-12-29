@@ -32,10 +32,6 @@ public:
 		}
 	}
 
-protected:
-	FTriggerPhase OnTriggerEnter;
-	FTriggerPhase OnTriggerExit;
-
 	UFUNCTION()
 		virtual void BeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 			UPrimitiveComponent* OtherComp, const int32 OtherBodyIndex, const bool bFromSweep, const FHitResult& SweepResult)
@@ -49,5 +45,8 @@ protected:
 			OnTriggerExit.ExecuteIfBound(OtherActor, OtherComp);
 		}
 
+protected:
+	FTriggerPhase OnTriggerEnter;
+	FTriggerPhase OnTriggerExit;
 
 };

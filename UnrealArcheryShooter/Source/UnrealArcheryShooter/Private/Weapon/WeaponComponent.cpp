@@ -1,12 +1,13 @@
 // Authored by Tomasz Piowczyk. MIT License. Repository: https://github.com/Prastiwar/UnrealArcheryShooter
 
 #include "WeaponComponent.h"
-#include "Cooldown.h"
+#include "CooldownComponent.h"
 #include "UIWeaponData.h"
 #include "FireBehavior.h"
 #include "Camera/CameraComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Engine/DataTable.h"
+#include "Statics.h"
 
 UWeaponComponent::UWeaponComponent()
 {
@@ -18,28 +19,13 @@ UWeaponComponent::UWeaponComponent()
 void UWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	Cooldown = NewObject<UCooldown>();
-
-	FPMeshViewer = Cast<USkeletalMeshComponent>(FPMeshViewerRef.GetComponent(GetOwner()));
+	Cooldown = FStatics::GetComponentByClass<UCooldownComponent>(GetOwner());
+	GunMesh = FStatics::GetComponent<USkeletalMeshComponent>(GunMeshRef, GetOwner());
+	Camera = FStatics::GetComponent<UCameraComponent>(CameraRef, GetOwner());
+	FPMeshViewer = FStatics::GetComponent<USkeletalMeshComponent>(FPMeshViewerRef, GetOwner());
 	if (FPMeshViewer)
 	{
 		AnimInstance = FPMeshViewer->GetAnimInstance();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("FPMeshViewer component not found"));
-	}
-
-	GunMesh = Cast<USkeletalMeshComponent>(GunMeshRef.GetComponent(GetOwner()));
-	if (!GunMesh)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("GunMesh component not found"));
-	}
-
-	Camera = Cast<UCameraComponent>(CameraRef.GetComponent(GetOwner()));
-	if (!Camera)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Camera component not found"));
 	}
 
 	if (Weapons.Num() > 0)
@@ -47,12 +33,6 @@ void UWeaponComponent::BeginPlay()
 		SetWeapon(CurrentWeaponIndex);
 	}
 	Zoom(false);
-}
-
-void UWeaponComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	Cooldown->Tick(DeltaTime);
 }
 
 void UWeaponComponent::Fire()

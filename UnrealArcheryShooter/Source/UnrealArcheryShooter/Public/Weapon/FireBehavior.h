@@ -68,7 +68,7 @@ protected:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void OnFire(const FVector Start, const FVector Forward);
 
-	virtual void OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, const FHitResult& Hit) {}
+	virtual void OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, const FHitResult& Hit);
 
 	virtual void OnMissHit() {}
 

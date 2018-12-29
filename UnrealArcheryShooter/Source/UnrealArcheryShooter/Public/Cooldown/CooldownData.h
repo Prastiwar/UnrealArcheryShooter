@@ -5,6 +5,7 @@
 #include "CooldownData.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FMDFloatValueChanged, float);
+DECLARE_MULTICAST_DELEGATE(FMDOnCompleted);
 
 USTRUCT(BlueprintType)
 struct UNREALARCHERYSHOOTER_API FCooldownData
@@ -18,7 +19,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float TickRateMultiplier = 1.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float InitialTime = 1.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -28,6 +29,7 @@ public:
 		bool bIsCompleted = true;
 
 	FMDFloatValueChanged OnValueChanged;
+	FMDOnCompleted OnCompleted;
 	int32 ID;
 
 	FORCEINLINE bool operator==(const FCooldownData &Other) const { return ID == Other.ID; }
