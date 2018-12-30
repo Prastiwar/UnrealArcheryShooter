@@ -4,10 +4,11 @@
 
 #include "GameFramework/Actor.h"
 #include "BoostData.h"
+#include "Spawnable.h"
 #include "Boost.generated.h"
 
 UCLASS()
-class UNREALARCHERYSHOOTER_API ABoost : public AActor
+class UNREALARCHERYSHOOTER_API ABoost : public AActor, public ISpawnable
 {
 	GENERATED_BODY()
 
@@ -17,6 +18,11 @@ public:
 protected:
 	virtual void PickBoostImpl(AActor* AppliedActor) {}
 	virtual void RevertBoostImpl(AActor* AppliedActor) {}
+
+	// ISpawnable interface
+	virtual bool CanBeSpawned() const override;
+	virtual UClass* GetSpawnableClass() const override { return this->GetClass(); }
+	/////////////////////////
 
 	void SetTriggerComponent(class UShapeComponent* Trigger);
 

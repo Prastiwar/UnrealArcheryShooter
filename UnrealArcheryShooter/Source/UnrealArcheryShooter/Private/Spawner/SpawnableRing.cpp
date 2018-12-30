@@ -25,7 +25,7 @@ ASpawnableRing::ASpawnableRing()
 bool ASpawnableRing::CanBeSpawned() const
 {
 	Light->SetLightColor(FLinearColor::MakeRandomColor());
-	return true;
+	return ISpawnable::CanBeSpawned();
 }
 
 float ASpawnableRing::GetScore() const

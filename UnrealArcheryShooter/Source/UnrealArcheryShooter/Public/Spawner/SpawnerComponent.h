@@ -4,6 +4,7 @@
 
 #include "Components/SceneComponent.h"
 #include "CooldownData.h"
+#include "Spawnable.h"
 #include "SpawnerComponent.generated.h"
 
 UCLASS(ClassGroup = (Spawners), meta = (BlueprintSpawnableComponent))
@@ -14,8 +15,8 @@ class UNREALARCHERYSHOOTER_API USpawnerComponent : public USceneComponent
 public:
 	USpawnerComponent();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-		class ASpawnableActor* Spawn();
+	UFUNCTION(BlueprintCallable)
+		virtual TScriptInterface<ISpawnable> Spawn();
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -24,8 +25,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		FCooldownData CooldownData;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TArray<TSubclassOf<class ASpawnableActor>> SpawnableActors;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (MustImplement = "Spawnable"))
+		TArray<TSubclassOf<AActor>> SpawnableActors;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool bSetTimerOnBeginPlay;
@@ -40,8 +41,6 @@ protected:
 	void CallSpawn();
 
 	virtual int32 GetSpawnableIndex_Implementation();
-
-	virtual class ASpawnableActor* Spawn_Implementation();
 
 	virtual void BeginPlay() override;
 

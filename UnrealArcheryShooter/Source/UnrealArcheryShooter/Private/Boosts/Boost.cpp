@@ -6,9 +6,22 @@
 
 ABoost::ABoost()
 {
-	PrimaryActorTick.bCanEverTick = false;	
+	PrimaryActorTick.bCanEverTick = false;
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	RootComponent = StaticMesh;
+}
+
+bool ABoost::CanBeSpawned() const
+{
+	FHitResult Hit;
+	TArray<FHitResult> HitResults;
+	const FVector Location = GetActorLocation();
+	const ECollisionChannel ECC = ECollisionChannel::ECC_WorldStatic;
+	FCollisionShape CollisionShape;
+	CollisionShape.ShapeType = ECollisionShape::Box;
+	CollisionShape.SetBox(GetActorScale());
+	const bool bHitSomething = GetWorld()->SweepMultiByChannel(HitResults, Location, Location, FQuat::FQuat(), ECC, CollisionShape);
+	return !bHitSomething && ISpawnable::CanBeSpawned();
 }
 
 void ABoost::SetTriggerComponent(UShapeComponent* Trigger)

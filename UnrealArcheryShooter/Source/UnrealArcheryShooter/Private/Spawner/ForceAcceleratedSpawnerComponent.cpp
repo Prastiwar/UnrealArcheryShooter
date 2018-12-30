@@ -3,26 +3,29 @@
 #include "ForceAcceleratedSpawnerComponent.h"
 #include "DestructibleComponent.h"
 #include "Components/StaticMeshComponent.h"
-#include "SpawnableActor.h"
 
 UForceAcceleratedSpawnerComponent::UForceAcceleratedSpawnerComponent()
 {
 	Force = FVector(400, 0, 3000);
 }
 
-ASpawnableActor* UForceAcceleratedSpawnerComponent::Spawn_Implementation()
+TScriptInterface<ISpawnable> UForceAcceleratedSpawnerComponent::Spawn()
 {
-	ASpawnableActor* SpawnedActor = Super::Spawn_Implementation();
-	if (SpawnedActor)
+	TScriptInterface<ISpawnable> Spawnable = Super::Spawn();
+	if (Spawnable)
 	{
-		if (UDestructibleComponent* DM = Cast<UDestructibleComponent>(SpawnedActor->GetRootComponent()))
+		AActor* SpawnedActor = Cast<AActor>(Spawnable->_getUObject());
+		if (SpawnedActor)
 		{
-			DM->SetPhysicsLinearVelocity(Force);
-		}
-		else if (UStaticMeshComponent* SM = Cast<UStaticMeshComponent>(SpawnedActor->GetRootComponent()))
-		{
-			SM->SetPhysicsLinearVelocity(Force);
+			if (UDestructibleComponent* DM = Cast<UDestructibleComponent>(SpawnedActor->GetRootComponent()))
+			{
+				DM->SetPhysicsLinearVelocity(Force);
+			}
+			else if (UStaticMeshComponent* SM = Cast<UStaticMeshComponent>(SpawnedActor->GetRootComponent()))
+			{
+				SM->SetPhysicsLinearVelocity(Force);
+			}
 		}
 	}
-	return SpawnedActor;
+	return Spawnable;
 }

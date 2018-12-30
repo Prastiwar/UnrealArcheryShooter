@@ -2,7 +2,7 @@
 
 #include "SpawnerComponent.h"
 #include "Statics.h"
-#include "SpawnableActor.h"
+#include "Spawnable.h"
 
 USpawnerComponent::USpawnerComponent()
 {
@@ -29,25 +29,19 @@ void USpawnerComponent::SetSpawnTimer()
 	CooldownComponent->SetCooldown(&CooldownData);
 }
 
-ASpawnableActor* USpawnerComponent::Spawn_Implementation()
+TScriptInterface<ISpawnable> USpawnerComponent::Spawn()
 {
 	const int32 Index = GetSpawnableIndex();
-	ASpawnableActor* Spawnable = GetWorld()->SpawnActor<ASpawnableActor>(SpawnableActors[Index], GetOwner()->GetTransform());
-	if (Spawnable->CanBeSpawned())
-	{
-		return Spawnable;
-	}
-	else
-	{
-		Spawnable->Destroy();
-		return nullptr;
-	}
+	AActor* SpawnableActor = Cast<AActor>(SpawnableActors[Index].GetDefaultObject());
+	ISpawnable* Spawnable = Cast<ISpawnable>(SpawnableActor)->Spawn(CooldownComponent, GetWorld(), GetOwner()->GetTransform());
+	SetSpawnTimer();
+	return FStatics::CreateScriptInterface<ISpawnable>(Spawnable, SpawnableActor);
 }
 
+// Used for cooldown delegate
 void USpawnerComponent::CallSpawn()
 {
 	Spawn();
-	SetSpawnTimer();
 }
 
 int32 USpawnerComponent::GetSpawnableIndex_Implementation()

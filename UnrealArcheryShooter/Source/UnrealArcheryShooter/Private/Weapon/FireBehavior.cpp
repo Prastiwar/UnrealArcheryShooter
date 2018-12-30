@@ -27,7 +27,6 @@ void UFireBehavior::OnFire_Implementation(const FVector Start, const FVector For
 	FCollisionQueryParams CollisionParams;
 
 	const bool bTraceHit = WorldPrivate->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
-
 	// DEBUG: Drawing trace
 	DrawDebugLine(WorldPrivate, Start, bTraceHit ? OutHit.ImpactPoint : End, FColor::Red, false, 2.0f);
 	DrawDebugPoint(WorldPrivate, bTraceHit ? OutHit.ImpactPoint : End, 16.0f, FColor::Red, false, 2.0f);

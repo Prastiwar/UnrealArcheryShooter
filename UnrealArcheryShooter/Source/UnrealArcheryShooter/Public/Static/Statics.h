@@ -30,4 +30,13 @@ struct UNREALARCHERYSHOOTER_API FStatics
 		return Component;
 	}
 
+	template<typename T>
+	static TScriptInterface<T> CreateScriptInterface(T* InInterface, UObject* InObject)
+	{
+		auto ScriptInterface = TScriptInterface<T>();
+		ScriptInterface.SetInterface(InInterface);
+		ScriptInterface.SetObject(InObject);
+		return ScriptInterface;
+	}
+
 };

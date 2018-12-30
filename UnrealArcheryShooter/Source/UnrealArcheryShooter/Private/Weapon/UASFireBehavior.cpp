@@ -2,6 +2,7 @@
 
 #include "UASFireBehavior.h"
 #include "EngineUtils.h"
+#include "DestructibleComponent.h"
 #include "DrawDebugHelpers.h"
 
 bool UUASFireBehavior::TryAddScoreFromActor(AActor* OtherActor)

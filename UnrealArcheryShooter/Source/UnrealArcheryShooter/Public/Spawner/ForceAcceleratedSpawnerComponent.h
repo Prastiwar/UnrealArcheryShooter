@@ -17,6 +17,6 @@ public:
 		FVector Force;
 
 protected:
-	virtual class ASpawnableActor* Spawn_Implementation() override;
+	virtual TScriptInterface<ISpawnable> Spawn() override;
 
 };

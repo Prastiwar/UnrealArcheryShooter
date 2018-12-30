@@ -2,19 +2,22 @@
 
 #pragma once
 
-#include "SpawnableActor.h"
 #include "DestructibleComponent.h"
+#include "Spawnable.h"
 #include "SpawnableRing.generated.h"
 
 UCLASS()
-class UNREALARCHERYSHOOTER_API ASpawnableRing : public ASpawnableActor
+class UNREALARCHERYSHOOTER_API ASpawnableRing : public AActor, public ISpawnable
 {
 	GENERATED_BODY()
 
 public:
 	ASpawnableRing();
 
+	// ISpawnable interface
 	virtual bool CanBeSpawned() const override;
+	virtual UClass* GetSpawnableClass() const override { return this->GetClass(); }
+	/////////////////////////////
 
 	UFUNCTION(BlueprintCallable)
 		float GetScore() const;
